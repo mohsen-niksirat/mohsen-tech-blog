@@ -4,8 +4,8 @@ title: Mohsen's Tech Blog
 description: Personal blog about tech, programming, and learnings
 author: Mohsen Niksirat
 email: mohsen@example.com
-url: https://mohsen-niksirat.github.io/mohsen-tech-blog
-baseurl: /mohsen-tech-blog
+url: https://mohsen-niksirat.github.io
+baseurl: ""
 
 # SEO plugins (GitHub Pages provides these automatically)
 plugins:
