@@ -3,13 +3,14 @@
 
 title: Mohsen's Tech Blog
 description: Personal blog about tech, programming, and learnings
-theme: minima
 author: Mohsen Niksirat
 email: mohsen@example.com
+url: https://mohsen-niksirat.github.io/mohsen-tech-blog
+baseurl: /mohsen-tech-blog
 
 # GitHub is happy to use this for GitHub Pages
 github_metadata:
-  repository: mohsen-niksirat/mohsen-niksirat.github.io
+  repository: mohsen-niksirat/mohsen-tech-blog
 
 # Enable the site-wide license
 show_donations: false
@@ -22,16 +23,6 @@ social_links:
     icon: twitter
   - url: https://www.linkedin.com/in/mohsen-niksirat
     icon: linkedin
-
-# Pagination
-plugins:
-  - jekyll-feed
-  - jekyll-sitemap
-  - jekyll-seo-tag
-  - jekyll-mentions
-
-permalink: /:year/:month/:day/:title/
-timezone: Asia/Tehran
 
 # SEO and Meta plugins
 plugins:
