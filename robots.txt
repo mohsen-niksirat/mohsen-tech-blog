@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mohsen-niksirat.github.io/sitemap.xml

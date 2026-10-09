@@ -33,13 +33,22 @@ plugins:
 permalink: /:year/:month/:day/:title/
 timezone: Asia/Tehran
 
+# SEO and Meta plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+permalink: /:year/:month/:day/:title/
+timezone: Asia/Tehran
+
 # Collections
 collections:
   posts:
     output: true
     permalink: /blog/:year/:month/:day/:title/
 
-# Pagination plugin (for jekyll-pagination4)
+# Gems
 gems:
   - jekyll-sitemap
   - jekyll-feed

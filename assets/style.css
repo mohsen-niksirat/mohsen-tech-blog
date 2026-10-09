@@ -238,9 +238,30 @@ body.dark .post-meta .tags {
   font-size: 0.9rem;
 }
 
-.pagination {
-  text-align: center;
-  margin: 3rem 0;
+.social-sharing {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--code-bg);
+  border-radius: 8px;
+}
+
+.social-sharing p {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.social-sharing a {
+  display: inline-block;
+  margin-right: 1rem;
+  padding: 0.4rem 0.8rem;
+  background: #4a90d9;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.social-sharing a:hover {
+  background: #2c6cb0;
 }
 
 .pagination a, .pagination span {
