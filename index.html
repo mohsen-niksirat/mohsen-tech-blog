@@ -20,7 +20,7 @@ title: Home
   <ul class="post-list">
     {% for post in site.posts limit: 6 %}
       <li>
-        <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+         <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
         <p class="excerpt">{{ post.excerpt | strip_html | truncate: 160 }}</p>
         <div class="post-meta">
           <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %d, %Y" }}</time>
@@ -34,7 +34,7 @@ title: Home
 
   {% if site.posts.size > 6 %}
     <p style="text-align: center; margin-top: 2rem;">
-      <a href="/archive" class="view-all">View all posts →</a>
+      <a href="{{ '/archive' | relative_url }}" class="view-all">View all posts →</a>
     </p>
   {% endif %}
 {% else %}
@@ -42,9 +42,9 @@ title: Home
 {% endif %}
 
 <div style="margin-top: 3rem; text-align: center;">
-  <a href="/about" class="btn-link">About Me</a>
-  <a href="/projects" class="btn-link">My Projects</a>
-  <a href="/search" class="btn-link">Search</a>
+  <a href="{{ '/about' | relative_url }}" class="btn-link">About Me</a>
+  <a href="{{ '/projects' | relative_url }}" class="btn-link">My Projects</a>
+  <a href="{{ '/search' | relative_url }}" class="btn-link">Search</a>
 </div>
 
 <style>
