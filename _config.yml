@@ -32,6 +32,13 @@ plugins:
 
 permalink: /:year/:month/:day/:title/
 timezone: Asia/Tehran
+# Keep pretty URLs for pages (about, archive, search, etc.) at root level
+defaults:
+  - scope:
+      path: ""
+      type: pages
+    values:
+      permalink: /:name/
 
 # Collections
 collections:
