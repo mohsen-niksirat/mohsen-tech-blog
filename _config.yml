@@ -38,3 +38,9 @@ collections:
   posts:
     output: true
     permalink: /blog/:year/:month/:day/:title/
+
+# Pagination plugin (for jekyll-pagination4)
+gems:
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
