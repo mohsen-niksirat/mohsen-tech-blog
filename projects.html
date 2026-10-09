@@ -1,0 +1,80 @@
+---
+layout: default
+title: Projects
+permalink: /projects/
+---
+
+<h1>My Projects</h1>
+
+<div class="projects-grid">
+  <div class="project-card">
+    <h2><a href="https://github.com/mohsen-niksirat/mohsen-tech-blog" target="_blank" rel="noopener">Mohsen's Tech Blog</a></h2>
+    <p>A personal blog built with Jekyll and hosted on GitHub Pages. Features include dark mode, SEO optimization, and comment support via Utterances.</p>
+    <div class="project-tags">
+      <span class="tag">Jekyll</span>
+      <span class="tag">CSS</span>
+      <span class="tag">JavaScript</span>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <h2><a href="https://github.com/mohsen-niksirat/portfolio-template" target="_blank" rel="noopener">Portfolio Template</a></h2>
+    <p>A clean, responsive portfolio template for developers. Built with HTML, CSS, and a bit of JavaScript.</p>
+    <div class="project-tags">
+      <span class="tag">HTML</span>
+      <span class="tag">CSS</span>
+      <span class="tag">Template</span>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <h2><a href="https://github.com/mohsen-niksirat/cli-helper" target="_blank" rel="noopener">CLI Helper</a></h2>
+    <p>A Node.js command-line interface tool for common development tasks like file generation and project scaffolding.</p>
+    <div class="project-tags">
+      <span class="tag">Node.js</span>
+      <span class="tag">CLI</span>
+      <span class="tag">JavaScript</span>
+    </div>
+  </div>
+</div>
+
+<style>
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.project-card {
+  background: var(--code-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.project-card h2 a {
+  color: var(--text);
+  font-size: 1.2rem;
+}
+
+.project-card p {
+  color: var(--muted);
+  margin: 0.5rem 0 1rem;
+  font-size: 0.95rem;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.tag {
+  background: var(--code-inline);
+  color: var(--muted);
+  padding: 0.2rem 0.6rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+}
+</style>

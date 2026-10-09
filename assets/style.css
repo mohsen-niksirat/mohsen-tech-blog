@@ -316,6 +316,29 @@ body.dark .post-meta .tags {
   font-size: 0.95rem;
 }
 
+.archive-section h3 {
+  font-size: 1.3rem;
+  margin: 1.5rem 0 1rem;
+  color: #4a90d9;
+}
+
+.archive-section ul.post-list {
+  list-style: none;
+  padding-right: 0;
+}
+
+.archive-section ul li {
+  margin-bottom: 0.5rem;
+  padding: 0;
+  border: none;
+}
+
+.archive-section .post-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
 @media (max-width: 600px) {
   .container {
     padding: 1rem;

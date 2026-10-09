@@ -1,0 +1,43 @@
+---
+layout: default
+title: Archive
+permalink: /archive/
+---
+
+<h1>Archive</h1>
+
+<div class="archive-section">
+  <h2>By Year</h2>
+  {% assign posts_by_year = "" | split: "" %}
+  {% for post in site.posts %}
+    {% capture year %}{{ post.date | date: "%Y" }}{% endcapture %}
+    {% unless posts_by_year contains year %}
+      {% assign posts_by_year = posts_by_year | push: year %}
+    {% endunless %}
+  {% endfor %}
+
+  {% for year in posts_by_year %}
+    <h3>{{ year }}</h3>
+    <ul class="post-list">
+      {% for post in site.posts %}
+        {% if post.date | date: "%Y" == year %}
+          <li>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+            <span class="post-meta">— {{ post.date | date: "%B %d" }}</span>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endfor %}
+</div>
+
+<div class="archive-section" style="margin-top: 2rem;">
+  <h2>By Tag</h2>
+  <div class="tags-list">
+    {% for tag in site.tags %}
+      {% assign tag_name = tag[0] %}
+      {% assign tag_posts = tag[1] %}
+      <a href="/tag/{{ tag_name }}">{{ tag_name }} ({{ tag_posts.size }})</a>
+    {% endfor %}
+  </div>
+</div>
