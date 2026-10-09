@@ -1,5 +1,4 @@
 # Welcome to Jekyll!
-# _config.yml is where you can configure site-wide settings.
 
 title: Mohsen's Tech Blog
 description: Personal blog about tech, programming, and learnings
@@ -8,23 +7,7 @@ email: mohsen@example.com
 url: https://mohsen-niksirat.github.io/mohsen-tech-blog
 baseurl: /mohsen-tech-blog
 
-# GitHub is happy to use this for GitHub Pages
-github_metadata:
-  repository: mohsen-niksirat/mohsen-tech-blog
-
-# Enable the site-wide license
-show_donations: false
-
-# Social links
-social_links:
-  - url: https://github.com/mohsen-niksirat
-    icon: github
-  - url: https://twitter.com/mohsenniksirat
-    icon: twitter
-  - url: https://www.linkedin.com/in/mohsen-niksirat
-    icon: linkedin
-
-# SEO and Meta plugins
+# SEO plugins (GitHub Pages provides these automatically)
 plugins:
   - jekyll-feed
   - jekyll-sitemap
@@ -32,22 +15,5 @@ plugins:
 
 permalink: /:year/:month/:day/:title/
 timezone: Asia/Tehran
-# Keep pretty URLs for pages (about, archive, search, etc.) at root level
-defaults:
-  - scope:
-      path: ""
-      type: pages
-    values:
-      permalink: /:name/
 
-# Collections
-collections:
-  posts:
-    output: true
-    permalink: /blog/:year/:month/:day/:title/
-
-# Gems
-gems:
-  - jekyll-sitemap
-  - jekyll-feed
-  - jekyll-seo-tag
+markdown: kramdown
