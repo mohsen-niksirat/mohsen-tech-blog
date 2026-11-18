@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beyond Rigid Leitner Boxes: Implementing FSRS in an Offline-First Reader | Mohsen Niksirat · Engineering Monograph</title>
+  <meta name="description" content="Why classic five-box Leitner systems over-schedule reviews, and how Readner models per-card memory stability alongside an integrated PDF reader and semantic WordWeb graph.">
+  <meta name="author" content="Mohsen Niksirat">
+  <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/fsrs-spaced-repetition-architecture/">
+  <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/fsrs-spaced-repetition-architecture/">
+  <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/fsrs-spaced-repetition-architecture/">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:title" content="Beyond Rigid Leitner Boxes: Implementing FSRS in an Offline-First Reader">
+  <meta property="og:description" content="Why classic five-box Leitner systems over-schedule reviews, and how Readner models per-card memory stability alongside an integrated PDF reader and semantic WordWeb graph.">
+  <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/fsrs-spaced-repetition-architecture/">
+  <meta property="og:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/fsrs-spaced-repetition-architecture.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Beyond Rigid Leitner Boxes: Implementing FSRS in an Offline-First Reader">
+  <meta name="twitter:description" content="Why classic five-box Leitner systems over-schedule reviews, and how Readner models per-card memory stability alongside an integrated PDF reader and semantic WordWeb graph.">
+  <meta name="twitter:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/fsrs-spaced-repetition-architecture.png">
+
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/mohsen-tech-blog/assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
+
+  <script>
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+  </script>
+  <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
+  <script defer src="/mohsen-tech-blog/assets/app.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Beyond Rigid Leitner Boxes: Implementing FSRS in an Offline-First Reader","description":"Why classic five-box Leitner systems over-schedule reviews, and how Readner models per-card memory stability alongside an integrated PDF reader and semantic WordWeb graph.","datePublished":"2026-11-10","inLanguage":"en-US","image":"https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/fsrs-spaced-repetition-architecture.png","mainEntityOfPage":"https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/fsrs-spaced-repetition-architecture/","author":{"@type":"Person","name":"Mohsen Niksirat","url":"https://mohsen-niksirat.github.io/Profile/"}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="reading-progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="/mohsen-tech-blog/">
+        <span class="brand-mark" aria-hidden="true">MN</span>
+        <span class="brand-text">
+          <span class="brand-name">Mohsen Niksirat</span>
+          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+        </span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+
+      <div class="header-tools">
+        <button type="button" class="tool-btn" data-open-search aria-label="Search essays and notes (Ctrl+K)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-btn-label">Search</span>
+          <kbd class="kbd-hint">⌘K</kbd>
+        </button>
+
+        <a class="tool-btn" href="/mohsen-tech-blog/fa/posts/fsrs-spaced-repetition-architecture/" hreflang="fa" aria-label="Read Persian edition">
+          فارسی
+        </a>
+
+        <button type="button" class="tool-btn" data-theme-toggle aria-label="Toggle color theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+
+        <button type="button" class="tool-btn mobile-menu-btn" data-mobile-menu-btn aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-drawer" id="mobile-drawer">
+      <nav aria-label="Mobile navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell">
+    
+    <article class="article-wrap">
+      <header class="article-header">
+        <h1 class="article-title">Beyond Rigid Leitner Boxes: Implementing FSRS in an Offline-First Reader</h1>
+        <p class="article-deck">Why classic five-box Leitner systems over-schedule reviews, and how Readner models per-card memory stability alongside an integrated PDF reader and semantic WordWeb graph.</p>
+        <div class="meta-row tabular">
+          <span class="topic-label">Learning Engines</span>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <time datetime="2026-11-10">Nov 10, 2026</time>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <span>4 min read</span>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <a href="/mohsen-tech-blog/fa/posts/fsrs-spaced-repetition-architecture/" hreflang="fa">مطالعه به فارسی</a>
+        </div>
+      </header>
+
+      <div class="article-layout">
+        <div class="prose">
+          <p>Anyone who has tried memorizing thousands of foreign words with a physical five-box Leitner deck eventually hits the &quot;review avalanche.&quot; Miss a word once on day 30, and classic Leitner drops it all the way back to Box 1 alongside brand-new vocabulary you first saw five minutes ago.</p>
+<p>When building <strong><a href="https://mohsen-niksirat.github.io/Leitner-Pro-Max/" target="_blank" rel="noopener noreferrer">Readner (Leitner Pro Max)</a></strong> as an offline-first Progressive Web App and native Kotlin Android companion, I replaced rigid box progression with the <strong>Free Spaced Repetition Scheduler (FSRS)</strong> and wired it directly into a PDF book reader and a 4,500-word CEFR A1–C2 lexicon.</p>
+<figure class="schematic" role="group" aria-label="FSRS adaptive memory stability curves compared against fixed Leitner resets">
+  <svg viewBox="0 0 760 260" width="760" height="260" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+    <rect x="1" y="1" width="758" height="258" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
+    <!-- Axes -->
+    <line x1="76" y1="36" x2="76" y2="208" stroke="var(--border-strong)" stroke-width="1.4" />
+    <line x1="76" y1="208" x2="716" y2="208" stroke="var(--border-strong)" stroke-width="1.4" />
+    <!-- 90% Target Retention Line -->
+    <line x1="76" y1="74" x2="716" y2="74" stroke="var(--accent)" stroke-width="1" stroke-dasharray="5 4" />
+    <text x="68" y="44" text-anchor="end" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="10.5">100%</text>
+    <text x="68" y="78" text-anchor="end" fill="var(--accent)" font-family="var(--font-mono)" font-size="10.5" font-weight="600">90% R*</text>
+    <text x="68" y="208" text-anchor="end" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="10.5">50%</text>
+
+    <!-- FSRS Stability Growth Curves -->
+    <path d="M76 40 Q108 62, 140 74 L140 40 Q210 62, 276 74 L276 40 Q400 60, 510 74 L510 40 Q620 55, 706 70" stroke="var(--accent)" stroke-width="2.2" fill="none" />
+    <!-- Rigid Leitner Reset Sawtooth -->
+    <path d="M76 40 Q96 68, 114 96 L114 40 Q145 78, 178 124 L178 40 Q202 80, 224 132 L224 40 Q258 76, 294 118" stroke="var(--text-muted)" stroke-width="1.4" stroke-dasharray="3 3" fill="none" />
+
+    <!-- Review Nodes -->
+    <circle cx="140" cy="74" r="4" fill="var(--accent)" />
+    <circle cx="276" cy="74" r="4" fill="var(--accent)" />
+    <circle cx="510" cy="74" r="4" fill="var(--accent)" />
+
+    <text x="140" y="228" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">S₁ = 1.8d</text>
+    <text x="276" y="228" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">S₂ = 7.4d</text>
+    <text x="510" y="228" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">S₃ = 26.5d</text>
+    <text x="684" y="228" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">S₄ = 84d</text>
+
+    <!-- Legend -->
+    <rect x="448" y="138" width="248" height="54" rx="6" fill="var(--bg-canvas)" stroke="var(--border)" />
+    <line x1="464" y1="156" x2="490" y2="156" stroke="var(--accent)" stroke-width="2.2" />
+    <text x="498" y="160" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11" font-weight="600">FSRS Stability Scheduling</text>
+    <line x1="464" y1="176" x2="490" y2="176" stroke="var(--text-muted)" stroke-width="1.4" stroke-dasharray="3 3" />
+    <text x="498" y="180" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">Classic Box-1 Penalty Reset</text>
+  </svg>
+  <figcaption>Figure 1: Review scheduling in Readner (Leitner Pro Max) anchored at 90% retrievability (R*). Each successful recall compounds stability S instead of marching through rigid box steps.</figcaption>
+</figure>
+<h2 id="sec-1">Why Memory Stability Beats Box Numbers</h2>
+<p>Human long-term memory does not reset to zero after a single lapse; a word you knew for a month re-stabilizes much faster than an unfamiliar term. FSRS formalizes this through the <strong>DSR (Difficulty, Stability, Retrievability)</strong> three-component model of memory:</p>
+<ul><li><strong>Stability ($S$):</strong> The number of days it takes for recall probability to decay from $100\%$ down to $90\%$.</li><li><strong>Difficulty ($D \in [1, 10]$):</strong> Intrinsic complexity of the item for this learner, updated after each rating (<code>Again</code>, <code>Hard</code>, <code>Good</code>, <code>Easy</code>).</li><li><strong>Retrievability ($R$):</strong> Instantaneous probability of recall after $t$ elapsed days, governed by a power-law forgetting curve:</li></ul>
+<div class="code-block">
+        <div class="code-head"><span>JAVASCRIPT</span><button type="button" class="copy-btn" data-copy-code>Copy</button></div>
+        <pre><code><span class="tok-cmt">// FSRS v4.5 power-law forgetting curve and target interval solver</span>
+<span class="tok-kw">const</span> DECAY = -<span class="tok-num">0.5</span>;
+<span class="tok-kw">const</span> FACTOR = <span class="tok-num">19</span> / <span class="tok-num">81</span>; <span class="tok-cmt">// Ensures R(S, S) === 0.90</span>
+
+<span class="tok-kw">export</span> <span class="tok-kw">function</span> <span class="tok-fn">retrievability</span>(elapsedDays, stability) {
+  <span class="tok-kw">if</span> (stability &lt;= <span class="tok-num">0</span>) <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+  <span class="tok-kw">return</span> <span class="tok-typ">Math</span>.<span class="tok-fn">pow</span>(<span class="tok-num">1</span> + (FACTOR * elapsedDays) / stability, DECAY);
+}
+
+<span class="tok-kw">export</span> <span class="tok-kw">function</span> <span class="tok-fn">nextIntervalDays</span>(stability, desiredRetention = <span class="tok-num">0.9</span>) {
+  <span class="tok-kw">const</span> raw = (stability / FACTOR) * (<span class="tok-typ">Math</span>.<span class="tok-fn">pow</span>(desiredRetention, <span class="tok-num">1</span> / DECAY) - <span class="tok-num">1</span>);
+  <span class="tok-kw">return</span> <span class="tok-typ">Math</span>.<span class="tok-fn">max</span>(<span class="tok-num">1</span>, <span class="tok-typ">Math</span>.<span class="tok-fn">round</span>(raw));
+}</code></pre>
+      </div>
+<p>Notice the elegance of <code>FACTOR = 19 / 81</code> with <code>DECAY = -0.5</code>: when <code>elapsedDays === stability</code>, $(1 + 19/81)^{-0.5} = (100/81)^{-0.5} = 9/10 = 0.90$. If a learner reviews a card late (say at day 14 when $S = 9$) and still recalls it, their demonstrated retrievability was lower, so FSRS rewards them with a <strong>larger</strong> stability boost than if they had crammed early.</p>
+<h2 id="sec-2">Closing the Gap Between Reading and Flashcards</h2>
+<p>Most spaced-repetition apps fail at acquisition friction: copying a sentence out of an article, switching tabs, pasting definitions, and tagging CEFR levels breaks reading flow.</p>
+<p>In Readner, the PDF workspace and the vocabulary deck share the same IndexedDB store:</p>
+<ol><li><strong>Contextual Selection:</strong> Highlighting any word inside a loaded PDF extracts both the target lemma and the surrounding sentence as an authentic usage example.</li><li><strong>Instant Lexicon Hydration:</strong> If the lemma matches Readner&#39;s bundled 4,500+ CEFR dictionary, phonetic IPA transcription, part of speech, level badge (<code>A1</code> through <code>C2</code>), and multilingual translations populate offline in under 4 milliseconds.</li><li><strong>WordWeb Semantic Graph:</strong> Isolated words fade faster than connected clusters. Readner builds an interactive force-directed neighborhood linking roots, synonyms, and contrast pairs so learners review meaning networks rather than isolated strings.</li></ol>
+<h2 id="sec-3">Offline-First Sync and Transaction Safety in IndexedDB</h2>
+<p>Because commuters and students review decks on subways or airplanes, every review transaction must commit locally with zero network dependency. One subtle bug in browser storage is splitting card state updates and review log appends across separate transactions; if a tab closes mid-write, FSRS analytics drift out of sync with card intervals.</p>
+<div class="code-block">
+        <div class="code-head"><span>JAVASCRIPT</span><button type="button" class="copy-btn" data-copy-code>Copy</button></div>
+        <pre><code><span class="tok-kw">export</span> <span class="tok-kw">function</span> <span class="tok-fn">commitReviewAtomic</span>(db, updatedCard, reviewLogEntry) {
+  <span class="tok-kw">return</span> <span class="tok-kw">new</span> <span class="tok-typ">Promise</span>((resolve, reject) =&gt; {
+    <span class="tok-kw">const</span> tx = db.<span class="tok-fn">transaction</span>([<span class="tok-str">&quot;cards&quot;</span>, <span class="tok-str">&quot;review_logs&quot;</span>], <span class="tok-str">&quot;readwrite&quot;</span>);
+    tx.<span class="tok-fn">objectStore</span>(<span class="tok-str">&quot;cards&quot;</span>).<span class="tok-fn">put</span>(updatedCard);
+    tx.<span class="tok-fn">objectStore</span>(<span class="tok-str">&quot;review_logs&quot;</span>).<span class="tok-fn">add</span>(reviewLogEntry);
+
+    tx.oncomplete = () =&gt; <span class="tok-fn">resolve</span>(updatedCard);
+    tx.onerror = () =&gt; <span class="tok-fn">reject</span>(tx.error);
+    tx.onabort = () =&gt; <span class="tok-fn">reject</span>(<span class="tok-kw">new</span> <span class="tok-typ">Error</span>(<span class="tok-str">&quot;IndexedDB review transaction aborted&quot;</span>));
+  });
+}</code></pre>
+      </div>
+<p>Wrapping both object stores (<code>cards</code> and <code>review_logs</code>) in a single multi-store <code>readwrite</code> transaction guarantees ACID atomicity inside the browser, matching the Room SQLite transactions used in the Kotlin + Jetpack Compose Android build.</p>
+<h2 id="sec-4">Practical Impact</h2>
+<p>Switching from fixed box intervals to FSRS reduced daily review counts by roughly a quarter at the same 90% target retention, while sentence-anchored cards captured from real PDFs stayed memorable far longer than synthetic word lists.</p>
+
+          <section class="artifact-box" aria-label="Related open-source project">
+            <div>
+              <h2>Readner · Leitner Pro Max</h2>
+              <p>Explore the live deployment and full open-source implementation referenced in this monograph.</p>
+            </div>
+            <div class="btn-row">
+              <a class="btn-primary" href="https://mohsen-niksirat.github.io/Leitner-Pro-Max/" target="_blank" rel="noopener noreferrer">Open Live App</a>
+              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/Leitner-Pro-Max" target="_blank" rel="noopener noreferrer">View GitHub Repository</a>
+            </div>
+          </section>
+
+          <nav class="post-Matrix-nav" aria-label="Adjacent monographs">
+            <a class="adj-link" href="/mohsen-tech-blog/posts/multi-provider-ai-gateway/">
+                    <span class="adj-dir">Newer Monograph</span>
+                    <span class="adj-title">Designing a Resilient Multi-Provider AI Gateway on Serverless Runtimes</span>
+                  </a>
+            <a class="adj-link" href="/mohsen-tech-blog/posts/browser-only-developer-tools/">
+                    <span class="adj-dir">Earlier Monograph</span>
+                    <span class="adj-title">Zero-Backend Developer Tools: Analyzing Repos and Datasets Entirely in the Browser</span>
+                  </a>
+          </nav>
+
+          <section class="comments-box" aria-labelledby="comments-heading">
+            <div class="section-head">
+              <h2 id="comments-heading" class="section-title">Technical Discussion</h2>
+              <button type="button" class="tool-btn" data-copy-url><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copy Link</span></button>
+            </div>
+            <p style="margin-bottom:14px;color:var(--text-secondary);font-size:0.93rem;">Comments load on demand via GitHub Issues so zero third-party scripts run uninvited while you read.</p>
+            <div class="btn-row">
+              <button type="button" class="btn-secondary" data-load-comments>Load GitHub Comments</button>
+              <a class="btn-secondary" href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">Discuss on Telegram</a>
+            </div>
+            <div id="comments-mount" style="margin-top:16px;"></div>
+          </section>
+        </div>
+
+        <aside class="article-rail" aria-label="Article table of contents and reading tools">
+          <div class="rail-box">
+                  <p class="rail-heading">On This Page</p>
+                  <ul class="toc-list">
+                    <li><a href="#sec-1">Why Memory Stability Beats Box Numbers</a></li><li><a href="#sec-2">Closing the Gap Between Reading and Flashcards</a></li><li><a href="#sec-3">Offline-First Sync and Transaction Safety in IndexedDB</a></li><li><a href="#sec-4">Practical Impact</a></li>
+                  </ul>
+                </div>
+
+          <div class="rail-box">
+            <p class="rail-heading">Reading Type Scale</p>
+            <div class="size-controls" role="group" aria-label="Adjust article font size">
+              <button type="button" class="size-btn" data-font-scale="sm" aria-pressed="false">A-</button>
+              <button type="button" class="size-btn" data-font-scale="md" aria-pressed="true">A</button>
+              <button type="button" class="size-btn" data-font-scale="lg" aria-pressed="false">A+</button>
+            </div>
+          </div>
+
+          <div class="rail-box">
+            <p class="rail-heading">Technical Tags</p>
+            <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.7;">FSRS · Spaced Repetition · Offline PWA · IndexedDB · Kotlin</p>
+          </div>
+        </aside>
+      </div>
+    </article>
+  
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© 2026 Mohsen Niksirat · M.Sc. Computer Architecture · Open-Source Builder</p>
+      <div class="footer-links">
+        <a href="https://mohsen-niksirat.github.io/Profile/" target="_blank" rel="noopener noreferrer">Interactive OS Portfolio</a>
+        <a href="https://github.com/mohsen-niksirat" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a href="/mohsen-tech-blog/search/">Search</a>
+        <a href="/mohsen-tech-blog/feed.xml">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Instant Command / Search Modal -->
+  <div class="search-dialog-backdrop" id="search-backdrop" hidden>
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-modal-label">
+      <div class="dialog-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label id="search-modal-label" for="search-modal-input" class="skip-link">Search query</label>
+        <input id="search-modal-input" type="search" autocomplete="off" placeholder="Search essays, architectures, or topics (e.g. FSRS, 9router, MCP)...">
+        <button type="button" class="tool-btn" data-close-search>Esc</button>
+      </div>
+      <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

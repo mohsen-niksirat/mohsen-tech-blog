@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://mohsen-niksirat.github.io/sitemap.xml
+
+Sitemap: https://mohsen-niksirat.github.io/mohsen-tech-blog/sitemap.xml

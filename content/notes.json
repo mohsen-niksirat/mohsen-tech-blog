@@ -1,0 +1,74 @@
+[
+  {
+    "id": "webcrypto-pbkdf2-vaults",
+    "date": "2026-11-14",
+    "tag": "Security",
+    "tagFa": "امنیت وب",
+    "title": "PBKDF2 Iteration Counts for Offline Browser Vaults",
+    "titleFa": "تنظیم تعداد دورهای PBKDF2 در گاوصندوق آفلاین مرورگر",
+    "body": "In API Key Manager, deriving a 256-bit AES-GCM key via WebCrypto PBKDF2-SHA256 at 600,000 iterations takes ~190ms on modern laptops and ~420ms on mid-range Android phones: fast enough for a single unlock prompt while raising brute-force cost substantially without external WASM bundles.",
+    "bodyFa": "در پروژه API Key Manager، مشتق‌سازی کلید ۲۵۶ بیتی AES-GCM با WebCrypto PBKDF2-SHA256 روی ۶۰۰٬۰۰۰ دور حدود ۱۹۰ میلی‌ثانیه در لپ‌تاپ و ۴۲۰ میلی‌ثانیه در گوشی‌های میان‌رده زمان می‌برد؛ تعادلی عالی بین بازگشایی روان رابط کاربری و مقاومت بالا در برابر حملات جستجوی فراگیر.",
+    "link": "https://mohsen-niksirat.github.io/api-key-manager/",
+    "linkLabel": "API Key Manager"
+  },
+  {
+    "id": "tauri-v2-rust-footprint",
+    "date": "2026-11-04",
+    "tag": "Rust & Desktop",
+    "tagFa": "راست و دسکتاپ",
+    "title": "Shipping Sub-8MB Windows Installers with Rust and Tauri v2",
+    "titleFa": "نصاب ویندوز زیر ۸ مگابایت با ترکیب Rust و Tauri v2",
+    "body": "Building Kite Downloader on Tauri v2 instead of bundling Chromium kept the Windows installer under 8 MB while letting Rust async Tokio tasks own segmented HTTP range downloads, checksum verification, and clipboard URL sniffing off the UI thread.",
+    "bodyFa": "استفاده از Tauri v2 به جای Electron در ساخت Kite Downloader حجم نصاب ویندوز را زیر ۸ مگابایت نگه داشت و اجازه داد دانلود چندبخشی فایل‌ها و پایش کلیپ‌بورد کاملاً روی تردهای ناهمگام Tokio در Rust و دور از ترد رابط کاربری اجرا شود.",
+    "link": "https://github.com/mohsen-niksirat/kite-downloader",
+    "linkLabel": "Kite Downloader"
+  },
+  {
+    "id": "rtl-code-isolation-css",
+    "date": "2026-10-24",
+    "tag": "Typography & RTL",
+    "tagFa": "تایپوگرافی و فارسی",
+    "title": "Preventing Punctuation Flip in Bilingual RTL Technical Prose",
+    "titleFa": "جلوگیری از جابه‌جایی علائم نگارشی در متون فنی دوزبانه راست‌به‌چپ",
+    "body": "Inline code spans like `HTTP 429` or `O(N log N)` inside Persian paragraphs scramble parentheses unless styled with `unicode-bidi: isolate` and `direction: ltr`. Applying isolation at the base `code` selector fixes bidirectional cursor movement and copy-paste order across Ravaan and this journal.",
+    "bodyFa": "عبارت‌های کد درون‌خطی مثل `O(N log N)` در میانه پاراگراف فارسی بدون تنظیم `unicode-bidi: isolate` و `direction: ltr` پرانتزها را وارونه نمایش می‌دهند. اعمال این دو ویژگی روی تگ پایه `code` هم نمایش و هم ترتیب کپی شدن متن را در پروژه روان و همین وبلاگ یک‌دست کرد.",
+    "link": "https://mohsen-niksirat.github.io/Ravaan/",
+    "linkLabel": "Ravaan Editor"
+  },
+  {
+    "id": "voice-turn-taking-ielts",
+    "date": "2026-10-12",
+    "tag": "Voice AI",
+    "tagFa": "هوش مصنوعی صوتی",
+    "title": "Silence Thresholds in Spoken English Tutoring",
+    "titleFa": "تنظیم آستانه سکوت در مربی هوشمند مکالمه انگلیسی",
+    "body": "Standard 500ms voice-activity cutoffs interrupt non-native speakers mid-thought while searching for vocabulary. Extending end-of-turn silence tolerance to 1,250ms in SpeakAI Coach produced far more accurate 6-axis IELTS fluency and lexical resource scoring.",
+    "bodyFa": "برش پیش‌فرض ۵۰۰ میلی‌ثانیه‌ای در تشخیص صدا، زبان‌آموزان را دقیقاً در لحظه فکر کردن به واژه بعدی قطع می‌کند. افزایش آستانه سکوت پایان نوبت به ۱٬۲۵۰ میلی‌ثانیه در SpeakAI Coach دقت ارزیابی شش‌محوری مکالمه و تخمین نمره آیلتس را به‌طور محسوسی ارتقا داد.",
+    "link": "https://mohsen-niksirat.github.io/SpeakAI-Coach/",
+    "linkLabel": "SpeakAI Coach"
+  },
+  {
+    "id": "neural-evolution-60fps",
+    "date": "2026-09-29",
+    "tag": "Simulation",
+    "tagFa": "شبیه‌سازی",
+    "title": "Flat Float32Array Weights for In-Browser Neuroevolution",
+    "titleFa": "ذخیره وزن‌های شبکه عصبی در Float32Array برای شبیه‌سازی ۶۰ فریم",
+    "body": "In Biosphera, representing each digital organism's tiny neural network as a contiguous `Float32Array` slice rather than nested JS arrays cut crossover/mutation garbage collection pauses to near zero at 60 FPS.",
+    "bodyFa": "در شبیه‌ساز حیات دیجیتال Biosphera، نگهداری وزن‌های شبکه عصبی هر موجود در یک آرایه پیوسته `Float32Array` به جای آرایه‌های تودرتوی جاوااسکریپت، مکث‌های Garbage Collector هنگام جهش ژنتیکی را در نرخ ۶۰ فریم تقریباً به صفر رساند.",
+    "link": "https://mohsen-niksirat.github.io/Biosphera/",
+    "linkLabel": "Biosphera"
+  },
+  {
+    "id": "webaudio-polyphony-scheduling",
+    "date": "2026-09-14",
+    "tag": "Web Audio",
+    "tagFa": "صوت تحت وب",
+    "title": "Lookahead Scheduling with AudioContext.currentTime",
+    "titleFa": "زمان‌بندی دقیق نت‌های موسیقی با AudioContext.currentTime",
+    "body": "JavaScript `setInterval` drifts by 10–40ms whenever the main thread paints. In Tonora, scheduling Web Audio oscillator envelopes 100ms ahead against hardware `audioCtx.currentTime` keeps chord playback rhythmically tight even on mobile browsers.",
+    "bodyFa": "تایمرهای معمولی جاوااسکریپت هنگام رندر صفحه ۱۰ تا ۴۰ میلی‌ثانیه نوسان دارند. در استودیوی موسیقی Tonora، زمان‌بندی پیش‌دستانه نوسان‌سازها بر مبنای ساعت سخت‌افزاری `audioCtx.currentTime` ریتم اجرای آکوردها را حتی در موبایل کاملاً دقیق نگه می‌دارد.",
+    "link": "https://mohsen-niksirat.github.io/Tonora/",
+    "linkLabel": "Tonora Studio"
+  }
+]

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mohsen Niksirat · Engineering Monograph</title>
+    <description>Long-form engineering essays on AI gateways, spaced repetition, WebAssembly, and local-first tools.</description>
+    <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/</link>
+    <language>en-us</language>
+    <atom:link href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Designing a Resilient Multi-Provider AI Gateway on Serverless Runtimes</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/multi-provider-ai-gateway/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/multi-provider-ai-gateway/</guid>
+      <pubDate>Mon, 16 Nov 2026 09:00:00 GMT</pubDate>
+      <category>AI Systems</category>
+      <description>How 9router and AIDahl pool keys across Gemini, Groq, DeepSeek, OpenAI, and OpenRouter with sub-20ms automatic HTTP 429 failover, per-user AES-GCM vaults, and rate-safe Telegram token streaming.</description>
+    </item>
+    <item>
+      <title>Beyond Rigid Leitner Boxes: Implementing FSRS in an Offline-First Reader</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/fsrs-spaced-repetition-architecture/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/fsrs-spaced-repetition-architecture/</guid>
+      <pubDate>Tue, 10 Nov 2026 09:00:00 GMT</pubDate>
+      <category>Learning Engines</category>
+      <description>Why classic five-box Leitner systems over-schedule reviews, and how Readner models per-card memory stability alongside an integrated PDF reader and semantic WordWeb graph.</description>
+    </item>
+    <item>
+      <title>Zero-Backend Developer Tools: Analyzing Repos and Datasets Entirely in the Browser</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/browser-only-developer-tools/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/browser-only-developer-tools/</guid>
+      <pubDate>Thu, 29 Oct 2026 09:00:00 GMT</pubDate>
+      <category>Local-First Web</category>
+      <description>Architectural lessons from building Repodest, DataLens, and A11y Inspector so developers can inspect codebases, chart sensitive CSVs, and audit WCAG compliance with zero server uploads.</description>
+    </item>
+    <item>
+      <title>60 FPS Swarm Survival on the Web: Exporting Godot 4 3D Roguelites to WebAssembly</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/godot4-wasm-horde-survival/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/godot4-wasm-horde-survival/</guid>
+      <pubDate>Sun, 18 Oct 2026 09:00:00 GMT</pubDate>
+      <category>Systems &amp; Game Dev</category>
+      <description>How Horde Survival 3D sustains hundreds of active 3D enemies, evolving projectile rings, and boss phases inside a browser WASM budget, plus lessons from parallel Unity and Kotlin builds.</description>
+    </item>
+    <item>
+      <title>Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/</guid>
+      <pubDate>Mon, 05 Oct 2026 09:00:00 GMT</pubDate>
+      <category>AI Systems</category>
+      <description>Inside MCP Studio: turning raw Model Context Protocol JSON Schemas and JSON-RPC 2.0 traffic into an interactive browser IDE for testing agent tools, resources, and prompts.</description>
+    </item>
+    <item>
+      <title>Teaching Algorithms with Deterministic Canvas Engines: Inside CodeVis</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/deterministic-canvas-cs-animations/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/deterministic-canvas-cs-animations/</guid>
+      <pubDate>Tue, 22 Sep 2026 09:00:00 GMT</pubDate>
+      <category>Learning Engines</category>
+      <description>How CodeVis packs 49 interactive computer science visualizations, synchronized code stepping, and PNG export cards into a single zero-dependency HTML file.</description>
+    </item>
+  </channel>
+</rss>

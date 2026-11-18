@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Field Notes | Mohsen Niksirat · Engineering Monograph</title>
+  <meta name="description" content="Short engineering field notes and implementation benchmarks by Mohsen Niksirat.">
+  <meta name="author" content="Mohsen Niksirat">
+  <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/notes/">
+  <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/notes/">
+  <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/notes/">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:title" content="Field Notes">
+  <meta property="og:description" content="Short engineering field notes and implementation benchmarks by Mohsen Niksirat.">
+  <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/notes/">
+  <meta property="og:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Field Notes">
+  <meta name="twitter:description" content="Short engineering field notes and implementation benchmarks by Mohsen Niksirat.">
+  <meta name="twitter:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/og-default.png">
+
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/mohsen-tech-blog/assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
+
+  <script>
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+  </script>
+  <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
+  <script defer src="/mohsen-tech-blog/assets/app.js"></script>
+  
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="/mohsen-tech-blog/">
+        <span class="brand-mark" aria-hidden="true">MN</span>
+        <span class="brand-text">
+          <span class="brand-name">Mohsen Niksirat</span>
+          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+        </span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/" aria-current="page">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+
+      <div class="header-tools">
+        <button type="button" class="tool-btn" data-open-search aria-label="Search essays and notes (Ctrl+K)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-btn-label">Search</span>
+          <kbd class="kbd-hint">⌘K</kbd>
+        </button>
+
+        <a class="tool-btn" href="/mohsen-tech-blog/fa/notes/" hreflang="fa" aria-label="Read Persian edition">
+          فارسی
+        </a>
+
+        <button type="button" class="tool-btn" data-theme-toggle aria-label="Toggle color theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+
+        <button type="button" class="tool-btn mobile-menu-btn" data-mobile-menu-btn aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-drawer" id="mobile-drawer">
+      <nav aria-label="Mobile navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/" aria-current="page">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell">
+    
+    <section class="page-section">
+      <header class="page-header">
+        <h1 class="page-title">Engineering Field Notes</h1>
+        <p class="page-sub">Concise implementation findings, benchmarks, and architectural micro-decisions recorded while shipping production web, Rust, and AI tools.</p>
+      </header>
+
+      <div class="notes-columns">
+        <article class="note-entry" id="webcrypto-pbkdf2-vaults">
+              <div class="note-meta tabular">
+                <span class="note-tag">Security</span>
+                <time datetime="2026-11-14">Nov 14, 2026</time>
+              </div>
+              <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:650;">PBKDF2 Iteration Counts for Offline Browser Vaults</h2>
+              <p>In API Key Manager, deriving a 256-bit AES-GCM key via WebCrypto PBKDF2-SHA256 at 600,000 iterations takes ~190ms on modern laptops and ~420ms on mid-range Android phones: fast enough for a single unlock prompt while raising brute-force cost substantially without external WASM bundles.</p>
+              <div class="note-foot">
+                <a href="https://mohsen-niksirat.github.io/api-key-manager/" target="_blank" rel="noopener noreferrer">API Key Manager</a>
+              </div>
+            </article><article class="note-entry" id="tauri-v2-rust-footprint">
+              <div class="note-meta tabular">
+                <span class="note-tag">Rust &amp; Desktop</span>
+                <time datetime="2026-11-04">Nov 4, 2026</time>
+              </div>
+              <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:650;">Shipping Sub-8MB Windows Installers with Rust and Tauri v2</h2>
+              <p>Building Kite Downloader on Tauri v2 instead of bundling Chromium kept the Windows installer under 8 MB while letting Rust async Tokio tasks own segmented HTTP range downloads, checksum verification, and clipboard URL sniffing off the UI thread.</p>
+              <div class="note-foot">
+                <a href="https://github.com/mohsen-niksirat/kite-downloader" target="_blank" rel="noopener noreferrer">Kite Downloader</a>
+              </div>
+            </article><article class="note-entry" id="rtl-code-isolation-css">
+              <div class="note-meta tabular">
+                <span class="note-tag">Typography &amp; RTL</span>
+                <time datetime="2026-10-24">Oct 24, 2026</time>
+              </div>
+              <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:650;">Preventing Punctuation Flip in Bilingual RTL Technical Prose</h2>
+              <p>Inline code spans like <code>HTTP 429</code> or <code>O(N log N)</code> inside Persian paragraphs scramble parentheses unless styled with <code>unicode-bidi: isolate</code> and <code>direction: ltr</code>. Applying isolation at the base <code>code</code> selector fixes bidirectional cursor movement and copy-paste order across Ravaan and this journal.</p>
+              <div class="note-foot">
+                <a href="https://mohsen-niksirat.github.io/Ravaan/" target="_blank" rel="noopener noreferrer">Ravaan Editor</a>
+              </div>
+            </article><article class="note-entry" id="voice-turn-taking-ielts">
+              <div class="note-meta tabular">
+                <span class="note-tag">Voice AI</span>
+                <time datetime="2026-10-12">Oct 12, 2026</time>
+              </div>
+              <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:650;">Silence Thresholds in Spoken English Tutoring</h2>
+              <p>Standard 500ms voice-activity cutoffs interrupt non-native speakers mid-thought while searching for vocabulary. Extending end-of-turn silence tolerance to 1,250ms in SpeakAI Coach produced far more accurate 6-axis IELTS fluency and lexical resource scoring.</p>
+              <div class="note-foot">
+                <a href="https://mohsen-niksirat.github.io/SpeakAI-Coach/" target="_blank" rel="noopener noreferrer">SpeakAI Coach</a>
+              </div>
+            </article><article class="note-entry" id="neural-evolution-60fps">
+              <div class="note-meta tabular">
+                <span class="note-tag">Simulation</span>
+                <time datetime="2026-09-29">Sep 29, 2026</time>
+              </div>
+              <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:650;">Flat Float32Array Weights for In-Browser Neuroevolution</h2>
+              <p>In Biosphera, representing each digital organism&#39;s tiny neural network as a contiguous <code>Float32Array</code> slice rather than nested JS arrays cut crossover/mutation garbage collection pauses to near zero at 60 FPS.</p>
+              <div class="note-foot">
+                <a href="https://mohsen-niksirat.github.io/Biosphera/" target="_blank" rel="noopener noreferrer">Biosphera</a>
+              </div>
+            </article><article class="note-entry" id="webaudio-polyphony-scheduling">
+              <div class="note-meta tabular">
+                <span class="note-tag">Web Audio</span>
+                <time datetime="2026-09-14">Sep 14, 2026</time>
+              </div>
+              <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:650;">Lookahead Scheduling with AudioContext.currentTime</h2>
+              <p>JavaScript <code>setInterval</code> drifts by 10–40ms whenever the main thread paints. In Tonora, scheduling Web Audio oscillator envelopes 100ms ahead against hardware <code>audioCtx.currentTime</code> keeps chord playback rhythmically tight even on mobile browsers.</p>
+              <div class="note-foot">
+                <a href="https://mohsen-niksirat.github.io/Tonora/" target="_blank" rel="noopener noreferrer">Tonora Studio</a>
+              </div>
+            </article>
+      </div>
+    </section>
+  
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© 2026 Mohsen Niksirat · M.Sc. Computer Architecture · Open-Source Builder</p>
+      <div class="footer-links">
+        <a href="https://mohsen-niksirat.github.io/Profile/" target="_blank" rel="noopener noreferrer">Interactive OS Portfolio</a>
+        <a href="https://github.com/mohsen-niksirat" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a href="/mohsen-tech-blog/search/">Search</a>
+        <a href="/mohsen-tech-blog/feed.xml">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Instant Command / Search Modal -->
+  <div class="search-dialog-backdrop" id="search-backdrop" hidden>
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-modal-label">
+      <div class="dialog-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label id="search-modal-label" for="search-modal-input" class="skip-link">Search query</label>
+        <input id="search-modal-input" type="search" autocomplete="off" placeholder="Search essays, architectures, or topics (e.g. FSRS, 9router, MCP)...">
+        <button type="button" class="tool-btn" data-close-search>Esc</button>
+      </div>
+      <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

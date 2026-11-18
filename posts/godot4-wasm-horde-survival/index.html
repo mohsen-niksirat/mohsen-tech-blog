@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>60 FPS Swarm Survival on the Web: Exporting Godot 4 3D Roguelites to WebAssembly | Mohsen Niksirat · Engineering Monograph</title>
+  <meta name="description" content="How Horde Survival 3D sustains hundreds of active 3D enemies, evolving projectile rings, and boss phases inside a browser WASM budget, plus lessons from parallel Unity and Kotlin builds.">
+  <meta name="author" content="Mohsen Niksirat">
+  <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/godot4-wasm-horde-survival/">
+  <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/godot4-wasm-horde-survival/">
+  <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/godot4-wasm-horde-survival/">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:title" content="60 FPS Swarm Survival on the Web: Exporting Godot 4 3D Roguelites to WebAssembly">
+  <meta property="og:description" content="How Horde Survival 3D sustains hundreds of active 3D enemies, evolving projectile rings, and boss phases inside a browser WASM budget, plus lessons from parallel Unity and Kotlin builds.">
+  <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/godot4-wasm-horde-survival/">
+  <meta property="og:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/godot4-wasm-horde-survival.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="60 FPS Swarm Survival on the Web: Exporting Godot 4 3D Roguelites to WebAssembly">
+  <meta name="twitter:description" content="How Horde Survival 3D sustains hundreds of active 3D enemies, evolving projectile rings, and boss phases inside a browser WASM budget, plus lessons from parallel Unity and Kotlin builds.">
+  <meta name="twitter:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/godot4-wasm-horde-survival.png">
+
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/mohsen-tech-blog/assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
+
+  <script>
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+  </script>
+  <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
+  <script defer src="/mohsen-tech-blog/assets/app.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"60 FPS Swarm Survival on the Web: Exporting Godot 4 3D Roguelites to WebAssembly","description":"How Horde Survival 3D sustains hundreds of active 3D enemies, evolving projectile rings, and boss phases inside a browser WASM budget, plus lessons from parallel Unity and Kotlin builds.","datePublished":"2026-10-18","inLanguage":"en-US","image":"https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/godot4-wasm-horde-survival.png","mainEntityOfPage":"https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/godot4-wasm-horde-survival/","author":{"@type":"Person","name":"Mohsen Niksirat","url":"https://mohsen-niksirat.github.io/Profile/"}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="reading-progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="/mohsen-tech-blog/">
+        <span class="brand-mark" aria-hidden="true">MN</span>
+        <span class="brand-text">
+          <span class="brand-name">Mohsen Niksirat</span>
+          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+        </span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+
+      <div class="header-tools">
+        <button type="button" class="tool-btn" data-open-search aria-label="Search essays and notes (Ctrl+K)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-btn-label">Search</span>
+          <kbd class="kbd-hint">⌘K</kbd>
+        </button>
+
+        <a class="tool-btn" href="/mohsen-tech-blog/fa/posts/godot4-wasm-horde-survival/" hreflang="fa" aria-label="Read Persian edition">
+          فارسی
+        </a>
+
+        <button type="button" class="tool-btn" data-theme-toggle aria-label="Toggle color theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+
+        <button type="button" class="tool-btn mobile-menu-btn" data-mobile-menu-btn aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-drawer" id="mobile-drawer">
+      <nav aria-label="Mobile navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell">
+    
+    <article class="article-wrap">
+      <header class="article-header">
+        <h1 class="article-title">60 FPS Swarm Survival on the Web: Exporting Godot 4 3D Roguelites to WebAssembly</h1>
+        <p class="article-deck">How Horde Survival 3D sustains hundreds of active 3D enemies, evolving projectile rings, and boss phases inside a browser WASM budget, plus lessons from parallel Unity and Kotlin builds.</p>
+        <div class="meta-row tabular">
+          <span class="topic-label">Systems &amp; Game Dev</span>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <time datetime="2026-10-18">Oct 18, 2026</time>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <span>4 min read</span>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <a href="/mohsen-tech-blog/fa/posts/godot4-wasm-horde-survival/" hreflang="fa">مطالعه به فارسی</a>
+        </div>
+      </header>
+
+      <div class="article-layout">
+        <div class="prose">
+          <p>Desktop game engines forgive a surprising amount of allocation sloppiness. Compile that exact same 3D scene to <strong>WebAssembly and WebGL 2</strong> for instant browser play on GitHub Pages, and every extra physics query, per-bullet node instantiation, or uncached shader variant immediately shows up as a dropped frame.</p>
+<p><strong><a href="https://mohsen-niksirat.github.io/Horde_Survival_3D_Godot/" target="_blank" rel="noopener noreferrer">Horde Survival 3D</a></strong> is part of a personal game-engineering trilogy where I implemented wave-survival roguelite mechanics across <strong>Godot 4 (GDScript / 3D Web)</strong>, <strong>Unity (C#)</strong>, and <strong>Android (Kotlin 2D)</strong> to compare engine ergonomics under heavy entity counts. Getting the 3D Web build locked at 60 FPS required rethinking three subsystems: collision broadphase, object lifetimes, and WebGL material warm-up.</p>
+<figure class="schematic" role="group" aria-label="Uniform spatial hash grid and projectile ring buffer in Godot 4 WebAssembly">
+  <svg viewBox="0 0 760 240" width="760" height="240" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+    <rect x="1" y="1" width="758" height="238" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
+    <!-- Spatial Grid -->
+    <g transform="translate(44, 30)">
+      <rect x="0" y="0" width="220" height="180" rx="6" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
+      <line x1="55" y1="0" x2="55" y2="180" stroke="var(--border)" />
+      <line x1="110" y1="0" x2="110" y2="180" stroke="var(--border)" />
+      <line x1="165" y1="0" x2="165" y2="180" stroke="var(--border)" />
+      <line x1="0" y1="45" x2="220" y2="45" stroke="var(--border)" />
+      <line x1="0" y1="90" x2="220" y2="90" stroke="var(--border)" />
+      <line x1="0" y1="135" x2="220" y2="135" stroke="var(--border)" />
+      <!-- Active 3x3 Query Neighborhood -->
+      <rect x="55" y="45" width="110" height="90" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5" />
+      <circle cx="110" cy="90" r="6" fill="var(--accent)" />
+      <circle cx="82" cy="68" r="3.5" fill="var(--text-primary)" />
+      <circle cx="142" cy="76" r="3.5" fill="var(--text-primary)" />
+      <circle cx="128" cy="116" r="3.5" fill="var(--text-primary)" />
+      <circle cx="24" cy="24" r="3.5" fill="var(--text-muted)" opacity="0.45" />
+      <circle cx="194" cy="156" r="3.5" fill="var(--text-muted)" opacity="0.45" />
+      <circle cx="188" cy="28" r="3.5" fill="var(--text-muted)" opacity="0.45" />
+    </g>
+    <!-- Right Panel: Frame Budget Breakdown -->
+    <rect x="308" y="30" width="410" height="180" rx="8" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
+    <text x="330" y="58" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">16.6ms WASM FRAME BUDGET (60 FPS)</text>
+    <text x="330" y="88" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11.5">Naive CharacterBody3D × 300 mobs (24.8ms · drops to 38 FPS)</text>
+    <rect x="330" y="96" width="356" height="14" rx="3" fill="var(--border)" />
+    <rect x="330" y="96" width="356" height="14" rx="3" fill="var(--text-muted)" opacity="0.55" />
+
+    <text x="330" y="138" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5" font-weight="600">Spatial Hash + Squared-Distance Pool (6.1ms · locked 60 FPS)</text>
+    <rect x="330" y="146" width="356" height="14" rx="3" fill="var(--border)" />
+    <rect x="330" y="146" width="132" height="14" rx="3" fill="var(--accent)" />
+
+    <text x="330" y="188" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="10.5">Zero GC allocations per wave · Pre-warmed WebGL shaders</text>
+  </svg>
+  <figcaption>Figure 1: Querying only the highlighted 3×3 spatial hash neighborhood plus pre-allocated object pools keeps total frame simulation at 6.1ms inside browser WebAssembly.</figcaption>
+</figure>
+<h2 id="sec-1">Replacing Full 3D Physics Bodies with Spatial Hash Grids</h2>
+<p>In a horde roguelite, 250+ enemies converge continuously on the player while orbital blades, area pulses, and ricochet projectiles sweep through the crowd. Attaching a full <code>CharacterBody3D</code> with <code>move_and_slide()</code> to every enemy forces the 3D physics server to resolve thousands of convex capsule contacts per frame.</p>
+<p>Because combat takes place on a mostly planar arena ($XZ$ plane with visual height variation), enemy separation and projectile hit detection only need 2D uniform spatial hashing with squared-distance checks:</p>
+<div class="code-block">
+        <div class="code-head"><span>GDSCRIPT</span><button type="button" class="copy-btn" data-copy-code>Copy</button></div>
+        <pre><code>class_name SpatialGrid
+<span class="tok-kw">extends</span> <span class="tok-typ">RefCounted</span>
+
+<span class="tok-kw">var</span> cell_size: float = <span class="tok-num">4.0</span>
+<span class="tok-kw">var</span> buckets: <span class="tok-typ">Dictionary</span> = {}
+
+<span class="tok-kw">func</span> <span class="tok-fn">clear</span>() -&gt; <span class="tok-kw">void</span>:
+    buckets.<span class="tok-fn">clear</span>()
+
+<span class="tok-kw">func</span> <span class="tok-fn">_key</span>(pos: <span class="tok-typ">Vector3</span>) -&gt; int:
+    <span class="tok-kw">var</span> cx := <span class="tok-fn">int</span>(<span class="tok-fn">floor</span>(pos.x / cell_size))
+    <span class="tok-kw">var</span> cz := <span class="tok-fn">int</span>(<span class="tok-fn">floor</span>(pos.z / cell_size))
+    <span class="tok-kw">return</span> (cx &lt;&lt; <span class="tok-num">16</span>) ^ (cz &amp; 0xFFFF)
+
+<span class="tok-kw">func</span> <span class="tok-fn">insert</span>(enemy_id: int, pos: <span class="tok-typ">Vector3</span>) -&gt; <span class="tok-kw">void</span>:
+    <span class="tok-kw">var</span> k := <span class="tok-fn">_key</span>(pos)
+    <span class="tok-kw">if</span> not buckets.<span class="tok-fn">has</span>(k):
+        buckets[k] = <span class="tok-typ">PackedInt32Array</span>()
+    buckets[k].<span class="tok-fn">append</span>(enemy_id)
+
+<span class="tok-kw">func</span> <span class="tok-fn">query_radius</span>(origin: <span class="tok-typ">Vector3</span>, radius: float, positions: <span class="tok-typ">PackedVector3Array</span>) -&gt; <span class="tok-typ">PackedInt32Array</span>:
+    <span class="tok-kw">var</span> hits := <span class="tok-typ">PackedInt32Array</span>()
+    <span class="tok-kw">var</span> r_sq := radius * radius
+    <span class="tok-kw">var</span> base_x := <span class="tok-fn">int</span>(<span class="tok-fn">floor</span>(origin.x / cell_size))
+    <span class="tok-kw">var</span> base_z := <span class="tok-fn">int</span>(<span class="tok-fn">floor</span>(origin.z / cell_size))
+
+    <span class="tok-kw">for</span> dx <span class="tok-kw">in</span> <span class="tok-fn">range</span>(-<span class="tok-num">1</span>, <span class="tok-num">2</span>):
+        <span class="tok-kw">for</span> dz <span class="tok-kw">in</span> <span class="tok-fn">range</span>(-<span class="tok-num">1</span>, <span class="tok-num">2</span>):
+            <span class="tok-kw">var</span> k := ((base_x + dx) &lt;&lt; <span class="tok-num">16</span>) ^ ((base_z + dz) &amp; 0xFFFF)
+            <span class="tok-kw">if</span> not buckets.<span class="tok-fn">has</span>(k):
+                <span class="tok-kw">continue</span>
+            <span class="tok-kw">for</span> id <span class="tok-kw">in</span> buckets[k]:
+                <span class="tok-kw">if</span> origin.<span class="tok-fn">distance_squared_to</span>(positions[id]) &lt;= r_sq:
+                    hits.<span class="tok-fn">append</span>(id)
+    <span class="tok-kw">return</span> hits</code></pre>
+      </div>
+<p>Packing cell coordinates into a single 32-bit integer key avoids string allocations (<code>&quot;%d,%d&quot;</code>), and checking <code>distance_squared_to</code> skips square-root calls until an actual hit occurs.</p>
+<h2 id="sec-2">Zero-Allocation Ring Buffers for Projectiles and XP Gems</h2>
+<p>Spawning and freeing scene-tree nodes (<code>instantiate()</code> + <code>queue_free()</code>) during late-game waves creates frame-time spikes when hundreds of XP crystals and damage numbers appear simultaneously.</p>
+<p>Pre-allocating fixed pools at scene boot (for projectiles, XP pickups, and floating combat text) turns spawning into an $O(1)$ index increment. Inactive instances simply toggle <code>visible = false</code> and park outside the camera frustum, keeping memory flat from minute one through the three-phase boss encounter.</p>
+<h2 id="sec-3">Eliminating First-Hit Shader Stutter in WebGL 2</h2>
+<p>Even with fast simulation code, WebGL 2 compiles shader permutations lazily the first time a material + light + particle combination enters the camera view. Without preparation, the first boss shockwave or evolved weapon aura causes a noticeable 120ms hitch.</p>
+<p>Rendering a hidden 1-frame warm-up strip behind the title screen (containing one tiny quad of each particle material and emission shader) forces the browser&#39;s ANGLE / WebGL pipeline to compile programs before Wave 1 starts.</p>
+<h2 id="sec-4">Cross-Engine Perspective: Godot 4 vs Unity vs Kotlin</h2>
+<p>Building variations of the same genre across three stacks highlighted clear boundaries:</p>
+<ul><li><strong>Godot 4</strong> won decisively on iteration speed and lightweight WebAssembly export size, provided you step around heavy 3D physics nodes for swarm entities.</li><li><strong>Unity C#</strong> offered strong burst/struct data locality out of the box, at the cost of heavier project scaffolding and slower cold web loads.</li><li><strong>Native Kotlin 2D</strong> started instantaneously on mobile hardware with minimal battery draw, proving that custom canvas/sprite loops remain tough to beat for pure 2D arcade responsiveness.</li></ul>
+
+          <section class="artifact-box" aria-label="Related open-source project">
+            <div>
+              <h2>Horde Survival 3D</h2>
+              <p>Explore the live deployment and full open-source implementation referenced in this monograph.</p>
+            </div>
+            <div class="btn-row">
+              <a class="btn-primary" href="https://mohsen-niksirat.github.io/Horde_Survival_3D_Godot/" target="_blank" rel="noopener noreferrer">Open Live App</a>
+              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/Horde_Survival_3D_Godot" target="_blank" rel="noopener noreferrer">View GitHub Repository</a>
+            </div>
+          </section>
+
+          <nav class="post-Matrix-nav" aria-label="Adjacent monographs">
+            <a class="adj-link" href="/mohsen-tech-blog/posts/browser-only-developer-tools/">
+                    <span class="adj-dir">Newer Monograph</span>
+                    <span class="adj-title">Zero-Backend Developer Tools: Analyzing Repos and Datasets Entirely in the Browser</span>
+                  </a>
+            <a class="adj-link" href="/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/">
+                    <span class="adj-dir">Earlier Monograph</span>
+                    <span class="adj-title">Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench</span>
+                  </a>
+          </nav>
+
+          <section class="comments-box" aria-labelledby="comments-heading">
+            <div class="section-head">
+              <h2 id="comments-heading" class="section-title">Technical Discussion</h2>
+              <button type="button" class="tool-btn" data-copy-url><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copy Link</span></button>
+            </div>
+            <p style="margin-bottom:14px;color:var(--text-secondary);font-size:0.93rem;">Comments load on demand via GitHub Issues so zero third-party scripts run uninvited while you read.</p>
+            <div class="btn-row">
+              <button type="button" class="btn-secondary" data-load-comments>Load GitHub Comments</button>
+              <a class="btn-secondary" href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">Discuss on Telegram</a>
+            </div>
+            <div id="comments-mount" style="margin-top:16px;"></div>
+          </section>
+        </div>
+
+        <aside class="article-rail" aria-label="Article table of contents and reading tools">
+          <div class="rail-box">
+                  <p class="rail-heading">On This Page</p>
+                  <ul class="toc-list">
+                    <li><a href="#sec-1">Replacing Full 3D Physics Bodies with Spatial Hash Grids</a></li><li><a href="#sec-2">Zero-Allocation Ring Buffers for Projectiles and XP Gems</a></li><li><a href="#sec-3">Eliminating First-Hit Shader Stutter in WebGL 2</a></li><li><a href="#sec-4">Cross-Engine Perspective: Godot 4 vs Unity vs Kotlin</a></li>
+                  </ul>
+                </div>
+
+          <div class="rail-box">
+            <p class="rail-heading">Reading Type Scale</p>
+            <div class="size-controls" role="group" aria-label="Adjust article font size">
+              <button type="button" class="size-btn" data-font-scale="sm" aria-pressed="false">A-</button>
+              <button type="button" class="size-btn" data-font-scale="md" aria-pressed="true">A</button>
+              <button type="button" class="size-btn" data-font-scale="lg" aria-pressed="false">A+</button>
+            </div>
+          </div>
+
+          <div class="rail-box">
+            <p class="rail-heading">Technical Tags</p>
+            <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.7;">Godot 4 · WebAssembly · WebGL · Spatial Hashing · Game Architecture</p>
+          </div>
+        </aside>
+      </div>
+    </article>
+  
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© 2026 Mohsen Niksirat · M.Sc. Computer Architecture · Open-Source Builder</p>
+      <div class="footer-links">
+        <a href="https://mohsen-niksirat.github.io/Profile/" target="_blank" rel="noopener noreferrer">Interactive OS Portfolio</a>
+        <a href="https://github.com/mohsen-niksirat" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a href="/mohsen-tech-blog/search/">Search</a>
+        <a href="/mohsen-tech-blog/feed.xml">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Instant Command / Search Modal -->
+  <div class="search-dialog-backdrop" id="search-backdrop" hidden>
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-modal-label">
+      <div class="dialog-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label id="search-modal-label" for="search-modal-input" class="skip-link">Search query</label>
+        <input id="search-modal-input" type="search" autocomplete="off" placeholder="Search essays, architectures, or topics (e.g. FSRS, 9router, MCP)...">
+        <button type="button" class="tool-btn" data-close-search>Esc</button>
+      </div>
+      <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

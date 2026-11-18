@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Designing a Resilient Multi-Provider AI Gateway on Serverless Runtimes | Mohsen Niksirat · Engineering Monograph</title>
+  <meta name="description" content="How 9router and AIDahl pool keys across Gemini, Groq, DeepSeek, OpenAI, and OpenRouter with sub-20ms automatic HTTP 429 failover, per-user AES-GCM vaults, and rate-safe Telegram token streaming.">
+  <meta name="author" content="Mohsen Niksirat">
+  <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/multi-provider-ai-gateway/">
+  <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/multi-provider-ai-gateway/">
+  <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:title" content="Designing a Resilient Multi-Provider AI Gateway on Serverless Runtimes">
+  <meta property="og:description" content="How 9router and AIDahl pool keys across Gemini, Groq, DeepSeek, OpenAI, and OpenRouter with sub-20ms automatic HTTP 429 failover, per-user AES-GCM vaults, and rate-safe Telegram token streaming.">
+  <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/multi-provider-ai-gateway/">
+  <meta property="og:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/multi-provider-ai-gateway.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Designing a Resilient Multi-Provider AI Gateway on Serverless Runtimes">
+  <meta name="twitter:description" content="How 9router and AIDahl pool keys across Gemini, Groq, DeepSeek, OpenAI, and OpenRouter with sub-20ms automatic HTTP 429 failover, per-user AES-GCM vaults, and rate-safe Telegram token streaming.">
+  <meta name="twitter:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/multi-provider-ai-gateway.png">
+
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/mohsen-tech-blog/assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
+
+  <script>
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+  </script>
+  <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
+  <script defer src="/mohsen-tech-blog/assets/app.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Designing a Resilient Multi-Provider AI Gateway on Serverless Runtimes","description":"How 9router and AIDahl pool keys across Gemini, Groq, DeepSeek, OpenAI, and OpenRouter with sub-20ms automatic HTTP 429 failover, per-user AES-GCM vaults, and rate-safe Telegram token streaming.","datePublished":"2026-11-16","inLanguage":"en-US","image":"https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/multi-provider-ai-gateway.png","mainEntityOfPage":"https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/multi-provider-ai-gateway/","author":{"@type":"Person","name":"Mohsen Niksirat","url":"https://mohsen-niksirat.github.io/Profile/"}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="reading-progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="/mohsen-tech-blog/">
+        <span class="brand-mark" aria-hidden="true">MN</span>
+        <span class="brand-text">
+          <span class="brand-name">Mohsen Niksirat</span>
+          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+        </span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+
+      <div class="header-tools">
+        <button type="button" class="tool-btn" data-open-search aria-label="Search essays and notes (Ctrl+K)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-btn-label">Search</span>
+          <kbd class="kbd-hint">⌘K</kbd>
+        </button>
+
+        <a class="tool-btn" href="/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/" hreflang="fa" aria-label="Read Persian edition">
+          فارسی
+        </a>
+
+        <button type="button" class="tool-btn" data-theme-toggle aria-label="Toggle color theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+
+        <button type="button" class="tool-btn mobile-menu-btn" data-mobile-menu-btn aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-drawer" id="mobile-drawer">
+      <nav aria-label="Mobile navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell">
+    
+    <article class="article-wrap">
+      <header class="article-header">
+        <h1 class="article-title">Designing a Resilient Multi-Provider AI Gateway on Serverless Runtimes</h1>
+        <p class="article-deck">How 9router and AIDahl pool keys across Gemini, Groq, DeepSeek, OpenAI, and OpenRouter with sub-20ms automatic HTTP 429 failover, per-user AES-GCM vaults, and rate-safe Telegram token streaming.</p>
+        <div class="meta-row tabular">
+          <span class="topic-label">AI Systems</span>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <time datetime="2026-11-16">Nov 16, 2026</time>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <span>4 min read</span>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <a href="/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/" hreflang="fa">مطالعه به فارسی</a>
+        </div>
+      </header>
+
+      <div class="article-layout">
+        <div class="prose">
+          <p>When you ship an AI assistant to real daily users, the hardest problems rarely come from prompt engineering. They come from upstream reliability: sudden <code>HTTP 429</code> rate limits on free or burst tiers, regional latency spikes, provider outages, and the security liability of storing user-supplied API keys.</p>
+<p>While building <strong><a href="https://github.com/mohsen-niksirat/9router_TG_Bot" target="_blank" rel="noopener noreferrer">9router</a></strong> (a multi-provider AI gateway and Telegram Mini App) alongside <strong><a href="https://github.com/mohsen-niksirat/AIDahl" target="_blank" rel="noopener noreferrer">AIDahl</a></strong> (a Bring-Your-Own-Key Telegram research assistant), I needed a routing layer that could treat five distinct model ecosystems (Gemini, Groq, DeepSeek, OpenAI, and OpenRouter) as a single fault-tolerant compute pool.</p>
+<figure class="schematic" role="group" aria-label="Multi-provider AI gateway routing and HTTP 429 circuit-breaker topology">
+  <svg viewBox="0 0 760 270" width="760" height="270" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+    <rect x="1" y="1" width="758" height="268" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
+    <!-- Client Node -->
+    <rect x="26" y="92" width="144" height="86" rx="8" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
+    <text x="98" y="122" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="600">CLIENT / TMA</text>
+    <text x="98" y="142" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">SSE Stream +</text>
+    <text x="98" y="158" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">AES-GCM BYOK</text>
+
+    <!-- Connector Client -> Router -->
+    <line x1="170" y1="135" x2="246" y2="135" stroke="var(--text-muted)" stroke-width="1.5" />
+    <polygon points="246,135 238,130 238,140" fill="var(--text-muted)" />
+
+    <!-- Router Core -->
+    <rect x="250" y="54" width="214" height="162" rx="10" fill="var(--bg-canvas)" stroke="var(--accent)" stroke-width="1.6" />
+    <text x="357" y="82" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">9ROUTER ENGINE</text>
+    <line x1="268" y1="94" x2="446" y2="94" stroke="var(--border)" />
+    <text x="357" y="116" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5" font-weight="600">Health-Weighted Pool</text>
+    <text x="357" y="136" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">1. Round-Robin / Latency</text>
+    <text x="357" y="154" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">2. 429 Cooldown + Jitter</text>
+    <text x="357" y="172" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">3. Auto Provider Failover</text>
+    <rect x="274" y="185" width="166" height="20" rx="4" fill="var(--accent-soft)" />
+    <text x="357" y="199" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="10" font-weight="600">failover &lt; 18ms overhead</text>
+
+    <!-- Provider Pool -->
+    <path d="M464 102 C505 102, 505 56, 548 56" stroke="var(--accent)" stroke-width="1.5" />
+    <polygon points="548,56 540,52 540,60" fill="var(--accent)" />
+
+    <path d="M464 124 C505 124, 505 108, 548 108" stroke="var(--text-muted)" stroke-width="1.3" stroke-dasharray="4 3" />
+    <path d="M464 146 C505 146, 505 160, 548 160" stroke="var(--accent)" stroke-width="1.5" />
+    <polygon points="548,160 540,156 540,164" fill="var(--accent)" />
+    <path d="M464 168 C505 168, 505 212, 548 212" stroke="var(--text-muted)" stroke-width="1.3" />
+
+    <!-- Upstream Cards -->
+    <rect x="552" y="36" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--accent)" />
+    <circle cx="570" cy="56" r="4.5" fill="var(--accent)" />
+    <text x="584" y="60" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">Gemini 2.5 · Healthy</text>
+
+    <rect x="552" y="88" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--border)" opacity="0.72" />
+    <line x1="566" y1="104" x2="574" y2="112" stroke="var(--text-muted)" stroke-width="1.6" />
+    <line x1="574" y1="104" x2="566" y2="112" stroke="var(--text-muted)" stroke-width="1.6" />
+    <text x="584" y="112" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="11">Groq · 429 Cooldown 30s</text>
+
+    <rect x="552" y="140" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--accent)" />
+    <circle cx="570" cy="160" r="4.5" fill="var(--accent)" />
+    <text x="584" y="164" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">DeepSeek · Fallback #1</text>
+
+    <rect x="552" y="192" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
+    <circle cx="570" cy="212" r="4" fill="var(--text-muted)" />
+    <text x="584" y="216" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="11">OpenRouter / OpenAI</text>
+  </svg>
+  <figcaption>Figure 1: Request routing in 9router and AIDahl. Keys returning HTTP 429 enter a jittered cooldown window while in-flight requests retry transparently on the next healthy provider.</figcaption>
+</figure>
+<h2 id="sec-1">Why Single-Provider Wrappers Break Under Real Traffic</h2>
+<p>Most chat bots wire user input straight to a single SDK endpoint. That works during a solo demo, then fails in three predictable ways once concurrent users arrive:</p>
+<ol><li><strong>Token-per-minute (TPM) cliffs:</strong> A single long-context document summary can exhaust a key&#39;s per-minute token bucket, blocking every short query behind it.</li><li><strong>Heterogeneous payload dialects:</strong> Gemini&#39;s native multimodal content parts differ from OpenAI-compatible <code>chat/completions</code> schemas, especially around vision attachments and tool calls.</li><li><strong>Downstream chat throttling:</strong> Even when Groq streams 400 tokens per second, forwarding every chunk to Telegram&#39;s <code>editMessageText</code> endpoint triggers a strict flood-wait penalty from Telegram itself.</li></ol>
+<p>Solving all three meant separating <strong>key health state</strong>, <strong>protocol normalization</strong>, and <strong>stream pacing</strong> into independent layers.</p>
+<h2 id="sec-2">Health-Weighted Key Pooling and 429 Circuit Breaking</h2>
+<p>Instead of static round-robin rotation, 9router maintains a lightweight health record per key. When an upstream request returns <code>429 Too Many Requests</code> or <code>503 Service Unavailable</code>, the router parses <code>Retry-After</code> headers (falling back to an exponential cooldown with random jitter) and immediately retries the request against the next healthy credential or fallback provider.</p>
+<div class="code-block">
+        <div class="code-head"><span>JAVASCRIPT</span><button type="button" class="copy-btn" data-copy-code>Copy</button></div>
+        <pre><code><span class="tok-kw">export</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> <span class="tok-fn">dispatchWithFailover</span>(pool, payload, maxAttempts = <span class="tok-num">4</span>) {
+  <span class="tok-kw">const</span> now = <span class="tok-typ">Date</span>.<span class="tok-fn">now</span>();
+  <span class="tok-kw">const</span> candidates = pool
+    .<span class="tok-fn">filter</span>((key) =&gt; key.cooldownUntil &lt;= now)
+    .<span class="tok-fn">sort</span>((a, b) =&gt; a.ewmaLatencyMs - b.ewmaLatencyMs);
+
+  <span class="tok-kw">let</span> lastError = <span class="tok-kw">null</span>;
+
+  <span class="tok-kw">for</span> (<span class="tok-kw">const</span> key of candidates.<span class="tok-fn">slice</span>(<span class="tok-num">0</span>, maxAttempts)) {
+    <span class="tok-kw">const</span> started = performance.<span class="tok-fn">now</span>();
+    <span class="tok-kw">try</span> {
+      <span class="tok-kw">const</span> response = <span class="tok-kw">await</span> <span class="tok-fn">callNormalizedProvider</span>(key, payload);
+      <span class="tok-kw">const</span> elapsed = performance.<span class="tok-fn">now</span>() - started;
+      key.ewmaLatencyMs = key.ewmaLatencyMs * <span class="tok-num">0.75</span> + elapsed * <span class="tok-num">0.25</span>;
+      key.failures = <span class="tok-num">0</span>;
+      <span class="tok-kw">return</span> response;
+    } <span class="tok-kw">catch</span> (err) {
+      lastError = err;
+      <span class="tok-kw">if</span> (err.status === <span class="tok-num">429</span> || err.status &gt;= <span class="tok-num">500</span>) {
+        <span class="tok-kw">const</span> baseMs = err.retryAfterMs ?? <span class="tok-typ">Math</span>.<span class="tok-fn">min</span>(<span class="tok-num">60_000</span>, <span class="tok-num">4_000</span> * <span class="tok-num">2</span> ** key.failures);
+        <span class="tok-kw">const</span> jitterMs = <span class="tok-typ">Math</span>.<span class="tok-fn">floor</span>(<span class="tok-typ">Math</span>.<span class="tok-fn">random</span>() * <span class="tok-num">1_500</span>);
+        key.failures += <span class="tok-num">1</span>;
+        key.cooldownUntil = <span class="tok-typ">Date</span>.<span class="tok-fn">now</span>() + baseMs + jitterMs;
+        <span class="tok-kw">continue</span>;
+      }
+      <span class="tok-kw">throw</span> err;
+    }
+  }
+
+  <span class="tok-kw">throw</span> <span class="tok-kw">new</span> <span class="tok-typ">Error</span>(<span class="tok-str">`All healthy upstream candidates exhausted: ${lastError?.message}`</span>);
+}</code></pre>
+      </div>
+<p>Adding random jitter (<code>0–1500ms</code>) prevents synchronized retry storms when multiple serverless workers wake up after a shared one-minute quota window resets.</p>
+<h2 id="sec-3">Per-User BYOK Encryption with AES-GCM</h2>
+<p>Both AIDahl and 9router support Bring-Your-Own-Key (BYOK) workflows so power users can attach personal OpenRouter or Gemini keys without sharing rate limits. Storing raw bearer tokens in a database table is unacceptable: if a read replica or log dump ever leaks, every user&#39;s billing account is exposed.</p>
+<p>To isolate credentials, each user&#39;s key is encrypted before persistence using authenticated <strong>AES-256-GCM</strong> with a unique 96-bit initialization vector (IV) and a per-user derived key:</p>
+<div class="code-block">
+        <div class="code-head"><span>JAVASCRIPT</span><button type="button" class="copy-btn" data-copy-code>Copy</button></div>
+        <pre><code><span class="tok-kw">import</span> { webcrypto as <span class="tok-typ">crypto</span> } <span class="tok-kw">from</span> <span class="tok-str">&quot;node:crypto&quot;</span>;
+
+<span class="tok-kw">export</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> <span class="tok-fn">sealUserApiKey</span>(masterSecret, telegramUserId, rawApiKey) {
+  <span class="tok-kw">const</span> enc = <span class="tok-kw">new</span> <span class="tok-typ">TextEncoder</span>();
+  <span class="tok-kw">const</span> baseKey = <span class="tok-kw">await</span> <span class="tok-typ">crypto</span>.subtle.<span class="tok-fn">importKey</span>(
+    <span class="tok-str">&quot;raw&quot;</span>,
+    enc.<span class="tok-fn">encode</span>(masterSecret),
+    <span class="tok-str">&quot;HKDF&quot;</span>,
+    <span class="tok-kw">false</span>,
+    [<span class="tok-str">&quot;deriveKey&quot;</span>]
+  );
+
+  <span class="tok-kw">const</span> userKey = <span class="tok-kw">await</span> <span class="tok-typ">crypto</span>.subtle.<span class="tok-fn">deriveKey</span>(
+    {
+      name: <span class="tok-str">&quot;HKDF&quot;</span>,
+      hash: <span class="tok-str">&quot;SHA-256&quot;</span>,
+      salt: enc.<span class="tok-fn">encode</span>(<span class="tok-str">`uid:${telegramUserId}`</span>),
+      info: enc.<span class="tok-fn">encode</span>(<span class="tok-str">&quot;9router-byok-v1&quot;</span>),
+    },
+    baseKey,
+    { name: <span class="tok-str">&quot;AES-GCM&quot;</span>, length: <span class="tok-num">256</span> },
+    <span class="tok-kw">false</span>,
+    [<span class="tok-str">&quot;encrypt&quot;</span>, <span class="tok-str">&quot;decrypt&quot;</span>]
+  );
+
+  <span class="tok-kw">const</span> iv = <span class="tok-typ">crypto</span>.<span class="tok-fn">getRandomValues</span>(<span class="tok-kw">new</span> <span class="tok-typ">Uint8Array</span>(<span class="tok-num">12</span>));
+  <span class="tok-kw">const</span> cipherBuf = <span class="tok-kw">await</span> <span class="tok-typ">crypto</span>.subtle.<span class="tok-fn">encrypt</span>(
+    { name: <span class="tok-str">&quot;AES-GCM&quot;</span>, iv },
+    userKey,
+    enc.<span class="tok-fn">encode</span>(rawApiKey)
+  );
+
+  <span class="tok-kw">return</span> {
+    iv: <span class="tok-typ">Buffer</span>.<span class="tok-kw">from</span>(iv).<span class="tok-fn">toString</span>(<span class="tok-str">&quot;base64&quot;</span>),
+    ciphertext: <span class="tok-typ">Buffer</span>.<span class="tok-kw">from</span>(cipherBuf).<span class="tok-fn">toString</span>(<span class="tok-str">&quot;base64&quot;</span>),
+  };
+}</code></pre>
+      </div>
+<p>Using HKDF bound to the immutable <code>telegramUserId</code> ensures that ciphertext copied from one user row cannot be decrypted under another user&#39;s context, and GCM&#39;s authentication tag rejects any tampered payload immediately.</p>
+<h2 id="sec-4">Pacing SSE Streams Inside Telegram&#39;s Rate Limits</h2>
+<p>Server-Sent Events (SSE) from modern inference engines emit 30 to 120 chunks per second. Calling Telegram&#39;s <code>editMessageText</code> on every token immediately trips a <code>429 Too Many Requests: retry after N</code> block on the chat.</p>
+<p>In AIDahl, an adaptive coalescing buffer solves this cleanly:</p>
+<ul><li><strong>Time-and-character Dual Gate:</strong> Flush an update only when at least <code>650ms</code> have elapsed <em>and</em> at least <code>48</code> new characters have accumulated, or when the stream finishes.</li><li><strong>Markdown Fence Balancing:</strong> Before sending an intermediate edit, count unclosed triple-backtick fences (<code> </code><code></code><code> </code>). Temporarily appending a closing fence keeps code blocks formatted smoothly while the model is still mid-function.</li><li><strong>Graceful Final Commit:</strong> The final edit strips the temporary cursor indicator and attaches inline action buttons (model badge, token usage, retry, or branch thread).</li></ul>
+<h2 id="sec-5">Takeaways for Serverless AI Tooling</h2>
+<p>Treating LLM providers like ephemeral spot instances rather than infallible RPC endpoints completely changes user perception. When a Gemini key hits a burst ceiling and DeepSeek or Groq picks up the request in under 20 milliseconds, the user simply gets their answer without ever seeing a traceback.</p>
+
+          <section class="artifact-box" aria-label="Related open-source project">
+            <div>
+              <h2>9router AI Gateway &amp; AIDahl</h2>
+              <p>Explore the live deployment and full open-source implementation referenced in this monograph.</p>
+            </div>
+            <div class="btn-row">
+              <a class="btn-primary" href="https://github.com/mohsen-niksirat/AIDahl" target="_blank" rel="noopener noreferrer">Open Live App</a>
+              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/9router_TG_Bot" target="_blank" rel="noopener noreferrer">View GitHub Repository</a>
+            </div>
+          </section>
+
+          <nav class="post-Matrix-nav" aria-label="Adjacent monographs">
+            <div></div>
+            <a class="adj-link" href="/mohsen-tech-blog/posts/fsrs-spaced-repetition-architecture/">
+                    <span class="adj-dir">Earlier Monograph</span>
+                    <span class="adj-title">Beyond Rigid Leitner Boxes: Implementing FSRS in an Offline-First Reader</span>
+                  </a>
+          </nav>
+
+          <section class="comments-box" aria-labelledby="comments-heading">
+            <div class="section-head">
+              <h2 id="comments-heading" class="section-title">Technical Discussion</h2>
+              <button type="button" class="tool-btn" data-copy-url><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copy Link</span></button>
+            </div>
+            <p style="margin-bottom:14px;color:var(--text-secondary);font-size:0.93rem;">Comments load on demand via GitHub Issues so zero third-party scripts run uninvited while you read.</p>
+            <div class="btn-row">
+              <button type="button" class="btn-secondary" data-load-comments>Load GitHub Comments</button>
+              <a class="btn-secondary" href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">Discuss on Telegram</a>
+            </div>
+            <div id="comments-mount" style="margin-top:16px;"></div>
+          </section>
+        </div>
+
+        <aside class="article-rail" aria-label="Article table of contents and reading tools">
+          <div class="rail-box">
+                  <p class="rail-heading">On This Page</p>
+                  <ul class="toc-list">
+                    <li><a href="#sec-1">Why Single-Provider Wrappers Break Under Real Traffic</a></li><li><a href="#sec-2">Health-Weighted Key Pooling and 429 Circuit Breaking</a></li><li><a href="#sec-3">Per-User BYOK Encryption with AES-GCM</a></li><li><a href="#sec-4">Pacing SSE Streams Inside Telegram&#39;s Rate Limits</a></li><li><a href="#sec-5">Takeaways for Serverless AI Tooling</a></li>
+                  </ul>
+                </div>
+
+          <div class="rail-box">
+            <p class="rail-heading">Reading Type Scale</p>
+            <div class="size-controls" role="group" aria-label="Adjust article font size">
+              <button type="button" class="size-btn" data-font-scale="sm" aria-pressed="false">A-</button>
+              <button type="button" class="size-btn" data-font-scale="md" aria-pressed="true">A</button>
+              <button type="button" class="size-btn" data-font-scale="lg" aria-pressed="false">A+</button>
+            </div>
+          </div>
+
+          <div class="rail-box">
+            <p class="rail-heading">Technical Tags</p>
+            <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.7;">AI Gateway · Serverless · Load Balancing · Telegram Mini App · Cryptography</p>
+          </div>
+        </aside>
+      </div>
+    </article>
+  
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© 2026 Mohsen Niksirat · M.Sc. Computer Architecture · Open-Source Builder</p>
+      <div class="footer-links">
+        <a href="https://mohsen-niksirat.github.io/Profile/" target="_blank" rel="noopener noreferrer">Interactive OS Portfolio</a>
+        <a href="https://github.com/mohsen-niksirat" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a href="/mohsen-tech-blog/search/">Search</a>
+        <a href="/mohsen-tech-blog/feed.xml">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Instant Command / Search Modal -->
+  <div class="search-dialog-backdrop" id="search-backdrop" hidden>
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-modal-label">
+      <div class="dialog-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label id="search-modal-label" for="search-modal-input" class="skip-link">Search query</label>
+        <input id="search-modal-input" type="search" autocomplete="off" placeholder="Search essays, architectures, or topics (e.g. FSRS, 9router, MCP)...">
+        <button type="button" class="tool-btn" data-close-search>Esc</button>
+      </div>
+      <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

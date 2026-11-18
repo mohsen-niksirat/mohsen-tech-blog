@@ -1,118 +1,361 @@
----
-layout: home
-title: Home
----
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mohsen Niksirat · Engineering Monograph</title>
+  <meta name="description" content="Technical essays and field notes by Mohsen Niksirat on multi-provider AI gateways, FSRS spaced repetition, Godot 4 WebAssembly, MCP tooling, and local-first web architecture.">
+  <meta name="author" content="Mohsen Niksirat">
+  <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/">
+  <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/">
+  <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
 
-<div class="hero">
-  <h1>Mohsen's Tech Blog</h1>
-  <p class="hero-subtitle">Sharing insights on web development, programming, and things I learn along the way.</p>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:title" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:description" content="Technical essays and field notes by Mohsen Niksirat on multi-provider AI gateways, FSRS spaced repetition, Godot 4 WebAssembly, MCP tooling, and local-first web architecture.">
+  <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/">
+  <meta property="og:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mohsen Niksirat · Engineering Monograph">
+  <meta name="twitter:description" content="Technical essays and field notes by Mohsen Niksirat on multi-provider AI gateways, FSRS spaced repetition, Godot 4 WebAssembly, MCP tooling, and local-first web architecture.">
+  <meta name="twitter:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/og-default.png">
 
-  <div class="stats">
-    <span><strong>{{ site.posts.size }}</strong> posts</span>
-    <span><strong>{% assign tag_count = 0 %}{% for tag in site.tags %}{% assign tag_count = tag_count | plus: 1 %}{% endfor %}{{ tag_count }}</strong> tags</span>
-    <span><strong>{% assign category_count = 0 %}{% for cat in site.categories %}{% assign category_count = category_count | plus: 1 %}{% endfor %}{{ category_count }}</strong> categories</span>
-  </div>
-</div>
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/mohsen-tech-blog/assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
 
-<h2 style="margin-top: 2rem; margin-bottom: 1rem;">Latest Posts</h2>
+  <script>
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+  </script>
+  <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
+  <script defer src="/mohsen-tech-blog/assets/app.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"Mohsen Niksirat · Engineering Monograph","url":"https://mohsen-niksirat.github.io/mohsen-tech-blog/","inLanguage":"en-US","author":{"@type":"Person","name":"Mohsen Niksirat","url":"https://mohsen-niksirat.github.io/Profile/","sameAs":["https://github.com/mohsen-niksirat","https://t.me/mohsenniksirat"]}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
 
-{% if site.posts.size > 0 %}
-  <ul class="post-list">
-    {% for post in site.posts limit: 6 %}
-      <li>
-         <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
-        <p class="excerpt">{{ post.excerpt | strip_html | truncate: 160 }}</p>
-        <div class="post-meta">
-          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %d, %Y" }}</time>
-          {% if post.tags %}
-            <span class="tags">{% for tag in post.tags %}{% if forloop.first %}{{ tag }}{% else %}<span class="tag-separator">,</span> {{ tag }}{% endif %}{% endfor %}</span>
-          {% endif %}
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="/mohsen-tech-blog/">
+        <span class="brand-mark" aria-hidden="true">MN</span>
+        <span class="brand-text">
+          <span class="brand-name">Mohsen Niksirat</span>
+          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+        </span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+
+      <div class="header-tools">
+        <button type="button" class="tool-btn" data-open-search aria-label="Search essays and notes (Ctrl+K)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-btn-label">Search</span>
+          <kbd class="kbd-hint">⌘K</kbd>
+        </button>
+
+        <a class="tool-btn" href="/mohsen-tech-blog/fa/" hreflang="fa" aria-label="Read Persian edition">
+          فارسی
+        </a>
+
+        <button type="button" class="tool-btn" data-theme-toggle aria-label="Toggle color theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+
+        <button type="button" class="tool-btn mobile-menu-btn" data-mobile-menu-btn aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-drawer" id="mobile-drawer">
+      <nav aria-label="Mobile navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell">
+    
+    <section class="masthead-intro">
+      <div class="masthead-grid">
+        <div>
+          <h1 class="masthead-title">Systems notes on resilient AI gateways, cognitive learning tools, and local-first web craft</h1>
         </div>
-      </li>
-    {% endfor %}
-  </ul>
+        <div>
+          <p class="masthead-lede">Long-form engineering essays and lab dispatches distilled from building 47+ open-source repositories across serverless AI routing, spaced-repetition engines, WebAssembly games, and zero-backend developer tools.</p>
+        </div>
+      </div>
 
-  {% if site.posts.size > 6 %}
-    <p style="text-align: center; margin-top: 2rem;">
-      <a href="{{ '/archive' | relative_url }}" class="view-all">View all posts →</a>
-    </p>
-  {% endif %}
-{% else %}
-  <p>No posts published yet. Coming soon!</p>
-{% endif %}
+      <div class="colophon-bar">
+        <span class="tabular">6 Deep-Dive Monographs · 6 Lab Field Notes · Bilingual Edition (EN / FA)</span>
+        <div class="colophon-links">
+          <a href="https://mohsen-niksirat.github.io/Profile/" target="_blank" rel="noopener noreferrer">Open Interactive macOS Portfolio</a>
+          <a href="https://github.com/mohsen-niksirat" target="_blank" rel="noopener noreferrer">@mohsen-niksirat</a>
+          <a href="/mohsen-tech-blog/feed.xml">RSS Feed</a>
+        </div>
+      </div>
+    </section>
 
-<div style="margin-top: 3rem; text-align: center;">
-  <a href="{{ '/about' | relative_url }}" class="btn-link">About Me</a>
-  <a href="{{ '/projects' | relative_url }}" class="btn-link">My Projects</a>
-  <a href="{{ '/search' | relative_url }}" class="btn-link">Search</a>
-</div>
+    <section class="lead-spread" aria-labelledby="lead-essay-heading">
+      <div class="lead-grid">
+        <div>
+          <h2 id="lead-essay-heading" class="lead-heading">
+            <a href="/mohsen-tech-blog/posts/multi-provider-ai-gateway/">Designing a Resilient Multi-Provider AI Gateway on Serverless Runtimes</a>
+          </h2>
+          <p class="lead-summary">How 9router and AIDahl pool keys across Gemini, Groq, DeepSeek, OpenAI, and OpenRouter with sub-20ms automatic HTTP 429 failover, per-user AES-GCM vaults, and rate-safe Telegram token streaming.</p>
+          <div class="meta-row tabular">
+            <span class="topic-label">AI Systems</span>
+            <span class="meta-dot" aria-hidden="true">·</span>
+            <time datetime="2026-11-16">Nov 16, 2026</time>
+            <span class="meta-dot" aria-hidden="true">·</span>
+            <span>4 min read</span>
+          </div>
+          <div class="btn-row">
+            <a class="btn-primary" href="/mohsen-tech-blog/posts/multi-provider-ai-gateway/">Read Full Monograph</a>
+            <a class="btn-secondary" href="https://github.com/mohsen-niksirat/9router_TG_Bot" target="_blank" rel="noopener noreferrer">Inspect Source on GitHub</a>
+          </div>
+        </div>
+        <div class="lead-visual">
+          <figure class="schematic" role="group" aria-label="Multi-provider AI gateway routing and HTTP 429 circuit-breaker topology">
+  <svg viewBox="0 0 760 270" width="760" height="270" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+    <rect x="1" y="1" width="758" height="268" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
+    <!-- Client Node -->
+    <rect x="26" y="92" width="144" height="86" rx="8" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
+    <text x="98" y="122" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="600">CLIENT / TMA</text>
+    <text x="98" y="142" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">SSE Stream +</text>
+    <text x="98" y="158" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">AES-GCM BYOK</text>
 
-<style>
-.hero {
-  text-align: center;
-  padding: 3rem 0;
-}
+    <!-- Connector Client -> Router -->
+    <line x1="170" y1="135" x2="246" y2="135" stroke="var(--text-muted)" stroke-width="1.5" />
+    <polygon points="246,135 238,130 238,140" fill="var(--text-muted)" />
 
-.hero h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
+    <!-- Router Core -->
+    <rect x="250" y="54" width="214" height="162" rx="10" fill="var(--bg-canvas)" stroke="var(--accent)" stroke-width="1.6" />
+    <text x="357" y="82" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">9ROUTER ENGINE</text>
+    <line x1="268" y1="94" x2="446" y2="94" stroke="var(--border)" />
+    <text x="357" y="116" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5" font-weight="600">Health-Weighted Pool</text>
+    <text x="357" y="136" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">1. Round-Robin / Latency</text>
+    <text x="357" y="154" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">2. 429 Cooldown + Jitter</text>
+    <text x="357" y="172" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">3. Auto Provider Failover</text>
+    <rect x="274" y="185" width="166" height="20" rx="4" fill="var(--accent-soft)" />
+    <text x="357" y="199" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="10" font-weight="600">failover &lt; 18ms overhead</text>
 
-.hero-subtitle {
-  font-size: 1.2rem;
-  color: var(--muted);
-  margin-bottom: 1.5rem;
-}
+    <!-- Provider Pool -->
+    <path d="M464 102 C505 102, 505 56, 548 56" stroke="var(--accent)" stroke-width="1.5" />
+    <polygon points="548,56 540,52 540,60" fill="var(--accent)" />
 
-.stats {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 1.5rem;
-  font-size: 0.95rem;
-  color: var(--muted);
-}
+    <path d="M464 124 C505 124, 505 108, 548 108" stroke="var(--text-muted)" stroke-width="1.3" stroke-dasharray="4 3" />
+    <path d="M464 146 C505 146, 505 160, 548 160" stroke="var(--accent)" stroke-width="1.5" />
+    <polygon points="548,160 540,156 540,164" fill="var(--accent)" />
+    <path d="M464 168 C505 168, 505 212, 548 212" stroke="var(--text-muted)" stroke-width="1.3" />
 
-.stats strong {
-  color: var(--text);
-  font-weight: 700;
-}
+    <!-- Upstream Cards -->
+    <rect x="552" y="36" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--accent)" />
+    <circle cx="570" cy="56" r="4.5" fill="var(--accent)" />
+    <text x="584" y="60" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">Gemini 2.5 · Healthy</text>
 
-.btn-link {
-  display: inline-block;
-  margin: 0 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--code-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  text-decoration: none;
-  color: var(--text);
-  transition: all 0.2s;
-}
+    <rect x="552" y="88" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--border)" opacity="0.72" />
+    <line x1="566" y1="104" x2="574" y2="112" stroke="var(--text-muted)" stroke-width="1.6" />
+    <line x1="574" y1="104" x2="566" y2="112" stroke="var(--text-muted)" stroke-width="1.6" />
+    <text x="584" y="112" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="11">Groq · 429 Cooldown 30s</text>
 
-.btn-link:hover {
-  background: #4a90d9;
-  color: white;
-}
+    <rect x="552" y="140" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--accent)" />
+    <circle cx="570" cy="160" r="4.5" fill="var(--accent)" />
+    <text x="584" y="164" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">DeepSeek · Fallback #1</text>
 
-.view-all {
-  display: inline-block;
-  padding: 0.4rem 0.8rem;
-  color: #4a90d9;
-  text-decoration: none;
-  font-weight: 500;
-}
+    <rect x="552" y="192" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
+    <circle cx="570" cy="212" r="4" fill="var(--text-muted)" />
+    <text x="584" y="216" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="11">OpenRouter / OpenAI</text>
+  </svg>
+  <figcaption>Figure 1: Request routing in 9router and AIDahl. Keys returning HTTP 429 enter a jittered cooldown window while in-flight requests retry transparently on the next healthy provider.</figcaption>
+</figure>
+        </div>
+      </div>
+    </section>
 
-.view-all:hover {
-  text-decoration: underline;
-}
+    <section class="ledger-section" aria-labelledby="ledger-heading">
+      <div class="section-head">
+        <h2 id="ledger-heading" class="section-title">Published Monographs</h2>
+        <a href="/mohsen-tech-blog/archive/">Browse complete archive</a>
+      </div>
 
-.post-meta .tags {
-  color: var(--muted);
-  font-size: 0.85rem;
-}
+      <div class="filter-bar" role="group" aria-label="Filter essays by engineering topic">
+        <button type="button" class="filter-tab" data-topic-filter="all" aria-pressed="true">
+          <span>All Topics</span>
+          <span class="filter-count">6</span>
+        </button>
+        <button type="button" class="filter-tab" data-topic-filter="AI Systems" aria-pressed="false">
+              <span>AI Systems</span>
+              <span class="filter-count">2</span>
+            </button><button type="button" class="filter-tab" data-topic-filter="Learning Engines" aria-pressed="false">
+              <span>Learning Engines</span>
+              <span class="filter-count">2</span>
+            </button><button type="button" class="filter-tab" data-topic-filter="Local-First Web" aria-pressed="false">
+              <span>Local-First Web</span>
+              <span class="filter-count">1</span>
+            </button><button type="button" class="filter-tab" data-topic-filter="Systems &amp; Game Dev" aria-pressed="false">
+              <span>Systems &amp; Game Dev</span>
+              <span class="filter-count">1</span>
+            </button>
+      </div>
 
-.tag-separator {
-  color: var(--muted);
-}
-</style>
+      <ul class="essay-ledger">
+        <li class="ledger-row" data-essay-topic="AI Systems">
+              <div class="ledger-date tabular">
+                <time datetime="2026-11-16">Nov 16, 2026</time>
+                <span class="ledger-readtime">4 min read</span>
+              </div>
+              <div class="ledger-main">
+                <h3><a href="/mohsen-tech-blog/posts/multi-provider-ai-gateway/">Designing a Resilient Multi-Provider AI Gateway on Serverless Runtimes</a></h3>
+                <p>How 9router and AIDahl pool keys across Gemini, Groq, DeepSeek, OpenAI, and OpenRouter with sub-20ms automatic HTTP 429 failover, per-user AES-GCM vaults, and rate-safe Telegram token streaming.</p>
+              </div>
+              <div class="ledger-topic">AI Systems</div>
+            </li><li class="ledger-row" data-essay-topic="Learning Engines">
+              <div class="ledger-date tabular">
+                <time datetime="2026-11-10">Nov 10, 2026</time>
+                <span class="ledger-readtime">4 min read</span>
+              </div>
+              <div class="ledger-main">
+                <h3><a href="/mohsen-tech-blog/posts/fsrs-spaced-repetition-architecture/">Beyond Rigid Leitner Boxes: Implementing FSRS in an Offline-First Reader</a></h3>
+                <p>Why classic five-box Leitner systems over-schedule reviews, and how Readner models per-card memory stability alongside an integrated PDF reader and semantic WordWeb graph.</p>
+              </div>
+              <div class="ledger-topic">Learning Engines</div>
+            </li><li class="ledger-row" data-essay-topic="Local-First Web">
+              <div class="ledger-date tabular">
+                <time datetime="2026-10-29">Oct 29, 2026</time>
+                <span class="ledger-readtime">4 min read</span>
+              </div>
+              <div class="ledger-main">
+                <h3><a href="/mohsen-tech-blog/posts/browser-only-developer-tools/">Zero-Backend Developer Tools: Analyzing Repos and Datasets Entirely in the Browser</a></h3>
+                <p>Architectural lessons from building Repodest, DataLens, and A11y Inspector so developers can inspect codebases, chart sensitive CSVs, and audit WCAG compliance with zero server uploads.</p>
+              </div>
+              <div class="ledger-topic">Local-First Web</div>
+            </li><li class="ledger-row" data-essay-topic="Systems &amp; Game Dev">
+              <div class="ledger-date tabular">
+                <time datetime="2026-10-18">Oct 18, 2026</time>
+                <span class="ledger-readtime">4 min read</span>
+              </div>
+              <div class="ledger-main">
+                <h3><a href="/mohsen-tech-blog/posts/godot4-wasm-horde-survival/">60 FPS Swarm Survival on the Web: Exporting Godot 4 3D Roguelites to WebAssembly</a></h3>
+                <p>How Horde Survival 3D sustains hundreds of active 3D enemies, evolving projectile rings, and boss phases inside a browser WASM budget, plus lessons from parallel Unity and Kotlin builds.</p>
+              </div>
+              <div class="ledger-topic">Systems &amp; Game Dev</div>
+            </li><li class="ledger-row" data-essay-topic="AI Systems">
+              <div class="ledger-date tabular">
+                <time datetime="2026-10-05">Oct 5, 2026</time>
+                <span class="ledger-readtime">4 min read</span>
+              </div>
+              <div class="ledger-main">
+                <h3><a href="/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/">Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench</a></h3>
+                <p>Inside MCP Studio: turning raw Model Context Protocol JSON Schemas and JSON-RPC 2.0 traffic into an interactive browser IDE for testing agent tools, resources, and prompts.</p>
+              </div>
+              <div class="ledger-topic">AI Systems</div>
+            </li><li class="ledger-row" data-essay-topic="Learning Engines">
+              <div class="ledger-date tabular">
+                <time datetime="2026-09-22">Sep 22, 2026</time>
+                <span class="ledger-readtime">4 min read</span>
+              </div>
+              <div class="ledger-main">
+                <h3><a href="/mohsen-tech-blog/posts/deterministic-canvas-cs-animations/">Teaching Algorithms with Deterministic Canvas Engines: Inside CodeVis</a></h3>
+                <p>How CodeVis packs 49 interactive computer science visualizations, synchronized code stepping, and PNG export cards into a single zero-dependency HTML file.</p>
+              </div>
+              <div class="ledger-topic">Learning Engines</div>
+            </li>
+      </ul>
+
+      <div class="empty-state" id="ledger-empty" hidden>
+        <p>No essays match the selected topic.</p>
+        <button type="button" class="btn-secondary" data-reset-filter>Show all essays</button>
+      </div>
+    </section>
+
+    <section class="notes-section" aria-labelledby="notes-heading">
+      <div class="section-head">
+        <h2 id="notes-heading" class="section-title">Recent Lab Field Notes</h2>
+        <a href="/mohsen-tech-blog/notes/">Read all field notes</a>
+      </div>
+
+      <div class="notes-columns">
+        <article class="note-entry" id="webcrypto-pbkdf2-vaults">
+              <div class="note-meta tabular">
+                <span class="note-tag">Security</span>
+                <time datetime="2026-11-14">Nov 14, 2026</time>
+              </div>
+              <h3>PBKDF2 Iteration Counts for Offline Browser Vaults</h3>
+              <p>In API Key Manager, deriving a 256-bit AES-GCM key via WebCrypto PBKDF2-SHA256 at 600,000 iterations takes ~190ms on modern laptops and ~420ms on mid-range Android phones: fast enough for a single unlock prompt while raising brute-force cost substantially without external WASM bundles.</p>
+              <div class="note-foot">
+                <a href="https://mohsen-niksirat.github.io/api-key-manager/" target="_blank" rel="noopener noreferrer">API Key Manager</a>
+              </div>
+            </article><article class="note-entry" id="tauri-v2-rust-footprint">
+              <div class="note-meta tabular">
+                <span class="note-tag">Rust &amp; Desktop</span>
+                <time datetime="2026-11-04">Nov 4, 2026</time>
+              </div>
+              <h3>Shipping Sub-8MB Windows Installers with Rust and Tauri v2</h3>
+              <p>Building Kite Downloader on Tauri v2 instead of bundling Chromium kept the Windows installer under 8 MB while letting Rust async Tokio tasks own segmented HTTP range downloads, checksum verification, and clipboard URL sniffing off the UI thread.</p>
+              <div class="note-foot">
+                <a href="https://github.com/mohsen-niksirat/kite-downloader" target="_blank" rel="noopener noreferrer">Kite Downloader</a>
+              </div>
+            </article><article class="note-entry" id="rtl-code-isolation-css">
+              <div class="note-meta tabular">
+                <span class="note-tag">Typography &amp; RTL</span>
+                <time datetime="2026-10-24">Oct 24, 2026</time>
+              </div>
+              <h3>Preventing Punctuation Flip in Bilingual RTL Technical Prose</h3>
+              <p>Inline code spans like <code>HTTP 429</code> or <code>O(N log N)</code> inside Persian paragraphs scramble parentheses unless styled with <code>unicode-bidi: isolate</code> and <code>direction: ltr</code>. Applying isolation at the base <code>code</code> selector fixes bidirectional cursor movement and copy-paste order across Ravaan and this journal.</p>
+              <div class="note-foot">
+                <a href="https://mohsen-niksirat.github.io/Ravaan/" target="_blank" rel="noopener noreferrer">Ravaan Editor</a>
+              </div>
+            </article><article class="note-entry" id="voice-turn-taking-ielts">
+              <div class="note-meta tabular">
+                <span class="note-tag">Voice AI</span>
+                <time datetime="2026-10-12">Oct 12, 2026</time>
+              </div>
+              <h3>Silence Thresholds in Spoken English Tutoring</h3>
+              <p>Standard 500ms voice-activity cutoffs interrupt non-native speakers mid-thought while searching for vocabulary. Extending end-of-turn silence tolerance to 1,250ms in SpeakAI Coach produced far more accurate 6-axis IELTS fluency and lexical resource scoring.</p>
+              <div class="note-foot">
+                <a href="https://mohsen-niksirat.github.io/SpeakAI-Coach/" target="_blank" rel="noopener noreferrer">SpeakAI Coach</a>
+              </div>
+            </article>
+      </div>
+    </section>
+  
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© 2026 Mohsen Niksirat · M.Sc. Computer Architecture · Open-Source Builder</p>
+      <div class="footer-links">
+        <a href="https://mohsen-niksirat.github.io/Profile/" target="_blank" rel="noopener noreferrer">Interactive OS Portfolio</a>
+        <a href="https://github.com/mohsen-niksirat" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a href="/mohsen-tech-blog/search/">Search</a>
+        <a href="/mohsen-tech-blog/feed.xml">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Instant Command / Search Modal -->
+  <div class="search-dialog-backdrop" id="search-backdrop" hidden>
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-modal-label">
+      <div class="dialog-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label id="search-modal-label" for="search-modal-input" class="skip-link">Search query</label>
+        <input id="search-modal-input" type="search" autocomplete="off" placeholder="Search essays, architectures, or topics (e.g. FSRS, 9router, MCP)...">
+        <button type="button" class="tool-btn" data-close-search>Esc</button>
+      </div>
+      <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

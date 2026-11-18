@@ -1,0 +1,374 @@
+[
+  {
+    "lang": "en",
+    "title": "Designing a Resilient Multi-Provider AI Gateway on Serverless Runtimes",
+    "summary": "How 9router and AIDahl pool keys across Gemini, Groq, DeepSeek, OpenAI, and OpenRouter with sub-20ms automatic HTTP 429 failover, per-user AES-GCM vaults, and rate-safe Telegram token streaming.",
+    "topic": "AI Systems",
+    "tags": [
+      "AI Gateway",
+      "Serverless",
+      "Load Balancing",
+      "Telegram Mini App",
+      "Cryptography"
+    ],
+    "dateLabel": "Nov 16, 2026",
+    "readTime": "4 min read",
+    "url": "/mohsen-tech-blog/posts/multi-provider-ai-gateway/",
+    "body": "When you ship an AI assistant to real daily users, the hardest problems rarely come from prompt engineering. They come from upstream reliability: sudden  HTTP 429  rate limits on free or burst tiers, regional latency spikes, provider outages, and the security liability of storing user-supplied API keys.\n\nWhile building   [9router](https://github.com/mohsen-niksirat/9router TG Bot)   (a multi-provider AI gateway and Telegram Mini App) alongside   [AIDahl](https://github.com/mohsen-niksirat/AIDahl)   (a Bring-Your-Own-Key Telegram research assistant), I needed a routing layer that could treat five distinct model ecosystems (Gemini, Groq, DeepSeek, OpenAI, and OpenRouter) as a single fault-tolerant compute pool.\n\n\n\n   Why Single-Provider Wrappers Break Under Real Traffic\n\nMost chat bots wire user input straight to a single SDK endpoint. That works during a solo demo, then fails in three predictable ways once concurrent users arrive:\n\n1.   Token-per-minute (TPM) cliffs:   A single long-context document summary can exhaust a key's per-minute token bucket, blocking every short query behind it.\n2.   Heterogeneous payload dialects:   Gemini's native multimodal content parts differ from OpenAI-compatible  chat/completions  schemas, especially around vision attachments and tool calls.\n3.   Downstream chat throttling:   Even when Groq streams 400 tokens per second, forwarding every chunk to Telegram's  editMessageText  endpoint triggers a strict flood-wait penalty from Telegram itself.\n\nSolving all three meant separating   key health state  ,   protocol normalization  , and   stream pacing   into independent layers.\n\n   Health-Weighted Key Pooling and 429 Circuit Breaking\n\nInstead of static round-robin rotation, 9router maintains a lightweight health record per key. When an upstream request returns  429 Too Many Requests  or  503 Service Unavailable , the router parses  Retry-After  headers (falling back to an exponential cooldown with random jitter) and immediately retries the request against the next healthy credential or fallback provider.\n\n   javascript\nexport async function dispatchWithFailover(pool, payload, maxAttempts = 4) {\n  const now = Date.now();\n  const candidates = pool\n    .filter((key) =  key.cooldownUntil <= now)\n    .sort((a, b) =  a.ewmaLatencyMs - b.ewmaLatencyMs);\n\n  let lastError = null;\n\n  for (const key of candidates.slice(0, maxAttempts)) {\n   "
+  },
+  {
+    "lang": "en",
+    "title": "Beyond Rigid Leitner Boxes: Implementing FSRS in an Offline-First Reader",
+    "summary": "Why classic five-box Leitner systems over-schedule reviews, and how Readner models per-card memory stability alongside an integrated PDF reader and semantic WordWeb graph.",
+    "topic": "Learning Engines",
+    "tags": [
+      "FSRS",
+      "Spaced Repetition",
+      "Offline PWA",
+      "IndexedDB",
+      "Kotlin"
+    ],
+    "dateLabel": "Nov 10, 2026",
+    "readTime": "4 min read",
+    "url": "/mohsen-tech-blog/posts/fsrs-spaced-repetition-architecture/",
+    "body": "Anyone who has tried memorizing thousands of foreign words with a physical five-box Leitner deck eventually hits the \"review avalanche.\" Miss a word once on day 30, and classic Leitner drops it all the way back to Box 1 alongside brand-new vocabulary you first saw five minutes ago.\n\nWhen building   [Readner (Leitner Pro Max)](https://mohsen-niksirat.github.io/Leitner-Pro-Max/)   as an offline-first Progressive Web App and native Kotlin Android companion, I replaced rigid box progression with the   Free Spaced Repetition Scheduler (FSRS)   and wired it directly into a PDF book reader and a 4,500-word CEFR A1–C2 lexicon.\n\n\n\n   Why Memory Stability Beats Box Numbers\n\nHuman long-term memory does not reset to zero after a single lapse; a word you knew for a month re-stabilizes much faster than an unfamiliar term. FSRS formalizes this through the   DSR (Difficulty, Stability, Retrievability)   three-component model of memory:\n\n    Stability ($S$):   The number of days it takes for recall probability to decay from $100\\%$ down to $90\\%$.\n    Difficulty ($D \\in [1, 10]$):   Intrinsic complexity of the item for this learner, updated after each rating ( Again ,  Hard ,  Good ,  Easy ).\n    Retrievability ($R$):   Instantaneous probability of recall after $t$ elapsed days, governed by a power-law forgetting curve:\n\n   javascript\n// FSRS v4.5 power-law forgetting curve and target interval solver\nconst DECAY = -0.5;\nconst FACTOR = 19 / 81; // Ensures R(S, S) === 0.90\n\nexport function retrievability(elapsedDays, stability) {\n  if (stability <= 0) return 0;\n  return Math.pow(1 + (FACTOR   elapsedDays) / stability, DECAY);\n}\n\nexport function nextIntervalDays(stability, desiredRetention = 0.9) {\n  const raw = (stability / FACTOR)   (Math.pow(desiredRetention, 1 / DECAY) - 1);\n  return Math.max(1, Math.round(raw));\n}\n   \n\nNotice the elegance of  FACTOR = 19 / 81  with  DECAY = -0.5 : when  elapsedDays === stability , $(1 + 19/81)^{-0.5} = (100/81)^{-0.5} = 9/10 = 0.90$. If a learner reviews a card late (say at day 14 when $S = 9$) and still recalls it, their demonstrated retrievability was lower, so FSRS rewards them with a   larger   stability boost than if they had crammed early.\n\n   Closing the Gap Between Reading and Flashcards\n\nMost spaced-repetition apps fail at acquisition friction: copying a sentence out of an article, switching tabs, pasting definitions, and tagging "
+  },
+  {
+    "lang": "en",
+    "title": "Zero-Backend Developer Tools: Analyzing Repos and Datasets Entirely in the Browser",
+    "summary": "Architectural lessons from building Repodest, DataLens, and A11y Inspector so developers can inspect codebases, chart sensitive CSVs, and audit WCAG compliance with zero server uploads.",
+    "topic": "Local-First Web",
+    "tags": [
+      "Local-First",
+      "Browser Architecture",
+      "GitHub API",
+      "Privacy",
+      "Accessibility"
+    ],
+    "dateLabel": "Oct 29, 2026",
+    "readTime": "4 min read",
+    "url": "/mohsen-tech-blog/posts/browser-only-developer-tools/",
+    "body": "Developers have grown rightfully skeptical of pasting internal CSV exports, HTML staging dumps, or repository trees into random web utilities. Every unnecessary backend introduces three costs at once: server hosting bills, latency round-trips, and data-privacy risk.\n\nAcross three of my open-source web tools,   [Repodest](https://mohsen-niksirat.github.io/Repodest/)   (GitHub repository analyzer and LLM prompt packer),   [DataLens](https://mohsen-niksirat.github.io/DataLens/)   (multi-format tabular workbench), and   [A11y Inspector](https://mohsen-niksirat.github.io/A11y-Inspector/)   (WCAG 2.2 accessibility auditor), I pushed a strict architectural constraint:   zero application backend, zero telemetry, and 100% in-browser execution.  \n\n\n\n   Single-Trip Repository Indexing with Git Trees\n\nA naive client-side GitHub explorer recursively calls  /repos/{owner}/{repo}/contents/{path}  for every directory. On a medium TypeScript monorepo with 40 subdirectories, that burns 41 of GitHub's 60 unauthenticated hourly REST requests in two seconds.\n\nRepodest avoids recursive traversal completely by resolving the default branch SHA once and requesting the flat Git tree with  ?recursive=1 :\n\n   javascript\nexport async function fetchRepoTreeSingleTrip(owner, repo, token = \"\") {\n  const headers = { Accept: \"application/vnd.github+json\" };\n  if (token) headers.Authorization =  Bearer ${token} ;\n\n  const metaRes = await fetch( https://api.github.com/repos/${owner}/${repo} , { headers });\n  if (!metaRes.ok) throw new Error( GitHub API ${metaRes.status} );\n  const meta = await metaRes.json();\n\n  const treeUrl =  https://api.github.com/repos/${owner}/${repo}/git/trees/${meta.default branch}?recursive=1 ;\n  const treeRes = await fetch(treeUrl, { headers });\n  const { tree, truncated } = await treeRes.json();\n\n  return { meta, blobs: tree.filter((node) =  node.type === \"blob\"), truncated };\n}\n   \n\nWith two HTTP requests total, Repodest receives every file path and byte size in the repository. From that single manifest, it computes a 0–100 repository health score (checking documentation, CI workflows, license presence, test ratios, and lockfile hygiene) without downloading a single source file until the user selects specific files for LLM packing.\n\n   Token-Aware Prompt Packing for LLMs\n\nDumping an entire repository into an LLM context window wastes tokens on lockfiles, minified b"
+  },
+  {
+    "lang": "en",
+    "title": "60 FPS Swarm Survival on the Web: Exporting Godot 4 3D Roguelites to WebAssembly",
+    "summary": "How Horde Survival 3D sustains hundreds of active 3D enemies, evolving projectile rings, and boss phases inside a browser WASM budget, plus lessons from parallel Unity and Kotlin builds.",
+    "topic": "Systems & Game Dev",
+    "tags": [
+      "Godot 4",
+      "WebAssembly",
+      "WebGL",
+      "Spatial Hashing",
+      "Game Architecture"
+    ],
+    "dateLabel": "Oct 18, 2026",
+    "readTime": "4 min read",
+    "url": "/mohsen-tech-blog/posts/godot4-wasm-horde-survival/",
+    "body": "Desktop game engines forgive a surprising amount of allocation sloppiness. Compile that exact same 3D scene to   WebAssembly and WebGL 2   for instant browser play on GitHub Pages, and every extra physics query, per-bullet node instantiation, or uncached shader variant immediately shows up as a dropped frame.\n\n  [Horde Survival 3D](https://mohsen-niksirat.github.io/Horde Survival 3D Godot/)   is part of a personal game-engineering trilogy where I implemented wave-survival roguelite mechanics across   Godot 4 (GDScript / 3D Web)  ,   Unity (C )  , and   Android (Kotlin 2D)   to compare engine ergonomics under heavy entity counts. Getting the 3D Web build locked at 60 FPS required rethinking three subsystems: collision broadphase, object lifetimes, and WebGL material warm-up.\n\n\n\n   Replacing Full 3D Physics Bodies with Spatial Hash Grids\n\nIn a horde roguelite, 250+ enemies converge continuously on the player while orbital blades, area pulses, and ricochet projectiles sweep through the crowd. Attaching a full  CharacterBody3D  with  move and slide()  to every enemy forces the 3D physics server to resolve thousands of convex capsule contacts per frame.\n\nBecause combat takes place on a mostly planar arena ($XZ$ plane with visual height variation), enemy separation and projectile hit detection only need 2D uniform spatial hashing with squared-distance checks:\n\n   gdscript\nclass name SpatialGrid\nextends RefCounted\n\nvar cell size: float = 4.0\nvar buckets: Dictionary = {}\n\nfunc clear() -  void:\n    buckets.clear()\n\nfunc  key(pos: Vector3) -  int:\n    var cx := int(floor(pos.x / cell size))\n    var cz := int(floor(pos.z / cell size))\n    return (cx << 16) ^ (cz & 0xFFFF)\n\nfunc insert(enemy id: int, pos: Vector3) -  void:\n    var k :=  key(pos)\n    if not buckets.has(k):\n        buckets[k] = PackedInt32Array()\n    buckets[k].append(enemy id)\n\nfunc query radius(origin: Vector3, radius: float, positions: PackedVector3Array) -  PackedInt32Array:\n    var hits := PackedInt32Array()\n    var r sq := radius   radius\n    var base x := int(floor(origin.x / cell size))\n    var base z := int(floor(origin.z / cell size))\n\n    for dx in range(-1, 2):\n        for dz in range(-1, 2):\n            var k := ((base x + dx) << 16) ^ ((base z + dz) & 0xFFFF)\n            if not buckets.has(k):\n                continue\n            for id in buckets[k]:\n                if origin.distance squar"
+  },
+  {
+    "lang": "en",
+    "title": "Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench",
+    "summary": "Inside MCP Studio: turning raw Model Context Protocol JSON Schemas and JSON-RPC 2.0 traffic into an interactive browser IDE for testing agent tools, resources, and prompts.",
+    "topic": "AI Systems",
+    "tags": [
+      "MCP",
+      "JSON-RPC",
+      "TypeScript",
+      "Developer Tools",
+      "AI Agents"
+    ],
+    "dateLabel": "Oct 5, 2026",
+    "readTime": "4 min read",
+    "url": "/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/",
+    "body": "As AI coding agents and desktop assistants adopt the   Model Context Protocol (MCP)  , backend engineers suddenly find themselves building tool servers whose primary consumer is an LLM rather than a human clicking buttons. When a tool call fails, staring at interleaved  stdio  or Server-Sent Event JSON lines makes it surprisingly tedious to tell whether the bug lives in your Zod schema, your argument coercion, or the protocol handshake.\n\nI built   [MCP Studio](https://mohsen-niksirat.github.io/Mcp-Studio/)   to bring the ergonomics of Postman and GraphQL Playground to MCP server development: connect an endpoint, inspect exposed capabilities, generate typed test forms automatically from  inputSchema , and trace raw JSON-RPC 2.0 frames side by side.\n\n\n\n   Anatomy of an MCP Capability Handshake\n\nUnderneath the SDK abstractions, MCP is clean stateful JSON-RPC 2.0. Before invoking any tool, a client and server negotiate protocol versions and capability flags ( tools ,  resources ,  prompts ,  logging ), followed by discovery calls:\n\n   typescript\nexport interface JsonRpcRequest<T = unknown  {\n  jsonrpc: \"2.0\";\n  id: string | number;\n  method: string;\n  params?: T;\n}\n\nexport async function negotiateMcpSession(send: (msg: JsonRpcRequest) =  Promise<any ) {\n  const initResult = await send({\n    jsonrpc: \"2.0\",\n    id: 1,\n    method: \"initialize\",\n    params: {\n      protocolVersion: \"2025-03-26\",\n      capabilities: { roots: { listChanged: false } },\n      clientInfo: { name: \"mcp-studio\", version: \"1.0.0\" },\n    },\n  });\n\n  const [toolsRes, resourcesRes, promptsRes] = await Promise.allSettled([\n    initResult.capabilities?.tools ? send({ jsonrpc: \"2.0\", id: 2, method: \"tools/list\" }) : null,\n    initResult.capabilities?.resources ? send({ jsonrpc: \"2.0\", id: 3, method: \"resources/list\" }) : null,\n    initResult.capabilities?.prompts ? send({ jsonrpc: \"2.0\", id: 4, method: \"prompts/list\" }) : null,\n  ]);\n\n  return { initResult, toolsRes, resourcesRes, promptsRes };\n}\n   \n\nSeeing the exact  capabilities  object immediately exposes a common mistake: registering tool handlers in code while forgetting to declare  capabilities: { tools: {} }  during server initialization.\n\n   Compiling JSON Schema into Live Input Controls\n\nAn MCP tool's  inputSchema  is standard JSON Schema. Rather than forcing developers to hand-type nested JSON blobs on every test run, MCP Studio recur"
+  },
+  {
+    "lang": "en",
+    "title": "Teaching Algorithms with Deterministic Canvas Engines: Inside CodeVis",
+    "summary": "How CodeVis packs 49 interactive computer science visualizations, synchronized code stepping, and PNG export cards into a single zero-dependency HTML file.",
+    "topic": "Learning Engines",
+    "tags": [
+      "HTML5 Canvas",
+      "Algorithms",
+      "CS Education",
+      "Zero Dependencies",
+      "Architecture"
+    ],
+    "dateLabel": "Sep 22, 2026",
+    "readTime": "4 min read",
+    "url": "/mohsen-tech-blog/posts/deterministic-canvas-cs-animations/",
+    "body": "Most algorithm visualizers online fall into one of two traps: either they play a pre-rendered video where you cannot inspect variables, or they mutate live DOM nodes inside  setTimeout  loops that break the instant you try stepping backward.\n\nWhen designing   [CodeVis](https://mohsen-niksirat.github.io/CodeVis/)   to teach 49 computer science concepts (spanning sorting, graph traversal, trees, dynamic programming, networking handshakes, and design patterns), I wanted two guarantees:   instant bidirectional scrubbing   and   single-file portability   (zero npm dependencies, works offline from a USB drive or browser tab).\n\n\n\n   Decoupling Execution from Rendering via Immutable Step Tapes\n\nThe cleanest way to make any algorithm reversible is never to animate inside the algorithm itself. Instead, each algorithm runs synchronously to completion once on a small input ($N \\le 32$), emitting an array of immutable   Step Snapshots  :\n\n   javascript\nexport function recordBinarySearch(sortedArray, target) {\n  const tape = [];\n  let low = 0;\n  let high = sortedArray.length - 1;\n\n  while (low <= high) {\n    const mid = (low + high)     1;\n    const value = sortedArray[mid];\n\n    tape.push({\n      line: 4,\n      vars: { low, mid, high, probe: value, target },\n      highlights: { range: [low, high], pivot: mid },\n      caption:  Probe index ${mid} (value ${value}) against target ${target}. ,\n    });\n\n    if (value === target) {\n      tape.push({\n        line: 6,\n        vars: { low, mid, high, foundAt: mid },\n        highlights: { found: mid },\n        caption:  Target ${target} matched at index ${mid}. ,\n      });\n      return tape;\n    }\n\n    if (value < target) low = mid + 1;\n    else high = mid - 1;\n  }\n\n  tape.push({ line: 11, vars: { low, high, foundAt: -1 }, highlights: {}, caption: \"Target absent.\" });\n  return tape;\n}\n   \n\nOnce  tape  exists in memory, the player UI becomes a pure function  render(tape[stepIndex], interpolationAlpha) :\n\n  Clicking   Step Back   simply decrements  stepIndex  with zero state corruption.\n  Dragging the timeline scrubber jumps to any frame in $O(1)$ time.\n  The code pane highlights  tape[stepIndex].line  and renders  tape[stepIndex].vars  in exact lockstep with the HTML5 Canvas drawing.\n\n   Crisp High-DPI Canvas Rendering\n\nBlurry text on Retina and Windows 125%/150% fractional-scaling laptops ruins technical diagrams. Scaling the back"
+  },
+  {
+    "lang": "fa",
+    "title": "معماری درگاه چندسرویس‌دهنده هوش مصنوعی با Failover خودکار روی بستر Serverless",
+    "summary": "چگونه در 9router و AIDahl کلیدهای Gemini، Groq، DeepSeek، OpenAI و OpenRouter با جایگزینی خودکار زیر ۲۰ میلی‌ثانیه هنگام خطای ۴۲۹، رمزنگاری AES-GCM و استریم ایمن تلگرام مدیریت می‌شوند.",
+    "topic": "سیستم‌های هوش مصنوعی",
+    "tags": [
+      "درگاه AI",
+      "Serverless",
+      "توزیع بار",
+      "مینی‌اپ تلگرام",
+      "رمزنگاری"
+    ],
+    "dateLabel": "۲۵ آبان ۱۴۰۵",
+    "readTime": "۴ دقیقه مطالعه",
+    "url": "/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/",
+    "body": "وقتی یک محصول هوش مصنوعی را از مرحله دمو به استفاده روزمره کاربران واقعی می‌برید، دشوارترین چالش‌ها دیگر مهندسی پرامپت نیستند؛ بلکه پایداری سرویس‌های بالادستی است: خطاهای ناگهانی  HTTP 429  روی سهمیه‌های دقیقه‌ای، نوسان تأخیر منطقه‌ای، قطعی موقت سرورها و مسئولیت امنیتی نگهداری کلیدهای شخصی کاربران (BYOK).\n\nدر جریان ساخت   [9router](https://github.com/mohsen-niksirat/9router TG Bot)   (درگاه چندسرویس‌دهنده هوش مصنوعی و مینی‌اپ تلگرام) و   [AIDahl](https://github.com/mohsen-niksirat/AIDahl)   (دستیار پژوهشی تلگرام بر پایه کلید شخصی کاربر)، به لایه‌ای نیاز داشتم که پنج اکوسیستم متفاوت (Gemini، Groq، DeepSeek، OpenAI و OpenRouter) را به یک استخر پردازشی واحد و مقاوم در برابر خطا تبدیل کند.\n\n\n\n   چرا اتصال مستقیم به یک سرویس‌دهنده زیر بار واقعی از کار می‌افتد؟\n\nاغلب بات‌ها و ابزارهای ساده، ورودی کاربر را مستقیماً به یک کلید و یک نقطه اتصال می‌فرستند. این الگو در تست تکی عالی کار می‌کند، اما با ورود کاربران همزمان در سه نقطه متوقف می‌شود:\n\n1.   اشباع سقف توکن در دقیقه (TPM):   خلاصه‌سازی یک سند بلند توسط یک کاربر می‌تواند کل سهمیه دقیقه‌ای کلید را مصرف کند و ده‌ها پیام کوتاه بعدی را با خطای  429  روبه‌رو سازد.\n2.   تفاوت ساختار پیام‌ها:   فرمت بخش‌های چندرسانه‌ای و تصاویر در API بومی Gemini با استاندارد  chat/completions  در OpenAI و OpenRouter تفاوت دارد.\n3.   محدودیت نرخ ویرایش پیام در تلگرام:   حتی اگر Groq بتواند ۴۰۰ توکن در ثانیه استریم کند، فراخوانی مستقیم  editMessageText  برای هر تکه متن بلافاصله باعث مسدودیت موقت ربات توسط سرور تلگرام می‌شود.\n\nراهکار مهندسی، تفکیک کامل   وضعیت سلامت کلیدها  ،   یکسان‌سازی پروتکل   و   تنظیم آهنگ استریم   در سه لایه مستقل بود.\n\n   چرخش هوشمند کلیدها و مدارقطع‌کن خطای ۴۲۹\n\nبه‌جای نوبت‌دهی کورکورانه (Round-Robin ساده)، موتور 9router برای هر کلید یک رکورد سلامت و میانگین متحرک تأخیر نگه می‌دارد. به محض دریافت کد وضعیت  429  یا خطاهای سری  5xx ، هدر  Retry-After  خوانده شده (یا بازه استراحت نمایی همراه با Jitter تصادفی محاسبه می‌شود) و درخواست در همان لحظه روی کلید یا سرویس‌دهنده سالم بعدی اجرا می‌گردد:\n\n   javascript\nexport async function dispatchWithFailover(pool, payload, maxAttempts = 4) {\n  const now = Date.now();\n  const candidates = pool\n    .filter((key) =  key.cooldownUntil <= now)\n    .sort((a, b) =  a.ewmaLatencyMs - b.ewmaLatencyMs);\n\n  let lastError = null;\n\n  for (const key of candidates.slice(0, maxAttempts)) {\n    const started = performance.now();\n    try {\n      const response = await callNormalizedProvider(k"
+  },
+  {
+    "lang": "fa",
+    "title": "فراتر از جعبه‌های سنتی لایتنر: پیاده‌سازی الگوریتم FSRS در خواننده آفلاین واژگان",
+    "summary": "چرا سیستم پنج‌جعبه‌ای سنتی لایتنر باعث انباشت مرورهای تکراری می‌شود و چگونه در Readner پایداری حافظه هر واژه را در کنار خواننده PDF و گراف معنایی WordWeb مدل‌سازی کردم.",
+    "topic": "سیستم‌های یادگیری",
+    "tags": [
+      "الگوریتم FSRS",
+      "تکرار فاصله‌دار",
+      "PWA آفلاین",
+      "IndexedDB",
+      "Kotlin"
+    ],
+    "dateLabel": "۱۹ آبان ۱۴۰۵",
+    "readTime": "۴ دقیقه مطالعه",
+    "url": "/mohsen-tech-blog/fa/posts/fsrs-spaced-repetition-architecture/",
+    "body": "هر کسی که تلاش کرده باشد چند هزار واژه انگلیسی را با جعبه لایتنر سنتی حفظ کند، دیر یا زود با «بهمن مرورهای روزانه» روبه‌رو شده است. کافی است لغتی را که یک ماه بلد بودید یک‌بار اشتباه جواب بدهید تا سیستم سنتی آن را به خانه اول برگرداند؛ دقیقاً کنار لغاتی که پنج دقیقه پیش برای اولین بار دیده‌اید.\n\nدر طراحی   [Readner (لایتنر پرو مکس)](https://mohsen-niksirat.github.io/Leitner-Pro-Max/)   در قالب وب‌اپ آفلاین (PWA) و اپلیکیشن نیتیو اندروید با Kotlin، جعبه‌های ثابت را کنار گذاشتم و موتور علمی   FSRS (Free Spaced Repetition Scheduler)   را مستقیماً به خواننده داخلی کتاب‌های PDF و بانک ۴٬۵۰۰ واژه سطح‌بندی‌شده CEFR متصل کردم.\n\n\n\n   چرا مدل‌سازی پایداری حافظه از شماره جعبه دقیق‌تر است؟\n\nحافظه بلندمدت انسان با یک خطای تکی صفر نمی‌شود؛ واژه‌ای که سی روز در ذهن مانده خیلی سریع‌تر از یک واژه کاملاً جدید تثبیت مجدد پیدا می‌کند. الگوریتم FSRS این رفتار طبیعی مغز را با سه متغیر کلیدی مدل می‌کند:\n\n    پایداری ($S$):   تعداد روزهایی که طول می‌کشد احتمال یادآوری یک کارت از ۱۰۰٪ به ۹۰٪ برسد.\n    دشواری ($D \\in [1, 10]$):   پیچیدگی ذاتی آن لغت برای کاربر مشخص که پس از هر پاسخ ( دوباره ،  سخت ،  خوب ،  آسان ) به‌روز می‌شود.\n    احتمال یادآوری ($R$):   احتمال به خاطر آوردن واژه پس از گذشت $t$ روز بر اساس منحنی فراموشی توانی:\n\n   javascript\n// FSRS v4.5 power-law forgetting curve and target interval solver\nconst DECAY = -0.5;\nconst FACTOR = 19 / 81; // Ensures R(S, S) === 0.90\n\nexport function retrievability(elapsedDays, stability) {\n  if (stability <= 0) return 0;\n  return Math.pow(1 + (FACTOR   elapsedDays) / stability, DECAY);\n}\n\nexport function nextIntervalDays(stability, desiredRetention = 0.9) {\n  const raw = (stability / FACTOR)   (Math.pow(desiredRetention, 1 / DECAY) - 1);\n  return Math.max(1, Math.round(raw));\n}\n   \n\nزیبایی ریاضی ثابت  FACTOR = 19 / 81  با توان  -0.5  در اینجاست که وقتی دقیقاً به اندازه پایداری کارت زمان گذشته باشد ( elapsedDays === stability )، مقدار یادآوری دقیقاً برابر  0.90  خواهد بود. حتی اگر کاربر چند روز دیرتر به سراغ مرور بیاید و باز هم لغت را به یاد بیاورد، الگوریتم متوجه موفقیت در احتمال پایین‌تر شده و جهش پایداری بزرگ‌تری به کارت می‌دهد.\n\n   حذف اصطکاک بین مطالعه کتاب PDF و ساخت فلش‌کارت\n\nبزرگ‌ترین دلیل رها کردن اپ‌های فلش‌کارت، زحمت ساخت کارت جدید است: خروج از کتاب، کپی کردن جمله، جستجوی تلفظ و وارد کردن دستی معنی تمرکز مطالعه را از بین می‌برد.\n\nدر Readner، محیط مطالعه PDF و موتور مرور از یک پایگاه داده مشترک استفاده می‌کنند:\n\n1.   استخراج در"
+  },
+  {
+    "lang": "fa",
+    "title": "ابزارهای توسعه‌دهنده بدون سرور: تحلیل مخزن‌های گیت‌هاب و داده‌ها کاملاً درون مرورگر",
+    "summary": "تجربه‌های معماری از ساخت Repodest، DataLens و A11y Inspector برای تحلیل کدبیس، مصورسازی فایل‌های داده حساس و ممیزی دسترس‌پذیری وب بدون ارسال حتی یک بایت به سرور.",
+    "topic": "وب محلی و حریم خصوصی",
+    "tags": [
+      "Local-First",
+      "معماری مرورگر",
+      "GitHub API",
+      "حریم خصوصی",
+      "دسترس‌پذیری"
+    ],
+    "dateLabel": "۷ آبان ۱۴۰۵",
+    "readTime": "۴ دقیقه مطالعه",
+    "url": "/mohsen-tech-blog/fa/posts/browser-only-developer-tools/",
+    "body": "توسعه‌دهندگان حق دارند نسبت به آپلود خروجی‌های CSV سازمانی، کدهای HTML محیط تست یا ساختار مخزن‌های کاری در ابزارهای آنلاین ناشناس محتاط باشند. هر سرور واسط غیرضروری همزمان سه هزینه ایجاد می‌کند: هزینه نگهداری زیرساخت، تأخیر رفت‌وبرگشت شبکه و ریسک افشای داده.\n\nدر طراحی سه ابزار متن‌باز   [Repodest](https://mohsen-niksirat.github.io/Repodest/)   (تحلیلگر مخزن گیت‌هاب و بسته‌بندی پرامپت برای مدل‌های زبانی)،   [DataLens](https://mohsen-niksirat.github.io/DataLens/)   (میزکار تحلیل و تبدیل فرمت‌های داده) و   [A11y Inspector](https://mohsen-niksirat.github.io/A11y-Inspector/)   (ممیزی دسترس‌پذیری استاندارد WCAG 2.2)، یک محدودیت سخت‌گیرانه تعیین کردم:   صفر سرور بک‌اند، صفر تله‌متری و اجرای ۱۰۰٪ درون مرورگر کاربر.  \n\n\n\n   دریافت کل درخت مخزن گیت‌هاب تنها با یک درخواست\n\nیک پیاده‌سازی ساده برای نمایش پوشه‌های گیت‌هاب معمولاً مسیر  /repos/{owner}/{repo}/contents/{path}  را به شکل بازگشتی برای هر پوشه صدا می‌زند. روی یک پروژه متوسط با ۴۰ زیرپوشه، این کار ۴۱ درخواست از سهمیه ۶۰تایی ساعتانه GitHub API بدون توکن را در دو ثانیه می‌سوزاند.\n\nدر Repodest به جای پیمایش پوشه‌به‌پوشه، شاخه پیش‌فرض یک‌بار خوانده شده و کل درخت فایل‌ها با پارامتر  ?recursive=1  در یک فراخوانی دریافت می‌شود:\n\n   javascript\nexport async function fetchRepoTreeSingleTrip(owner, repo, token = \"\") {\n  const headers = { Accept: \"application/vnd.github+json\" };\n  if (token) headers.Authorization =  Bearer ${token} ;\n\n  const metaRes = await fetch( https://api.github.com/repos/${owner}/${repo} , { headers });\n  if (!metaRes.ok) throw new Error( GitHub API ${metaRes.status} );\n  const meta = await metaRes.json();\n\n  const treeUrl =  https://api.github.com/repos/${owner}/${repo}/git/trees/${meta.default branch}?recursive=1 ;\n  const treeRes = await fetch(treeUrl, { headers });\n  const { tree, truncated } = await treeRes.json();\n\n  return { meta, blobs: tree.filter((node) =  node.type === \"blob\"), truncated };\n}\n   \n\nتنها با دو درخواست HTTP، فهرست کامل مسیرها و حجم تمام فایل‌های مخزن آماده است. بر همین اساس امتیاز سلامت ۰ تا ۱۰۰ مخزن (بررسی مستندات، پایپ‌لاین CI، مجوز انتشار، نسبت تست‌ها و بهداشت فایل‌های قفل) محاسبه می‌شود و محتوای متنی فایل‌ها فقط زمانی دانلود می‌گردد که کاربر آن‌ها را برای ساخت پرامپت انتخاب کند.\n\n   هرس هوشمند فایل‌های کم‌ارزش و بودجه‌بندی توکن\n\nکپی کردن خام تمام فایل‌های یک پروژه در پنجره متنی ChatGPT یا Claude بخش بزرگی از ظرفیت توکن را صرف  package-lock.json ، باندل‌های فشرده و فایل‌های"
+  },
+  {
+    "lang": "fa",
+    "title": "اجرای ۶۰ فریم بازی بقای سه‌بعدی در مرورگر: چالش‌های خروجی WebAssembly در Godot 4",
+    "summary": "چگونه در Horde Survival 3D صدها دشمن سه‌بعدی، حلقه‌های پرتابه و باس چندفازی را درون بودجه ۱۶.۶ میلی‌ثانیه‌ای مرورگر نگه داشتم؛ به‌همراه مقایسه عملی با Unity و Kotlin.",
+    "topic": "معماری سیستم و بازی‌سازی",
+    "tags": [
+      "Godot 4",
+      "WebAssembly",
+      "WebGL",
+      "شبکه مکانی",
+      "معماری بازی"
+    ],
+    "dateLabel": "۲۶ مهر ۱۴۰۵",
+    "readTime": "۴ دقیقه مطالعه",
+    "url": "/mohsen-tech-blog/fa/posts/godot4-wasm-horde-survival/",
+    "body": "اجرای مستقیم روی سیستم‌عامل دسکتاپ بسیاری از سربارهای تخصیص حافظه را پنهان می‌کند؛ اما وقتی همان صحنه سه‌بعدی را به   WebAssembly و WebGL 2   کامپایل می‌کنید تا کاربر با یک کلیک روی GitHub Pages بازی کند، هر برخورد فیزیکی اضافه، ساخت نود جدید برای گلوله‌ها یا کامپایل دیرهنگام شیدر بلافاصله به شکل لگ و افت فریم دیده می‌شود.\n\nپروژه   [Horde Survival 3D](https://mohsen-niksirat.github.io/Horde Survival 3D Godot/)   بخشی از یک سه‌گانه مهندسی شخصی است که در آن مکانیک‌های سبک بقای روگ‌لایت را موازی در سه پشته   Godot 4 (تحت وب سه‌بعدی)  ،   Unity (با C )   و   اندروید نیتیو (Kotlin دوبعدی)   پیاده‌سازی کردم. برای قفل شدن نرخ فریم نسخه وب روی ۶۰ فریم بر ثانیه، سه بخش اصلی موتور برخورد، چرخه عمر اشیاء و پیش‌گرمایش شیدرها را بازطراحی کردم.\n\n\n\n   جایگزینی فیزیک سنگین سه‌بعدی با شبکه هش مکانی (Spatial Grid)\n\nدر اوج موج‌های بازی، بیش از ۲۵۰ دشمن همزمان به سمت بازیکن حرکت می‌کنند و تیغه‌های چرخان و پرتابه‌های انفجاری از میان آن‌ها عبور می‌کنند. استفاده از  CharacterBody3D  و تابع  move and slide()  برای تک‌تک دشمنان باعث می‌شود موتور فیزیک در هر فریم هزاران برخورد کپسولی سه‌بعدی را حل کند.\n\nاز آنجا که منطق گیم‌پلی روی صفحه افقی $XZ$ جریان دارد، جداسازی دشمنان و تشخیص اصابت پرتابه‌ها را به یک شبکه مکانی یکنواخت با بررسی مجذور فاصله منتقل کردم:\n\n   gdscript\nclass name SpatialGrid\nextends RefCounted\n\nvar cell size: float = 4.0\nvar buckets: Dictionary = {}\n\nfunc clear() -  void:\n    buckets.clear()\n\nfunc  key(pos: Vector3) -  int:\n    var cx := int(floor(pos.x / cell size))\n    var cz := int(floor(pos.z / cell size))\n    return (cx << 16) ^ (cz & 0xFFFF)\n\nfunc insert(enemy id: int, pos: Vector3) -  void:\n    var k :=  key(pos)\n    if not buckets.has(k):\n        buckets[k] = PackedInt32Array()\n    buckets[k].append(enemy id)\n\nfunc query radius(origin: Vector3, radius: float, positions: PackedVector3Array) -  PackedInt32Array:\n    var hits := PackedInt32Array()\n    var r sq := radius   radius\n    var base x := int(floor(origin.x / cell size))\n    var base z := int(floor(origin.z / cell size))\n\n    for dx in range(-1, 2):\n        for dz in range(-1, 2):\n            var k := ((base x + dx) << 16) ^ ((base z + dz) & 0xFFFF)\n            if not buckets.has(k):\n                continue\n            for id in buckets[k]:\n                if origin.distance squared to(positions[id]) <= r sq:\n                    hits.append(id)\n    return hits\n   \n\nفشرده‌سازی مختصات سلول در یک عدد صحیح ۳"
+  },
+  {
+    "lang": "fa",
+    "title": "کالبدشکافی پروتکل MCP: ساخت محیط بصری تست و اشکال‌زدایی ابزارهای هوش مصنوعی",
+    "summary": "نگاهی به معماری MCP Studio: تبدیل اسکیمای JSON و ترافیک خام JSON-RPC 2.0 به یک محیط گرافیکی تعاملی در مرورگر برای تست سرورهای Model Context Protocol.",
+    "topic": "سیستم‌های هوش مصنوعی",
+    "tags": [
+      "پروتکل MCP",
+      "JSON-RPC",
+      "TypeScript",
+      "ابزار توسعه‌دهنده",
+      "ایجنت AI"
+    ],
+    "dateLabel": "۱۳ مهر ۱۴۰۵",
+    "readTime": "۴ دقیقه مطالعه",
+    "url": "/mohsen-tech-blog/fa/posts/inspecting-mcp-servers-visually/",
+    "body": "با گسترش استاندارد   Model Context Protocol (MCP)   در ایجنت‌های کدنویسی و دستیارهای دسکتاپ، توسعه‌دهندگان بک‌اند با نسل جدیدی از سرورها روبه‌رو شده‌اند که کاربر اصلی آن‌ها انسان نیست، بلکه مدل زبانی است. وقتی فراخوانی یک ابزار با خطا مواجه می‌شود، خواندن لاگ‌های خام  stdio  یا پیام‌های متنی JSON زمان زیادی می‌گیرد تا مشخص شود ایراد از اسکیمای Zod است، از نوع ورودی‌ها یا از مرحله Handshake اولیه.\n\nپروژه   [MCP Studio](https://mohsen-niksirat.github.io/Mcp-Studio/)   را ساختم تا تجربه کاربری ابزارهایی مثل Postman و GraphQL Playground را به دنیای MCP بیاورم: اتصال مستقیم به سرور، مشاهده فهرست ابزارها و منابع، تولید خودکار فرم تست از روی  inputSchema  و ردیابی دقیق بسته‌های JSON-RPC 2.0.\n\n\n\n   ساختار مذاکره اولیه (Handshake) در پروتکل MCP\n\nدر زیر لایه‌های SDK، پروتکل MCP بر پایه JSON-RPC 2.0 کار می‌کند. پیش از اجرای هر ابزاری، کلاینت و سرور نسخه پروتکل و قابلیت‌های فعال ( tools ،  resources  و  prompts ) را ردوبدل می‌کنند:\n\n   typescript\nexport interface JsonRpcRequest<T = unknown  {\n  jsonrpc: \"2.0\";\n  id: string | number;\n  method: string;\n  params?: T;\n}\n\nexport async function negotiateMcpSession(send: (msg: JsonRpcRequest) =  Promise<any ) {\n  const initResult = await send({\n    jsonrpc: \"2.0\",\n    id: 1,\n    method: \"initialize\",\n    params: {\n      protocolVersion: \"2025-03-26\",\n      capabilities: { roots: { listChanged: false } },\n      clientInfo: { name: \"mcp-studio\", version: \"1.0.0\" },\n    },\n  });\n\n  const [toolsRes, resourcesRes, promptsRes] = await Promise.allSettled([\n    initResult.capabilities?.tools ? send({ jsonrpc: \"2.0\", id: 2, method: \"tools/list\" }) : null,\n    initResult.capabilities?.resources ? send({ jsonrpc: \"2.0\", id: 3, method: \"resources/list\" }) : null,\n    initResult.capabilities?.prompts ? send({ jsonrpc: \"2.0\", id: 4, method: \"prompts/list\" }) : null,\n  ]);\n\n  return { initResult, toolsRes, resourcesRes, promptsRes };\n}\n   \n\nنمایش شفاف شیء  capabilities  در لحظه اتصال یکی از خطاهای رایج را بلافاصله آشکار می‌کند: تعریف توابع ابزار در کد بدون اعلام  capabilities: { tools: {} }  در پاسخ  initialize .\n\n   تبدیل خودکار JSON Schema به فرم‌های تعاملی\n\nهر ابزار در MCP دارای یک  inputSchema  استاندارد است. به جای تایپ دستی JSON در هر نوبت تست، MCP Studio درخت اسکیما را به کنترل‌های فرم دسترس‌پذیر تبدیل می‌کند و همزمان تب JSON خام را همگام نگه می‌دارد:\n\n  فیلدهای  string  دارای  enum  به منوی انتخابی  <select   و رشته‌های معمولی به ورو"
+  },
+  {
+    "lang": "fa",
+    "title": "آموزش بصری الگوریتم‌ها با موتور Canvas تک‌فایلی: نگاهی به معماری CodeVis",
+    "summary": "چگونه در CodeVis چهل‌ونه مفهوم علوم کامپیوتر، هایلایت همگام خطوط کد و خروجی کارت‌های آموزشی را در یک فایل HTML مستقل و آفلاین پیاده‌سازی کردم.",
+    "topic": "سیستم‌های یادگیری",
+    "tags": [
+      "HTML5 Canvas",
+      "الگوریتم‌ها",
+      "آموزش علوم کامپیوتر",
+      "بدون وابستگی",
+      "معماری نرم‌افزار"
+    ],
+    "dateLabel": "۳۱ شهریور ۱۴۰۵",
+    "readTime": "۴ دقیقه مطالعه",
+    "url": "/mohsen-tech-blog/fa/posts/deterministic-canvas-cs-animations/",
+    "body": "بیشتر شبیه‌سازهای آموزشی الگوریتم در یکی از دو تله می‌افتند: یا ویدیویی از پیش ضبط‌شده پخش می‌کنند که امکان دستکاری متغیرها را ندارد، یا درون حلقه‌های  setTimeout  مستقیماً عناصر DOM را تغییر می‌دهند که به محض زدن دکمه «گام قبلی» وضعیت برنامه به‌هم می‌ریزد.\n\nهنگام ساخت   [CodeVis](https://mohsen-niksirat.github.io/CodeVis/)   برای آموزش بصری ۴۹ مبحث علوم کامپیوتر (از مرتب‌سازی، پیمایش گراف و درخت‌ها تا برنامه‌نویسی پویا، شبکه و الگوهای طراحی)، دو اصل معماری را مبنا قرار دادم:   حرکت دوطرفه آنی بین گام‌ها   و   تک‌فایلی بودن کامل بدون هیچ وابستگی خارجی  .\n\n\n\n   جداسازی اجرای الگوریتم از رندر گرافیکی با نوار اسنپ‌شات\n\nتمیزترین روش برای برگشت‌پذیر کردن هر الگوریتم این است که هرگز داخل خود الگوریتم انیمیشن اجرا نکنیم. در عوض، الگوریتم یک‌بار به‌طور کامل روی ورودی کوچک ($N \\le 32$) اجرا شده و آرایه‌ای از   اسنپ‌شات‌های تغییرناپذیر (Step Tape)   تولید می‌کند:\n\n   javascript\nexport function recordBinarySearch(sortedArray, target) {\n  const tape = [];\n  let low = 0;\n  let high = sortedArray.length - 1;\n\n  while (low <= high) {\n    const mid = (low + high)     1;\n    const value = sortedArray[mid];\n\n    tape.push({\n      line: 4,\n      vars: { low, mid, high, probe: value, target },\n      highlights: { range: [low, high], pivot: mid },\n      caption:  Probe index ${mid} (value ${value}) against target ${target}. ,\n    });\n\n    if (value === target) {\n      tape.push({\n        line: 6,\n        vars: { low, mid, high, foundAt: mid },\n        highlights: { found: mid },\n        caption:  Target ${target} matched at index ${mid}. ,\n      });\n      return tape;\n    }\n\n    if (value < target) low = mid + 1;\n    else high = mid - 1;\n  }\n\n  tape.push({ line: 11, vars: { low, high, foundAt: -1 }, highlights: {}, caption: \"Target absent.\" });\n  return tape;\n}\n   \n\nوقتی آرایه  tape  ساخته شد، رابط پخش‌کننده به یک تابع خالص  render(tape[stepIndex])  تبدیل می‌شود:\n\n  دکمه   گام به عقب   صرفاً متغیر  stepIndex  را یک واحد کم می‌کند و هیچ باگی در وضعیت آرایه‌ها رخ نمی‌دهد.\n  جابه‌جایی نوار زمان (Scrubber) در زمان $O(1)$ به هر فریم دلخواه می‌پرد.\n  پنل کد دقیقاً خط  tape[stepIndex].line  و مقادیر لحظه‌ای متغیرها را همگام با شکل روی بوم Canvas هایلایت می‌کند.\n\n   وضوح بالا روی نمایشگرهای Retina و مقیاس کسری ویندوز\n\nمتن‌های تار روی لپ‌تاپ‌های ویندوزی با مقیاس ۱۲۵٪ یا ۱۵۰٪ خوانایی دیاگرام‌های فنی را از بین می‌برد. با ضرب کردن ابعاد واقعی بوم در  window.devicePixelRatio  و حفظ مختصات من"
+  },
+  {
+    "lang": "en",
+    "title": "PBKDF2 Iteration Counts for Offline Browser Vaults",
+    "summary": "In API Key Manager, deriving a 256-bit AES-GCM key via WebCrypto PBKDF2-SHA256 at 600,000 iterations takes ~190ms on modern laptops and ~420ms on mid-range Android phones: fast enough for a single unlock prompt while raising brute-force cost substantially without external WASM bundles.",
+    "topic": "Field Note · Security",
+    "tags": [
+      "Security",
+      "API Key Manager"
+    ],
+    "dateLabel": "Nov 14, 2026",
+    "readTime": "Lab Note",
+    "url": "/mohsen-tech-blog/notes/#webcrypto-pbkdf2-vaults",
+    "body": "In API Key Manager, deriving a 256-bit AES-GCM key via WebCrypto PBKDF2-SHA256 at 600,000 iterations takes ~190ms on modern laptops and ~420ms on mid-range Android phones: fast enough for a single unlock prompt while raising brute-force cost substantially without external WASM bundles."
+  },
+  {
+    "lang": "en",
+    "title": "Shipping Sub-8MB Windows Installers with Rust and Tauri v2",
+    "summary": "Building Kite Downloader on Tauri v2 instead of bundling Chromium kept the Windows installer under 8 MB while letting Rust async Tokio tasks own segmented HTTP range downloads, checksum verification, and clipboard URL sniffing off the UI thread.",
+    "topic": "Field Note · Rust & Desktop",
+    "tags": [
+      "Rust & Desktop",
+      "Kite Downloader"
+    ],
+    "dateLabel": "Nov 4, 2026",
+    "readTime": "Lab Note",
+    "url": "/mohsen-tech-blog/notes/#tauri-v2-rust-footprint",
+    "body": "Building Kite Downloader on Tauri v2 instead of bundling Chromium kept the Windows installer under 8 MB while letting Rust async Tokio tasks own segmented HTTP range downloads, checksum verification, and clipboard URL sniffing off the UI thread."
+  },
+  {
+    "lang": "en",
+    "title": "Preventing Punctuation Flip in Bilingual RTL Technical Prose",
+    "summary": "Inline code spans like `HTTP 429` or `O(N log N)` inside Persian paragraphs scramble parentheses unless styled with `unicode-bidi: isolate` and `direction: ltr`. Applying isolation at the base `code` selector fixes bidirectional cursor movement and copy-paste order across Ravaan and this journal.",
+    "topic": "Field Note · Typography & RTL",
+    "tags": [
+      "Typography & RTL",
+      "Ravaan Editor"
+    ],
+    "dateLabel": "Oct 24, 2026",
+    "readTime": "Lab Note",
+    "url": "/mohsen-tech-blog/notes/#rtl-code-isolation-css",
+    "body": "Inline code spans like `HTTP 429` or `O(N log N)` inside Persian paragraphs scramble parentheses unless styled with `unicode-bidi: isolate` and `direction: ltr`. Applying isolation at the base `code` selector fixes bidirectional cursor movement and copy-paste order across Ravaan and this journal."
+  },
+  {
+    "lang": "en",
+    "title": "Silence Thresholds in Spoken English Tutoring",
+    "summary": "Standard 500ms voice-activity cutoffs interrupt non-native speakers mid-thought while searching for vocabulary. Extending end-of-turn silence tolerance to 1,250ms in SpeakAI Coach produced far more accurate 6-axis IELTS fluency and lexical resource scoring.",
+    "topic": "Field Note · Voice AI",
+    "tags": [
+      "Voice AI",
+      "SpeakAI Coach"
+    ],
+    "dateLabel": "Oct 12, 2026",
+    "readTime": "Lab Note",
+    "url": "/mohsen-tech-blog/notes/#voice-turn-taking-ielts",
+    "body": "Standard 500ms voice-activity cutoffs interrupt non-native speakers mid-thought while searching for vocabulary. Extending end-of-turn silence tolerance to 1,250ms in SpeakAI Coach produced far more accurate 6-axis IELTS fluency and lexical resource scoring."
+  },
+  {
+    "lang": "en",
+    "title": "Flat Float32Array Weights for In-Browser Neuroevolution",
+    "summary": "In Biosphera, representing each digital organism's tiny neural network as a contiguous `Float32Array` slice rather than nested JS arrays cut crossover/mutation garbage collection pauses to near zero at 60 FPS.",
+    "topic": "Field Note · Simulation",
+    "tags": [
+      "Simulation",
+      "Biosphera"
+    ],
+    "dateLabel": "Sep 29, 2026",
+    "readTime": "Lab Note",
+    "url": "/mohsen-tech-blog/notes/#neural-evolution-60fps",
+    "body": "In Biosphera, representing each digital organism's tiny neural network as a contiguous `Float32Array` slice rather than nested JS arrays cut crossover/mutation garbage collection pauses to near zero at 60 FPS."
+  },
+  {
+    "lang": "en",
+    "title": "Lookahead Scheduling with AudioContext.currentTime",
+    "summary": "JavaScript `setInterval` drifts by 10–40ms whenever the main thread paints. In Tonora, scheduling Web Audio oscillator envelopes 100ms ahead against hardware `audioCtx.currentTime` keeps chord playback rhythmically tight even on mobile browsers.",
+    "topic": "Field Note · Web Audio",
+    "tags": [
+      "Web Audio",
+      "Tonora Studio"
+    ],
+    "dateLabel": "Sep 14, 2026",
+    "readTime": "Lab Note",
+    "url": "/mohsen-tech-blog/notes/#webaudio-polyphony-scheduling",
+    "body": "JavaScript `setInterval` drifts by 10–40ms whenever the main thread paints. In Tonora, scheduling Web Audio oscillator envelopes 100ms ahead against hardware `audioCtx.currentTime` keeps chord playback rhythmically tight even on mobile browsers."
+  },
+  {
+    "lang": "fa",
+    "title": "تنظیم تعداد دورهای PBKDF2 در گاوصندوق آفلاین مرورگر",
+    "summary": "در پروژه API Key Manager، مشتق‌سازی کلید ۲۵۶ بیتی AES-GCM با WebCrypto PBKDF2-SHA256 روی ۶۰۰٬۰۰۰ دور حدود ۱۹۰ میلی‌ثانیه در لپ‌تاپ و ۴۲۰ میلی‌ثانیه در گوشی‌های میان‌رده زمان می‌برد؛ تعادلی عالی بین بازگشایی روان رابط کاربری و مقاومت بالا در برابر حملات جستجوی فراگیر.",
+    "topic": "یادداشت فنی · امنیت وب",
+    "tags": [
+      "امنیت وب",
+      "API Key Manager"
+    ],
+    "dateLabel": "۲۳ آبان ۱۴۰۵",
+    "readTime": "یادداشت کوتاه",
+    "url": "/mohsen-tech-blog/fa/notes/#webcrypto-pbkdf2-vaults",
+    "body": "در پروژه API Key Manager، مشتق‌سازی کلید ۲۵۶ بیتی AES-GCM با WebCrypto PBKDF2-SHA256 روی ۶۰۰٬۰۰۰ دور حدود ۱۹۰ میلی‌ثانیه در لپ‌تاپ و ۴۲۰ میلی‌ثانیه در گوشی‌های میان‌رده زمان می‌برد؛ تعادلی عالی بین بازگشایی روان رابط کاربری و مقاومت بالا در برابر حملات جستجوی فراگیر."
+  },
+  {
+    "lang": "fa",
+    "title": "نصاب ویندوز زیر ۸ مگابایت با ترکیب Rust و Tauri v2",
+    "summary": "استفاده از Tauri v2 به جای Electron در ساخت Kite Downloader حجم نصاب ویندوز را زیر ۸ مگابایت نگه داشت و اجازه داد دانلود چندبخشی فایل‌ها و پایش کلیپ‌بورد کاملاً روی تردهای ناهمگام Tokio در Rust و دور از ترد رابط کاربری اجرا شود.",
+    "topic": "یادداشت فنی · راست و دسکتاپ",
+    "tags": [
+      "راست و دسکتاپ",
+      "Kite Downloader"
+    ],
+    "dateLabel": "۱۳ آبان ۱۴۰۵",
+    "readTime": "یادداشت کوتاه",
+    "url": "/mohsen-tech-blog/fa/notes/#tauri-v2-rust-footprint",
+    "body": "استفاده از Tauri v2 به جای Electron در ساخت Kite Downloader حجم نصاب ویندوز را زیر ۸ مگابایت نگه داشت و اجازه داد دانلود چندبخشی فایل‌ها و پایش کلیپ‌بورد کاملاً روی تردهای ناهمگام Tokio در Rust و دور از ترد رابط کاربری اجرا شود."
+  },
+  {
+    "lang": "fa",
+    "title": "جلوگیری از جابه‌جایی علائم نگارشی در متون فنی دوزبانه راست‌به‌چپ",
+    "summary": "عبارت‌های کد درون‌خطی مثل `O(N log N)` در میانه پاراگراف فارسی بدون تنظیم `unicode-bidi: isolate` و `direction: ltr` پرانتزها را وارونه نمایش می‌دهند. اعمال این دو ویژگی روی تگ پایه `code` هم نمایش و هم ترتیب کپی شدن متن را در پروژه روان و همین وبلاگ یک‌دست کرد.",
+    "topic": "یادداشت فنی · تایپوگرافی و فارسی",
+    "tags": [
+      "تایپوگرافی و فارسی",
+      "Ravaan Editor"
+    ],
+    "dateLabel": "۲ آبان ۱۴۰۵",
+    "readTime": "یادداشت کوتاه",
+    "url": "/mohsen-tech-blog/fa/notes/#rtl-code-isolation-css",
+    "body": "عبارت‌های کد درون‌خطی مثل `O(N log N)` در میانه پاراگراف فارسی بدون تنظیم `unicode-bidi: isolate` و `direction: ltr` پرانتزها را وارونه نمایش می‌دهند. اعمال این دو ویژگی روی تگ پایه `code` هم نمایش و هم ترتیب کپی شدن متن را در پروژه روان و همین وبلاگ یک‌دست کرد."
+  },
+  {
+    "lang": "fa",
+    "title": "تنظیم آستانه سکوت در مربی هوشمند مکالمه انگلیسی",
+    "summary": "برش پیش‌فرض ۵۰۰ میلی‌ثانیه‌ای در تشخیص صدا، زبان‌آموزان را دقیقاً در لحظه فکر کردن به واژه بعدی قطع می‌کند. افزایش آستانه سکوت پایان نوبت به ۱٬۲۵۰ میلی‌ثانیه در SpeakAI Coach دقت ارزیابی شش‌محوری مکالمه و تخمین نمره آیلتس را به‌طور محسوسی ارتقا داد.",
+    "topic": "یادداشت فنی · هوش مصنوعی صوتی",
+    "tags": [
+      "هوش مصنوعی صوتی",
+      "SpeakAI Coach"
+    ],
+    "dateLabel": "۲۰ مهر ۱۴۰۵",
+    "readTime": "یادداشت کوتاه",
+    "url": "/mohsen-tech-blog/fa/notes/#voice-turn-taking-ielts",
+    "body": "برش پیش‌فرض ۵۰۰ میلی‌ثانیه‌ای در تشخیص صدا، زبان‌آموزان را دقیقاً در لحظه فکر کردن به واژه بعدی قطع می‌کند. افزایش آستانه سکوت پایان نوبت به ۱٬۲۵۰ میلی‌ثانیه در SpeakAI Coach دقت ارزیابی شش‌محوری مکالمه و تخمین نمره آیلتس را به‌طور محسوسی ارتقا داد."
+  },
+  {
+    "lang": "fa",
+    "title": "ذخیره وزن‌های شبکه عصبی در Float32Array برای شبیه‌سازی ۶۰ فریم",
+    "summary": "در شبیه‌ساز حیات دیجیتال Biosphera، نگهداری وزن‌های شبکه عصبی هر موجود در یک آرایه پیوسته `Float32Array` به جای آرایه‌های تودرتوی جاوااسکریپت، مکث‌های Garbage Collector هنگام جهش ژنتیکی را در نرخ ۶۰ فریم تقریباً به صفر رساند.",
+    "topic": "یادداشت فنی · شبیه‌سازی",
+    "tags": [
+      "شبیه‌سازی",
+      "Biosphera"
+    ],
+    "dateLabel": "۷ مهر ۱۴۰۵",
+    "readTime": "یادداشت کوتاه",
+    "url": "/mohsen-tech-blog/fa/notes/#neural-evolution-60fps",
+    "body": "در شبیه‌ساز حیات دیجیتال Biosphera، نگهداری وزن‌های شبکه عصبی هر موجود در یک آرایه پیوسته `Float32Array` به جای آرایه‌های تودرتوی جاوااسکریپت، مکث‌های Garbage Collector هنگام جهش ژنتیکی را در نرخ ۶۰ فریم تقریباً به صفر رساند."
+  },
+  {
+    "lang": "fa",
+    "title": "زمان‌بندی دقیق نت‌های موسیقی با AudioContext.currentTime",
+    "summary": "تایمرهای معمولی جاوااسکریپت هنگام رندر صفحه ۱۰ تا ۴۰ میلی‌ثانیه نوسان دارند. در استودیوی موسیقی Tonora، زمان‌بندی پیش‌دستانه نوسان‌سازها بر مبنای ساعت سخت‌افزاری `audioCtx.currentTime` ریتم اجرای آکوردها را حتی در موبایل کاملاً دقیق نگه می‌دارد.",
+    "topic": "یادداشت فنی · صوت تحت وب",
+    "tags": [
+      "صوت تحت وب",
+      "Tonora Studio"
+    ],
+    "dateLabel": "۲۳ شهریور ۱۴۰۵",
+    "readTime": "یادداشت کوتاه",
+    "url": "/mohsen-tech-blog/fa/notes/#webaudio-polyphony-scheduling",
+    "body": "تایمرهای معمولی جاوااسکریپت هنگام رندر صفحه ۱۰ تا ۴۰ میلی‌ثانیه نوسان دارند. در استودیوی موسیقی Tonora، زمان‌بندی پیش‌دستانه نوسان‌سازها بر مبنای ساعت سخت‌افزاری `audioCtx.currentTime` ریتم اجرای آکوردها را حتی در موبایل کاملاً دقیق نگه می‌دارد."
+  }
+]

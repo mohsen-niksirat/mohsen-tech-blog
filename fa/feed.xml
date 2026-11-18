@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>یادداشت‌های مهندسی محسن نیک‌سیرت</title>
+    <description>مقالات مهندسی نرم‌افزار، درگاه‌های هوش مصنوعی و معماری وب محلی</description>
+    <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/</link>
+    <language>fa-ir</language>
+    <atom:link href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>معماری درگاه چندسرویس‌دهنده هوش مصنوعی با Failover خودکار روی بستر Serverless</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/</guid>
+      <pubDate>Mon, 16 Nov 2026 09:00:00 GMT</pubDate>
+      <category>سیستم‌های هوش مصنوعی</category>
+      <description>چگونه در 9router و AIDahl کلیدهای Gemini، Groq، DeepSeek، OpenAI و OpenRouter با جایگزینی خودکار زیر ۲۰ میلی‌ثانیه هنگام خطای ۴۲۹، رمزنگاری AES-GCM و استریم ایمن تلگرام مدیریت می‌شوند.</description>
+    </item>
+    <item>
+      <title>فراتر از جعبه‌های سنتی لایتنر: پیاده‌سازی الگوریتم FSRS در خواننده آفلاین واژگان</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/fsrs-spaced-repetition-architecture/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/fsrs-spaced-repetition-architecture/</guid>
+      <pubDate>Tue, 10 Nov 2026 09:00:00 GMT</pubDate>
+      <category>سیستم‌های یادگیری</category>
+      <description>چرا سیستم پنج‌جعبه‌ای سنتی لایتنر باعث انباشت مرورهای تکراری می‌شود و چگونه در Readner پایداری حافظه هر واژه را در کنار خواننده PDF و گراف معنایی WordWeb مدل‌سازی کردم.</description>
+    </item>
+    <item>
+      <title>ابزارهای توسعه‌دهنده بدون سرور: تحلیل مخزن‌های گیت‌هاب و داده‌ها کاملاً درون مرورگر</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/browser-only-developer-tools/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/browser-only-developer-tools/</guid>
+      <pubDate>Thu, 29 Oct 2026 09:00:00 GMT</pubDate>
+      <category>وب محلی و حریم خصوصی</category>
+      <description>تجربه‌های معماری از ساخت Repodest، DataLens و A11y Inspector برای تحلیل کدبیس، مصورسازی فایل‌های داده حساس و ممیزی دسترس‌پذیری وب بدون ارسال حتی یک بایت به سرور.</description>
+    </item>
+    <item>
+      <title>اجرای ۶۰ فریم بازی بقای سه‌بعدی در مرورگر: چالش‌های خروجی WebAssembly در Godot 4</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/godot4-wasm-horde-survival/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/godot4-wasm-horde-survival/</guid>
+      <pubDate>Sun, 18 Oct 2026 09:00:00 GMT</pubDate>
+      <category>معماری سیستم و بازی‌سازی</category>
+      <description>چگونه در Horde Survival 3D صدها دشمن سه‌بعدی، حلقه‌های پرتابه و باس چندفازی را درون بودجه ۱۶.۶ میلی‌ثانیه‌ای مرورگر نگه داشتم؛ به‌همراه مقایسه عملی با Unity و Kotlin.</description>
+    </item>
+    <item>
+      <title>کالبدشکافی پروتکل MCP: ساخت محیط بصری تست و اشکال‌زدایی ابزارهای هوش مصنوعی</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/inspecting-mcp-servers-visually/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/inspecting-mcp-servers-visually/</guid>
+      <pubDate>Mon, 05 Oct 2026 09:00:00 GMT</pubDate>
+      <category>سیستم‌های هوش مصنوعی</category>
+      <description>نگاهی به معماری MCP Studio: تبدیل اسکیمای JSON و ترافیک خام JSON-RPC 2.0 به یک محیط گرافیکی تعاملی در مرورگر برای تست سرورهای Model Context Protocol.</description>
+    </item>
+    <item>
+      <title>آموزش بصری الگوریتم‌ها با موتور Canvas تک‌فایلی: نگاهی به معماری CodeVis</title>
+      <link>https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/deterministic-canvas-cs-animations/</link>
+      <guid isPermaLink="true">https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/deterministic-canvas-cs-animations/</guid>
+      <pubDate>Tue, 22 Sep 2026 09:00:00 GMT</pubDate>
+      <category>سیستم‌های یادگیری</category>
+      <description>چگونه در CodeVis چهل‌ونه مفهوم علوم کامپیوتر، هایلایت همگام خطوط کد و خروجی کارت‌های آموزشی را در یک فایل HTML مستقل و آفلاین پیاده‌سازی کردم.</description>
+    </item>
+  </channel>
+</rss>

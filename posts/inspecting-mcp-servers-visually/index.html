@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench | Mohsen Niksirat · Engineering Monograph</title>
+  <meta name="description" content="Inside MCP Studio: turning raw Model Context Protocol JSON Schemas and JSON-RPC 2.0 traffic into an interactive browser IDE for testing agent tools, resources, and prompts.">
+  <meta name="author" content="Mohsen Niksirat">
+  <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/">
+  <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/">
+  <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/inspecting-mcp-servers-visually/">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:title" content="Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench">
+  <meta property="og:description" content="Inside MCP Studio: turning raw Model Context Protocol JSON Schemas and JSON-RPC 2.0 traffic into an interactive browser IDE for testing agent tools, resources, and prompts.">
+  <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/">
+  <meta property="og:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/inspecting-mcp-servers-visually.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench">
+  <meta name="twitter:description" content="Inside MCP Studio: turning raw Model Context Protocol JSON Schemas and JSON-RPC 2.0 traffic into an interactive browser IDE for testing agent tools, resources, and prompts.">
+  <meta name="twitter:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/inspecting-mcp-servers-visually.png">
+
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/mohsen-tech-blog/assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
+
+  <script>
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+  </script>
+  <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
+  <script defer src="/mohsen-tech-blog/assets/app.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench","description":"Inside MCP Studio: turning raw Model Context Protocol JSON Schemas and JSON-RPC 2.0 traffic into an interactive browser IDE for testing agent tools, resources, and prompts.","datePublished":"2026-10-05","inLanguage":"en-US","image":"https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/inspecting-mcp-servers-visually.png","mainEntityOfPage":"https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/","author":{"@type":"Person","name":"Mohsen Niksirat","url":"https://mohsen-niksirat.github.io/Profile/"}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="reading-progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="/mohsen-tech-blog/">
+        <span class="brand-mark" aria-hidden="true">MN</span>
+        <span class="brand-text">
+          <span class="brand-name">Mohsen Niksirat</span>
+          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+        </span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+
+      <div class="header-tools">
+        <button type="button" class="tool-btn" data-open-search aria-label="Search essays and notes (Ctrl+K)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-btn-label">Search</span>
+          <kbd class="kbd-hint">⌘K</kbd>
+        </button>
+
+        <a class="tool-btn" href="/mohsen-tech-blog/fa/posts/inspecting-mcp-servers-visually/" hreflang="fa" aria-label="Read Persian edition">
+          فارسی
+        </a>
+
+        <button type="button" class="tool-btn" data-theme-toggle aria-label="Toggle color theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+
+        <button type="button" class="tool-btn mobile-menu-btn" data-mobile-menu-btn aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-drawer" id="mobile-drawer">
+      <nav aria-label="Mobile navigation">
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell">
+    
+    <article class="article-wrap">
+      <header class="article-header">
+        <h1 class="article-title">Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench</h1>
+        <p class="article-deck">Inside MCP Studio: turning raw Model Context Protocol JSON Schemas and JSON-RPC 2.0 traffic into an interactive browser IDE for testing agent tools, resources, and prompts.</p>
+        <div class="meta-row tabular">
+          <span class="topic-label">AI Systems</span>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <time datetime="2026-10-05">Oct 5, 2026</time>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <span>4 min read</span>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <a href="/mohsen-tech-blog/fa/posts/inspecting-mcp-servers-visually/" hreflang="fa">مطالعه به فارسی</a>
+        </div>
+      </header>
+
+      <div class="article-layout">
+        <div class="prose">
+          <p>As AI coding agents and desktop assistants adopt the <strong>Model Context Protocol (MCP)</strong>, backend engineers suddenly find themselves building tool servers whose primary consumer is an LLM rather than a human clicking buttons. When a tool call fails, staring at interleaved <code>stdio</code> or Server-Sent Event JSON lines makes it surprisingly tedious to tell whether the bug lives in your Zod schema, your argument coercion, or the protocol handshake.</p>
+<p>I built <strong><a href="https://mohsen-niksirat.github.io/Mcp-Studio/" target="_blank" rel="noopener noreferrer">MCP Studio</a></strong> to bring the ergonomics of Postman and GraphQL Playground to MCP server development: connect an endpoint, inspect exposed capabilities, generate typed test forms automatically from <code>inputSchema</code>, and trace raw JSON-RPC 2.0 frames side by side.</p>
+<figure class="schematic" role="group" aria-label="JSON-RPC 2.0 inspection flow between MCP Studio and an MCP tool server">
+  <svg viewBox="0 0 760 220" width="760" height="220" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+    <rect x="1" y="1" width="758" height="218" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
+    <rect x="32" y="42" width="196" height="136" rx="8" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
+    <text x="130" y="72" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">MCP STUDIO UI</text>
+    <text x="130" y="98" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">JSON Schema -> Form UI</text>
+    <text x="130" y="118" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">Payload Diff &amp; Latency</text>
+    <text x="130" y="138" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="10.5">Interactive Replay</text>
+
+    <!-- Bidirectional Wire -->
+    <line x1="232" y1="88" x2="524" y2="88" stroke="var(--accent)" stroke-width="1.6" />
+    <polygon points="524,88 516,83 516,93" fill="var(--accent)" />
+    <text x="378" y="78" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="10.5" font-weight="600">tools/list · tools/call (JSON-RPC 2.0)</text>
+
+    <line x1="524" y1="136" x2="232" y2="136" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="5 3" />
+    <polygon points="232,136 240,131 240,141" fill="var(--text-muted)" />
+    <text x="378" y="156" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">content[] + isError + structured trace</text>
+
+    <rect x="528" y="42" width="200" height="136" rx="8" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
+    <text x="628" y="72" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">MCP SERVER</text>
+    <text x="628" y="98" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">Tools · Resources · Prompts</text>
+    <text x="628" y="118" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">SSE / Streamable HTTP</text>
+    <text x="628" y="138" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">Zod / Pydantic Schemas</text>
+  </svg>
+  <figcaption>Figure 1: Interactive debugging loop in MCP Studio. Exposed JSON Schemas become typed form inputs, capturing raw JSON-RPC frames and execution latency.</figcaption>
+</figure>
+<h2 id="sec-1">Anatomy of an MCP Capability Handshake</h2>
+<p>Underneath the SDK abstractions, MCP is clean stateful JSON-RPC 2.0. Before invoking any tool, a client and server negotiate protocol versions and capability flags (<code>tools</code>, <code>resources</code>, <code>prompts</code>, <code>logging</code>), followed by discovery calls:</p>
+<div class="code-block">
+        <div class="code-head"><span>TYPESCRIPT</span><button type="button" class="copy-btn" data-copy-code>Copy</button></div>
+        <pre><code><span class="tok-kw">export</span> <span class="tok-kw">interface</span> JsonRpcRequest&lt;T = unknown&gt; {
+  jsonrpc: <span class="tok-str">&quot;2.0&quot;</span>;
+  id: string | number;
+  method: string;
+  params?: T;
+}
+
+<span class="tok-kw">export</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> <span class="tok-fn">negotiateMcpSession</span>(send: (msg: JsonRpcRequest) =&gt; <span class="tok-typ">Promise</span>&lt;any&gt;) {
+  <span class="tok-kw">const</span> initResult = <span class="tok-kw">await</span> <span class="tok-fn">send</span>({
+    jsonrpc: <span class="tok-str">&quot;2.0&quot;</span>,
+    id: <span class="tok-num">1</span>,
+    method: <span class="tok-str">&quot;initialize&quot;</span>,
+    params: {
+      protocolVersion: <span class="tok-str">&quot;2025-03-26&quot;</span>,
+      capabilities: { roots: { listChanged: <span class="tok-kw">false</span> } },
+      clientInfo: { name: <span class="tok-str">&quot;mcp-studio&quot;</span>, version: <span class="tok-str">&quot;1.0.0&quot;</span> },
+    },
+  });
+
+  <span class="tok-kw">const</span> [toolsRes, resourcesRes, promptsRes] = <span class="tok-kw">await</span> <span class="tok-typ">Promise</span>.<span class="tok-fn">allSettled</span>([
+    initResult.capabilities?.tools ? <span class="tok-fn">send</span>({ jsonrpc: <span class="tok-str">&quot;2.0&quot;</span>, id: <span class="tok-num">2</span>, method: <span class="tok-str">&quot;tools/list&quot;</span> }) : <span class="tok-kw">null</span>,
+    initResult.capabilities?.resources ? <span class="tok-fn">send</span>({ jsonrpc: <span class="tok-str">&quot;2.0&quot;</span>, id: <span class="tok-num">3</span>, method: <span class="tok-str">&quot;resources/list&quot;</span> }) : <span class="tok-kw">null</span>,
+    initResult.capabilities?.prompts ? <span class="tok-fn">send</span>({ jsonrpc: <span class="tok-str">&quot;2.0&quot;</span>, id: <span class="tok-num">4</span>, method: <span class="tok-str">&quot;prompts/list&quot;</span> }) : <span class="tok-kw">null</span>,
+  ]);
+
+  <span class="tok-kw">return</span> { initResult, toolsRes, resourcesRes, promptsRes };
+}</code></pre>
+      </div>
+<p>Seeing the exact <code>capabilities</code> object immediately exposes a common mistake: registering tool handlers in code while forgetting to declare <code>capabilities: { tools: {} }</code> during server initialization.</p>
+<h2 id="sec-2">Compiling JSON Schema into Live Input Controls</h2>
+<p>An MCP tool&#39;s <code>inputSchema</code> is standard JSON Schema. Rather than forcing developers to hand-type nested JSON blobs on every test run, MCP Studio recursively maps schema nodes into accessible form fields while keeping a synchronized raw JSON tab:</p>
+<ul><li><code>type: &quot;string&quot;</code> with <code>enum</code> renders a <code>&lt;select&gt;</code> menu; plain strings render validated text inputs with <code>pattern</code> and <code>description</code> hints.</li><li><code>type: &quot;number&quot;</code> or <code>&quot;integer&quot;</code> enforces numeric stepping alongside <code>minimum</code> and <code>maximum</code> bounds.</li><li><code>type: &quot;boolean&quot;</code> renders a keyboard-accessible toggle switch.</li><li>Nested <code>object</code> and <code>array</code> properties render collapsible fieldsets, flagging required keys before a single packet hits the wire.</li></ul>
+<p>Catching a missing <code>description</code> or ambiguous parameter name in a visual form is also the fastest way to improve <strong>LLM tool-calling accuracy</strong>: if a human tester cannot tell whether <code>limit</code> expects <code>10</code> or <code>&quot;10&quot;</code>, a language model will guess inconsistently too.</p>
+<h2 id="sec-3">Distinguishing Protocol Errors from Tool Execution Errors</h2>
+<p>One subtle detail in the MCP specification is the distinction between <strong>JSON-RPC transport/protocol errors</strong> (returned in the top-level <code>error</code> object, such as <code>-32602 Invalid params</code>) and <strong>application-level tool errors</strong> (returned inside <code>result</code> with <code>isError: true</code> so the LLM can read the failure message and self-correct).</p>
+<p>MCP Studio highlights these two failure modes distinctly in the trace timeline, making it obvious whether an exception crashed your RPC transport or returned an actionable recovery hint to the agent.</p>
+
+          <section class="artifact-box" aria-label="Related open-source project">
+            <div>
+              <h2>MCP Studio</h2>
+              <p>Explore the live deployment and full open-source implementation referenced in this monograph.</p>
+            </div>
+            <div class="btn-row">
+              <a class="btn-primary" href="https://mohsen-niksirat.github.io/Mcp-Studio/" target="_blank" rel="noopener noreferrer">Open Live App</a>
+              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/Mcp-Studio" target="_blank" rel="noopener noreferrer">View GitHub Repository</a>
+            </div>
+          </section>
+
+          <nav class="post-Matrix-nav" aria-label="Adjacent monographs">
+            <a class="adj-link" href="/mohsen-tech-blog/posts/godot4-wasm-horde-survival/">
+                    <span class="adj-dir">Newer Monograph</span>
+                    <span class="adj-title">60 FPS Swarm Survival on the Web: Exporting Godot 4 3D Roguelites to WebAssembly</span>
+                  </a>
+            <a class="adj-link" href="/mohsen-tech-blog/posts/deterministic-canvas-cs-animations/">
+                    <span class="adj-dir">Earlier Monograph</span>
+                    <span class="adj-title">Teaching Algorithms with Deterministic Canvas Engines: Inside CodeVis</span>
+                  </a>
+          </nav>
+
+          <section class="comments-box" aria-labelledby="comments-heading">
+            <div class="section-head">
+              <h2 id="comments-heading" class="section-title">Technical Discussion</h2>
+              <button type="button" class="tool-btn" data-copy-url><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copy Link</span></button>
+            </div>
+            <p style="margin-bottom:14px;color:var(--text-secondary);font-size:0.93rem;">Comments load on demand via GitHub Issues so zero third-party scripts run uninvited while you read.</p>
+            <div class="btn-row">
+              <button type="button" class="btn-secondary" data-load-comments>Load GitHub Comments</button>
+              <a class="btn-secondary" href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">Discuss on Telegram</a>
+            </div>
+            <div id="comments-mount" style="margin-top:16px;"></div>
+          </section>
+        </div>
+
+        <aside class="article-rail" aria-label="Article table of contents and reading tools">
+          <div class="rail-box">
+                  <p class="rail-heading">On This Page</p>
+                  <ul class="toc-list">
+                    <li><a href="#sec-1">Anatomy of an MCP Capability Handshake</a></li><li><a href="#sec-2">Compiling JSON Schema into Live Input Controls</a></li><li><a href="#sec-3">Distinguishing Protocol Errors from Tool Execution Errors</a></li>
+                  </ul>
+                </div>
+
+          <div class="rail-box">
+            <p class="rail-heading">Reading Type Scale</p>
+            <div class="size-controls" role="group" aria-label="Adjust article font size">
+              <button type="button" class="size-btn" data-font-scale="sm" aria-pressed="false">A-</button>
+              <button type="button" class="size-btn" data-font-scale="md" aria-pressed="true">A</button>
+              <button type="button" class="size-btn" data-font-scale="lg" aria-pressed="false">A+</button>
+            </div>
+          </div>
+
+          <div class="rail-box">
+            <p class="rail-heading">Technical Tags</p>
+            <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.7;">MCP · JSON-RPC · TypeScript · Developer Tools · AI Agents</p>
+          </div>
+        </aside>
+      </div>
+    </article>
+  
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© 2026 Mohsen Niksirat · M.Sc. Computer Architecture · Open-Source Builder</p>
+      <div class="footer-links">
+        <a href="https://mohsen-niksirat.github.io/Profile/" target="_blank" rel="noopener noreferrer">Interactive OS Portfolio</a>
+        <a href="https://github.com/mohsen-niksirat" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a href="/mohsen-tech-blog/search/">Search</a>
+        <a href="/mohsen-tech-blog/feed.xml">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Instant Command / Search Modal -->
+  <div class="search-dialog-backdrop" id="search-backdrop" hidden>
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-modal-label">
+      <div class="dialog-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label id="search-modal-label" for="search-modal-input" class="skip-link">Search query</label>
+        <input id="search-modal-input" type="search" autocomplete="off" placeholder="Search essays, architectures, or topics (e.g. FSRS, 9router, MCP)...">
+        <button type="button" class="tool-btn" data-close-search>Esc</button>
+      </div>
+      <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

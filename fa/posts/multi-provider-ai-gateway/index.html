@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>معماری درگاه چندسرویس‌دهنده هوش مصنوعی با Failover خودکار روی بستر Serverless | یادداشت‌های مهندسی محسن نیک‌سیرت</title>
+  <meta name="description" content="چگونه در 9router و AIDahl کلیدهای Gemini، Groq، DeepSeek، OpenAI و OpenRouter با جایگزینی خودکار زیر ۲۰ میلی‌ثانیه هنگام خطای ۴۲۹، رمزنگاری AES-GCM و استریم ایمن تلگرام مدیریت می‌شوند.">
+  <meta name="author" content="محسن نیک‌سیرت">
+  <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/">
+  <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/">
+  <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/multi-provider-ai-gateway/">
+  <link rel="alternate" type="application/rss+xml" title="یادداشت‌های مهندسی محسن نیک‌سیرت" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/feed.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="یادداشت‌های مهندسی محسن نیک‌سیرت">
+  <meta property="og:title" content="معماری درگاه چندسرویس‌دهنده هوش مصنوعی با Failover خودکار روی بستر Serverless">
+  <meta property="og:description" content="چگونه در 9router و AIDahl کلیدهای Gemini، Groq، DeepSeek، OpenAI و OpenRouter با جایگزینی خودکار زیر ۲۰ میلی‌ثانیه هنگام خطای ۴۲۹، رمزنگاری AES-GCM و استریم ایمن تلگرام مدیریت می‌شوند.">
+  <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/">
+  <meta property="og:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/multi-provider-ai-gateway.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="معماری درگاه چندسرویس‌دهنده هوش مصنوعی با Failover خودکار روی بستر Serverless">
+  <meta name="twitter:description" content="چگونه در 9router و AIDahl کلیدهای Gemini، Groq، DeepSeek، OpenAI و OpenRouter با جایگزینی خودکار زیر ۲۰ میلی‌ثانیه هنگام خطای ۴۲۹، رمزنگاری AES-GCM و استریم ایمن تلگرام مدیریت می‌شوند.">
+  <meta name="twitter:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/multi-provider-ai-gateway.png">
+
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/mohsen-tech-blog/assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
+
+  <script>
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+  </script>
+  <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
+  <script defer src="/mohsen-tech-blog/assets/app.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"معماری درگاه چندسرویس‌دهنده هوش مصنوعی با Failover خودکار روی بستر Serverless","description":"چگونه در 9router و AIDahl کلیدهای Gemini، Groq، DeepSeek، OpenAI و OpenRouter با جایگزینی خودکار زیر ۲۰ میلی‌ثانیه هنگام خطای ۴۲۹، رمزنگاری AES-GCM و استریم ایمن تلگرام مدیریت می‌شوند.","datePublished":"2026-11-16","inLanguage":"fa-IR","image":"https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/multi-provider-ai-gateway.png","mainEntityOfPage":"https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/","author":{"@type":"Person","name":"محسن نیک‌سیرت","url":"https://mohsen-niksirat.github.io/Profile/"}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">پرش به محتوای اصلی</a>
+  <div class="reading-progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="/mohsen-tech-blog/fa/">
+        <span class="brand-mark" aria-hidden="true">MN</span>
+        <span class="brand-text">
+          <span class="brand-name">محسن نیک‌سیرت</span>
+          <span class="brand-sub">دفترچه مهندسی نرم‌افزار و هوش مصنوعی</span>
+        </span>
+      </a>
+
+      <nav class="primary-nav" aria-label="ناوبری اصلی">
+        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
+      </nav>
+
+      <div class="header-tools">
+        <button type="button" class="tool-btn" data-open-search aria-label="جستجو در مقالات (Ctrl+K)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <span class="search-btn-label">جستجو</span>
+          <kbd class="kbd-hint">⌘K</kbd>
+        </button>
+
+        <a class="tool-btn" href="/mohsen-tech-blog/posts/multi-provider-ai-gateway/" hreflang="en" aria-label="مشاهده نسخه انگلیسی">
+          EN
+        </a>
+
+        <button type="button" class="tool-btn" data-theme-toggle aria-label="تغییر پوسته روشن یا تاریک">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+
+        <button type="button" class="tool-btn mobile-menu-btn" data-mobile-menu-btn aria-expanded="false" aria-controls="mobile-drawer" aria-label="باز کردن منو">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-drawer" id="mobile-drawer">
+      <nav aria-label="منوی موبایل">
+        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell">
+    
+    <article class="article-wrap">
+      <header class="article-header">
+        <h1 class="article-title">معماری درگاه چندسرویس‌دهنده هوش مصنوعی با Failover خودکار روی بستر Serverless</h1>
+        <p class="article-deck">چگونه در 9router و AIDahl کلیدهای Gemini، Groq، DeepSeek، OpenAI و OpenRouter با جایگزینی خودکار زیر ۲۰ میلی‌ثانیه هنگام خطای ۴۲۹، رمزنگاری AES-GCM و استریم ایمن تلگرام مدیریت می‌شوند.</p>
+        <div class="meta-row tabular">
+          <span class="topic-label">سیستم‌های هوش مصنوعی</span>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <time datetime="2026-11-16">۲۵ آبان ۱۴۰۵</time>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <span>۴ دقیقه مطالعه</span>
+          <span class="meta-dot" aria-hidden="true">·</span>
+          <a href="/mohsen-tech-blog/posts/multi-provider-ai-gateway/" hreflang="en">Read in English</a>
+        </div>
+      </header>
+
+      <div class="article-layout">
+        <div class="prose">
+          <p>وقتی یک محصول هوش مصنوعی را از مرحله دمو به استفاده روزمره کاربران واقعی می‌برید، دشوارترین چالش‌ها دیگر مهندسی پرامپت نیستند؛ بلکه پایداری سرویس‌های بالادستی است: خطاهای ناگهانی <code>HTTP 429</code> روی سهمیه‌های دقیقه‌ای، نوسان تأخیر منطقه‌ای، قطعی موقت سرورها و مسئولیت امنیتی نگهداری کلیدهای شخصی کاربران (BYOK).</p>
+<p>در جریان ساخت <strong><a href="https://github.com/mohsen-niksirat/9router_TG_Bot" target="_blank" rel="noopener noreferrer">9router</a></strong> (درگاه چندسرویس‌دهنده هوش مصنوعی و مینی‌اپ تلگرام) و <strong><a href="https://github.com/mohsen-niksirat/AIDahl" target="_blank" rel="noopener noreferrer">AIDahl</a></strong> (دستیار پژوهشی تلگرام بر پایه کلید شخصی کاربر)، به لایه‌ای نیاز داشتم که پنج اکوسیستم متفاوت (Gemini، Groq، DeepSeek، OpenAI و OpenRouter) را به یک استخر پردازشی واحد و مقاوم در برابر خطا تبدیل کند.</p>
+<figure class="schematic" role="group" aria-label="معماری درگاه چندسرویس‌دهنده هوش مصنوعی و مدیریت خطای ۴۲۹">
+  <svg viewBox="0 0 760 270" width="760" height="270" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+    <rect x="1" y="1" width="758" height="268" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
+    <!-- Client Node -->
+    <rect x="26" y="92" width="144" height="86" rx="8" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
+    <text x="98" y="122" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="600">CLIENT / TMA</text>
+    <text x="98" y="142" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">SSE Stream +</text>
+    <text x="98" y="158" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">AES-GCM BYOK</text>
+
+    <!-- Connector Client -> Router -->
+    <line x1="170" y1="135" x2="246" y2="135" stroke="var(--text-muted)" stroke-width="1.5" />
+    <polygon points="246,135 238,130 238,140" fill="var(--text-muted)" />
+
+    <!-- Router Core -->
+    <rect x="250" y="54" width="214" height="162" rx="10" fill="var(--bg-canvas)" stroke="var(--accent)" stroke-width="1.6" />
+    <text x="357" y="82" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">9ROUTER ENGINE</text>
+    <line x1="268" y1="94" x2="446" y2="94" stroke="var(--border)" />
+    <text x="357" y="116" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5" font-weight="600">Health-Weighted Pool</text>
+    <text x="357" y="136" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">1. Round-Robin / Latency</text>
+    <text x="357" y="154" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">2. 429 Cooldown + Jitter</text>
+    <text x="357" y="172" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">3. Auto Provider Failover</text>
+    <rect x="274" y="185" width="166" height="20" rx="4" fill="var(--accent-soft)" />
+    <text x="357" y="199" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="10" font-weight="600">failover &lt; 18ms overhead</text>
+
+    <!-- Provider Pool -->
+    <path d="M464 102 C505 102, 505 56, 548 56" stroke="var(--accent)" stroke-width="1.5" />
+    <polygon points="548,56 540,52 540,60" fill="var(--accent)" />
+
+    <path d="M464 124 C505 124, 505 108, 548 108" stroke="var(--text-muted)" stroke-width="1.3" stroke-dasharray="4 3" />
+    <path d="M464 146 C505 146, 505 160, 548 160" stroke="var(--accent)" stroke-width="1.5" />
+    <polygon points="548,160 540,156 540,164" fill="var(--accent)" />
+    <path d="M464 168 C505 168, 505 212, 548 212" stroke="var(--text-muted)" stroke-width="1.3" />
+
+    <!-- Upstream Cards -->
+    <rect x="552" y="36" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--accent)" />
+    <circle cx="570" cy="56" r="4.5" fill="var(--accent)" />
+    <text x="584" y="60" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">Gemini 2.5 · Healthy</text>
+
+    <rect x="552" y="88" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--border)" opacity="0.72" />
+    <line x1="566" y1="104" x2="574" y2="112" stroke="var(--text-muted)" stroke-width="1.6" />
+    <line x1="574" y1="104" x2="566" y2="112" stroke="var(--text-muted)" stroke-width="1.6" />
+    <text x="584" y="112" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="11">Groq · 429 Cooldown 30s</text>
+
+    <rect x="552" y="140" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--accent)" />
+    <circle cx="570" cy="160" r="4.5" fill="var(--accent)" />
+    <text x="584" y="164" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">DeepSeek · Fallback #1</text>
+
+    <rect x="552" y="192" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
+    <circle cx="570" cy="212" r="4" fill="var(--text-muted)" />
+    <text x="584" y="216" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="11">OpenRouter / OpenAI</text>
+  </svg>
+  <figcaption>شکل ۱: توپولوژی مسیریابی در 9router و AIDahl؛ کلیدهای دارای خطای ۴۲۹ وارد دوره استراحت می‌شوند و درخواست بدون قطعی روی سرویس‌دهنده سالم بعدی اجرا می‌گردد.</figcaption>
+</figure>
+<h2 id="sec-1">چرا اتصال مستقیم به یک سرویس‌دهنده زیر بار واقعی از کار می‌افتد؟</h2>
+<p>اغلب بات‌ها و ابزارهای ساده، ورودی کاربر را مستقیماً به یک کلید و یک نقطه اتصال می‌فرستند. این الگو در تست تکی عالی کار می‌کند، اما با ورود کاربران همزمان در سه نقطه متوقف می‌شود:</p>
+<ol><li><strong>اشباع سقف توکن در دقیقه (TPM):</strong> خلاصه‌سازی یک سند بلند توسط یک کاربر می‌تواند کل سهمیه دقیقه‌ای کلید را مصرف کند و ده‌ها پیام کوتاه بعدی را با خطای <code>429</code> روبه‌رو سازد.</li><li><strong>تفاوت ساختار پیام‌ها:</strong> فرمت بخش‌های چندرسانه‌ای و تصاویر در API بومی Gemini با استاندارد <code>chat/completions</code> در OpenAI و OpenRouter تفاوت دارد.</li><li><strong>محدودیت نرخ ویرایش پیام در تلگرام:</strong> حتی اگر Groq بتواند ۴۰۰ توکن در ثانیه استریم کند، فراخوانی مستقیم <code>editMessageText</code> برای هر تکه متن بلافاصله باعث مسدودیت موقت ربات توسط سرور تلگرام می‌شود.</li></ol>
+<p>راهکار مهندسی، تفکیک کامل <strong>وضعیت سلامت کلیدها</strong>، <strong>یکسان‌سازی پروتکل</strong> و <strong>تنظیم آهنگ استریم</strong> در سه لایه مستقل بود.</p>
+<h2 id="sec-2">چرخش هوشمند کلیدها و مدارقطع‌کن خطای ۴۲۹</h2>
+<p>به‌جای نوبت‌دهی کورکورانه (Round-Robin ساده)، موتور 9router برای هر کلید یک رکورد سلامت و میانگین متحرک تأخیر نگه می‌دارد. به محض دریافت کد وضعیت <code>429</code> یا خطاهای سری <code>5xx</code>، هدر <code>Retry-After</code> خوانده شده (یا بازه استراحت نمایی همراه با Jitter تصادفی محاسبه می‌شود) و درخواست در همان لحظه روی کلید یا سرویس‌دهنده سالم بعدی اجرا می‌گردد:</p>
+<div class="code-block">
+        <div class="code-head"><span>JAVASCRIPT</span><button type="button" class="copy-btn" data-copy-code>کپی کد</button></div>
+        <pre><code><span class="tok-kw">export</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> <span class="tok-fn">dispatchWithFailover</span>(pool, payload, maxAttempts = <span class="tok-num">4</span>) {
+  <span class="tok-kw">const</span> now = <span class="tok-typ">Date</span>.<span class="tok-fn">now</span>();
+  <span class="tok-kw">const</span> candidates = pool
+    .<span class="tok-fn">filter</span>((key) =&gt; key.cooldownUntil &lt;= now)
+    .<span class="tok-fn">sort</span>((a, b) =&gt; a.ewmaLatencyMs - b.ewmaLatencyMs);
+
+  <span class="tok-kw">let</span> lastError = <span class="tok-kw">null</span>;
+
+  <span class="tok-kw">for</span> (<span class="tok-kw">const</span> key of candidates.<span class="tok-fn">slice</span>(<span class="tok-num">0</span>, maxAttempts)) {
+    <span class="tok-kw">const</span> started = performance.<span class="tok-fn">now</span>();
+    <span class="tok-kw">try</span> {
+      <span class="tok-kw">const</span> response = <span class="tok-kw">await</span> <span class="tok-fn">callNormalizedProvider</span>(key, payload);
+      <span class="tok-kw">const</span> elapsed = performance.<span class="tok-fn">now</span>() - started;
+      key.ewmaLatencyMs = key.ewmaLatencyMs * <span class="tok-num">0.75</span> + elapsed * <span class="tok-num">0.25</span>;
+      key.failures = <span class="tok-num">0</span>;
+      <span class="tok-kw">return</span> response;
+    } <span class="tok-kw">catch</span> (err) {
+      lastError = err;
+      <span class="tok-kw">if</span> (err.status === <span class="tok-num">429</span> || err.status &gt;= <span class="tok-num">500</span>) {
+        <span class="tok-kw">const</span> baseMs = err.retryAfterMs ?? <span class="tok-typ">Math</span>.<span class="tok-fn">min</span>(<span class="tok-num">60_000</span>, <span class="tok-num">4_000</span> * <span class="tok-num">2</span> ** key.failures);
+        <span class="tok-kw">const</span> jitterMs = <span class="tok-typ">Math</span>.<span class="tok-fn">floor</span>(<span class="tok-typ">Math</span>.<span class="tok-fn">random</span>() * <span class="tok-num">1_500</span>);
+        key.failures += <span class="tok-num">1</span>;
+        key.cooldownUntil = <span class="tok-typ">Date</span>.<span class="tok-fn">now</span>() + baseMs + jitterMs;
+        <span class="tok-kw">continue</span>;
+      }
+      <span class="tok-kw">throw</span> err;
+    }
+  }
+
+  <span class="tok-kw">throw</span> <span class="tok-kw">new</span> <span class="tok-typ">Error</span>(<span class="tok-str">`All healthy upstream candidates exhausted: ${lastError?.message}`</span>);
+}</code></pre>
+      </div>
+<p>افزودن مقدار تصادفی <code>jitterMs</code> جلوی هجوم همزمان (Thundering Herd) ورکرهای Serverless را دقیقاً در لحظه صفر شدن پنجره یک‌دقیقه‌ای سهمیه‌ها می‌گیرد.</p>
+<h2 id="sec-3">ایزوله‌سازی کلیدهای شخصی کاربران با رمزنگاری AES-GCM</h2>
+<p>در معماری BYOK، هر کاربر می‌تواند کلید اختصاصی خودش را ثبت کند. ذخیره متنی کلیدهای API در دیتابیس یک ریسک امنیتی جدی است. برای محافظت کامل، کلید هر کاربر پیش از ذخیره با الگوریتم احرازهویت‌شده <strong>AES-256-GCM</strong> و کلید مشتق‌شده اختصاصی از شناسه تغییرناپذیر کاربر (<code>HKDF-SHA256</code>) رمزنگاری می‌شود:</p>
+<div class="code-block">
+        <div class="code-head"><span>JAVASCRIPT</span><button type="button" class="copy-btn" data-copy-code>کپی کد</button></div>
+        <pre><code><span class="tok-kw">import</span> { webcrypto as <span class="tok-typ">crypto</span> } <span class="tok-kw">from</span> <span class="tok-str">&quot;node:crypto&quot;</span>;
+
+<span class="tok-kw">export</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> <span class="tok-fn">sealUserApiKey</span>(masterSecret, telegramUserId, rawApiKey) {
+  <span class="tok-kw">const</span> enc = <span class="tok-kw">new</span> <span class="tok-typ">TextEncoder</span>();
+  <span class="tok-kw">const</span> baseKey = <span class="tok-kw">await</span> <span class="tok-typ">crypto</span>.subtle.<span class="tok-fn">importKey</span>(
+    <span class="tok-str">&quot;raw&quot;</span>,
+    enc.<span class="tok-fn">encode</span>(masterSecret),
+    <span class="tok-str">&quot;HKDF&quot;</span>,
+    <span class="tok-kw">false</span>,
+    [<span class="tok-str">&quot;deriveKey&quot;</span>]
+  );
+
+  <span class="tok-kw">const</span> userKey = <span class="tok-kw">await</span> <span class="tok-typ">crypto</span>.subtle.<span class="tok-fn">deriveKey</span>(
+    {
+      name: <span class="tok-str">&quot;HKDF&quot;</span>,
+      hash: <span class="tok-str">&quot;SHA-256&quot;</span>,
+      salt: enc.<span class="tok-fn">encode</span>(<span class="tok-str">`uid:${telegramUserId}`</span>),
+      info: enc.<span class="tok-fn">encode</span>(<span class="tok-str">&quot;9router-byok-v1&quot;</span>),
+    },
+    baseKey,
+    { name: <span class="tok-str">&quot;AES-GCM&quot;</span>, length: <span class="tok-num">256</span> },
+    <span class="tok-kw">false</span>,
+    [<span class="tok-str">&quot;encrypt&quot;</span>, <span class="tok-str">&quot;decrypt&quot;</span>]
+  );
+
+  <span class="tok-kw">const</span> iv = <span class="tok-typ">crypto</span>.<span class="tok-fn">getRandomValues</span>(<span class="tok-kw">new</span> <span class="tok-typ">Uint8Array</span>(<span class="tok-num">12</span>));
+  <span class="tok-kw">const</span> cipherBuf = <span class="tok-kw">await</span> <span class="tok-typ">crypto</span>.subtle.<span class="tok-fn">encrypt</span>(
+    { name: <span class="tok-str">&quot;AES-GCM&quot;</span>, iv },
+    userKey,
+    enc.<span class="tok-fn">encode</span>(rawApiKey)
+  );
+
+  <span class="tok-kw">return</span> {
+    iv: <span class="tok-typ">Buffer</span>.<span class="tok-kw">from</span>(iv).<span class="tok-fn">toString</span>(<span class="tok-str">&quot;base64&quot;</span>),
+    ciphertext: <span class="tok-typ">Buffer</span>.<span class="tok-kw">from</span>(cipherBuf).<span class="tok-fn">toString</span>(<span class="tok-str">&quot;base64&quot;</span>),
+  };
+}</code></pre>
+      </div>
+<p>به لطف نمک اختصاصی <code>uid:${telegramUserId}</code>، حتی کپی شدن متن رمزنگاری‌شده از رکورد یک کاربر به رکورد دیگر قابل رمزگشایی نخواهد بود و تگ صحت GCM هرگونه دستکاری بایت‌ها را فوراً رد می‌کند.</p>
+<h2 id="sec-4">کنترل نرخ استریم زنده در تلگرام</h2>
+<p>برای نمایش روان پاسخ‌های استریم بدون برخورد با محدودیت Flood-Wait تلگرام، در AIDahl از یک بافر تجمیع هوشمند استفاده کردم:</p>
+<ul><li><strong>شرط دوگانه زمان و حجم:</strong> پیام فقط زمانی ویرایش می‌شود که حداقل <code>650</code> میلی‌ثانیه از ویرایش قبلی گذشته باشد و دست‌کم <code>48</code> کاراکتر تازه تولید شده باشد.</li><li><strong>بستن موقت بلوک‌های کد:</strong> اگر مدل در میانه نوشتن بلوک کد (<code> </code><code></code><code> </code>) باشد، پیش از ارسال هر ویرایش میانی تعداد بک‌تیک‌های باز شمارش شده و به‌طور موقت بسته می‌شود تا قالب‌بندی پیام در تلگرام به هم نریزد.</li></ul>
+<h2 id="sec-5">جمع‌بندی</h2>
+<p>نگاه به سرویس‌دهنده‌های مدل زبانی به‌عنوان منابع ناپایدار ابری (مشابه Spot Instance) تجربه کاربری را زیر و رو می‌کند: وقتی سهمیه یک کلید پر می‌شود و درخواست در کمتر از ۲۰ میلی‌ثانیه روی سرویس‌دهنده جایگزین ادامه پیدا می‌کند، کاربر نهایی فقط یک دستیار سریع و همیشه‌در‌دسترس را تجربه خواهد کرد.</p>
+
+          <section class="artifact-box" aria-label="پروژه متن‌باز مرتبط">
+            <div>
+              <h2>درگاه 9router و دستیار AIDahl</h2>
+              <p>کد کامل این معماری به‌صورت متن‌باز در گیت‌هاب من در دسترس است.</p>
+            </div>
+            <div class="btn-row">
+              <a class="btn-primary" href="https://github.com/mohsen-niksirat/AIDahl" target="_blank" rel="noopener noreferrer">اجرای نسخه زنده</a>
+              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/9router_TG_Bot" target="_blank" rel="noopener noreferrer">مشاهده سورس در گیت‌هاب</a>
+            </div>
+          </section>
+
+          <nav class="post-Matrix-nav" aria-label="مقاله قبلی و بعدی">
+            <div></div>
+            <a class="adj-link" href="/mohsen-tech-blog/fa/posts/fsrs-spaced-repetition-architecture/">
+                    <span class="adj-dir">مقاله پیشین</span>
+                    <span class="adj-title">فراتر از جعبه‌های سنتی لایتنر: پیاده‌سازی الگوریتم FSRS در خواننده آفلاین واژگان</span>
+                  </a>
+          </nav>
+
+          <section class="comments-box" aria-labelledby="comments-heading">
+            <div class="section-head">
+              <h2 id="comments-heading" class="section-title">گفتگوی فنی و دیدگاه‌ها</h2>
+              <button type="button" class="tool-btn" data-copy-url><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>کپی لینک مقاله</span></button>
+            </div>
+            <p style="margin-bottom:14px;color:var(--text-secondary);font-size:0.93rem;">دیدگاه‌ها از طریق GitHub Discussions بارگذاری می‌شوند (بدون اسکریپت ردیاب هنگام باز شدن صفحه)؛ یا مستقیماً در تلگرام گفتگو کنید.</p>
+            <div class="btn-row">
+              <button type="button" class="btn-secondary" data-load-comments>بارگذاری دیدگاه‌های گیت‌هاب</button>
+              <a class="btn-secondary" href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">ارسال بازخورد در تلگرام</a>
+            </div>
+            <div id="comments-mount" style="margin-top:16px;"></div>
+          </section>
+        </div>
+
+        <aside class="article-rail" aria-label="فهرست بخش‌ها و ابزار مطالعه">
+          <div class="rail-box">
+                  <p class="rail-heading">در این مقاله می‌خوانید</p>
+                  <ul class="toc-list">
+                    <li><a href="#sec-1">چرا اتصال مستقیم به یک سرویس‌دهنده زیر بار واقعی از کار می‌افتد؟</a></li><li><a href="#sec-2">چرخش هوشمند کلیدها و مدارقطع‌کن خطای ۴۲۹</a></li><li><a href="#sec-3">ایزوله‌سازی کلیدهای شخصی کاربران با رمزنگاری AES-GCM</a></li><li><a href="#sec-4">کنترل نرخ استریم زنده در تلگرام</a></li><li><a href="#sec-5">جمع‌بندی</a></li>
+                  </ul>
+                </div>
+
+          <div class="rail-box">
+            <p class="rail-heading">اندازه متن مطالعه</p>
+            <div class="size-controls" role="group" aria-label="تغییر اندازه قلم">
+              <button type="button" class="size-btn" data-font-scale="sm" aria-pressed="false">A-</button>
+              <button type="button" class="size-btn" data-font-scale="md" aria-pressed="true">A</button>
+              <button type="button" class="size-btn" data-font-scale="lg" aria-pressed="false">A+</button>
+            </div>
+          </div>
+
+          <div class="rail-box">
+            <p class="rail-heading">کلیدواژه‌ها</p>
+            <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.7;">درگاه AI · Serverless · توزیع بار · مینی‌اپ تلگرام · رمزنگاری</p>
+          </div>
+        </aside>
+      </div>
+    </article>
+  
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© ۲۰۲۶ محسن نیک‌سیرت · مهندس نرم‌افزار و پژوهشگر معماری کامپیوتر (تبریز)</p>
+      <div class="footer-links">
+        <a href="https://mohsen-niksirat.github.io/Profile/fa/" target="_blank" rel="noopener noreferrer">پورتفولیوی تعاملی macOS</a>
+        <a href="https://github.com/mohsen-niksirat" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://t.me/mohsenniksirat" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a href="/mohsen-tech-blog/fa/search/">جستجو</a>
+        <a href="/mohsen-tech-blog/fa/feed.xml">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Instant Command / Search Modal -->
+  <div class="search-dialog-backdrop" id="search-backdrop" hidden>
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-modal-label">
+      <div class="dialog-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label id="search-modal-label" for="search-modal-input" class="skip-link">عبارت جستجو</label>
+        <input id="search-modal-input" type="search" autocomplete="off" placeholder="جستجو در مقالات و یادداشت‌ها (مثلاً FSRS، 9router، WebAssembly)...">
+        <button type="button" class="tool-btn" data-close-search>بستن</button>
+      </div>
+      <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

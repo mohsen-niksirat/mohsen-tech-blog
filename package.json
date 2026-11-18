@@ -1,0 +1,10 @@
+{
+  "name": "mohsen-tech-blog",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Bilingual (EN/FA) Engineering Monograph & Field Notes by Mohsen Niksirat",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  }
+}
