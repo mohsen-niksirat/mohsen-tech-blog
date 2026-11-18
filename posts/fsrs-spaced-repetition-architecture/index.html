@@ -164,7 +164,7 @@
 </figure>
 <h2 id="sec-1">Why Memory Stability Beats Box Numbers</h2>
 <p>Human long-term memory does not reset to zero after a single lapse; a word you knew for a month re-stabilizes much faster than an unfamiliar term. FSRS formalizes this through the <strong>DSR (Difficulty, Stability, Retrievability)</strong> three-component model of memory:</p>
-<ul><li>*<em>Stability (</em>S<em>):</em>* The number of days it takes for recall probability to decay from 100% down to 90%.</li><li>*<em>Difficulty (</em>D<em> ∈ [1, 10]):</em>* Intrinsic complexity of the item for this learner, updated after each rating (<code>Again</code>, <code>Hard</code>, <code>Good</code>, <code>Easy</code>).</li><li>*<em>Retrievability (</em>R<em>):</em><em> Instantaneous probability of recall after </em>t* elapsed days, governed by a power-law forgetting curve:</li></ul>
+<ul><li><strong>Stability (<em>S</em>):</strong> The number of days it takes for recall probability to decay from 100% down to 90%.</li><li><strong>Difficulty (<em>D</em> ∈ [1, 10]):</strong> Intrinsic complexity of the item for this learner, updated after each rating (<code>Again</code>, <code>Hard</code>, <code>Good</code>, <code>Easy</code>).</li><li><strong>Retrievability (<em>R</em>):</strong> Instantaneous probability of recall after <em>t</em> elapsed days, governed by a power-law forgetting curve:</li></ul>
 <div class="code-block">
         <div class="code-head"><span>JAVASCRIPT</span><button type="button" class="copy-btn" data-copy-code>Copy</button></div>
         <pre><code><span class="tok-cmt">// FSRS v4.5 power-law forgetting curve and target interval solver</span>

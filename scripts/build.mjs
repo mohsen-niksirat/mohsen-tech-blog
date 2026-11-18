@@ -156,7 +156,7 @@ function renderInline(text) {
         const attrs = external ? ' target="_blank" rel="noopener noreferrer"' : "";
         return `<a href="${href}"${attrs}>${label}</a>`;
       });
-      s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      s = s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
       s = s.replace(/\*([^*]+)\*/g, "<em>$1</em>");
       return s;
     })
