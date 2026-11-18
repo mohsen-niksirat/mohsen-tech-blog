@@ -144,23 +144,23 @@ function parseFrontmatter(raw) {
 }
 
 function renderInline(text) {
-  return text
-    .split(/(`[^`]+`)/g)
-    .map((part) => {
-      if (part.startsWith("`") && part.endsWith("`")) {
-        return `<code>${esc(part.slice(1, -1))}</code>`;
-      }
-      let s = esc(part);
-      s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, href) => {
-        const external = /^https?:\/\//.test(href);
-        const attrs = external ? ' target="_blank" rel="noopener noreferrer"' : "";
-        return `<a href="${href}"${attrs}>${label}</a>`;
-      });
-      s = s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-      s = s.replace(/\*([^*]+)\*/g, "<em>$1</em>");
-      return s;
-    })
-    .join("");
+  const inlineCodes = [];
+  let s = text.replace(/`([^`]+)`/g, (_, code) => {
+    const idx = inlineCodes.length;
+    inlineCodes.push(`<code>${esc(code)}</code>`);
+    return `@@INLINE_${idx}@@`;
+  });
+
+  s = esc(s);
+  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, href) => {
+    const external = /^https?:\/\//.test(href);
+    const attrs = external ? ' target="_blank" rel="noopener noreferrer"' : "";
+    return `<a href="${href}"${attrs}>${label}</a>`;
+  });
+  s = s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  s = s.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  s = s.replace(/@@INLINE_(\d+)@@/g, (_, idx) => inlineCodes[Number(idx)]);
+  return s;
 }
 
 function renderMarkdown(md, locale = "en", diagramKey = "") {

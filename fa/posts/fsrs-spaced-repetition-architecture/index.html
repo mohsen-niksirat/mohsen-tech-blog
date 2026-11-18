@@ -164,7 +164,7 @@
 </figure>
 <h2 id="sec-1">چرا مدل‌سازی پایداری حافظه از شماره جعبه دقیق‌تر است؟</h2>
 <p>حافظه بلندمدت انسان با یک خطای تکی صفر نمی‌شود؛ واژه‌ای که سی روز در ذهن مانده خیلی سریع‌تر از یک واژه کاملاً جدید تثبیت مجدد پیدا می‌کند. الگوریتم FSRS این رفتار طبیعی مغز را با سه متغیر کلیدی مدل می‌کند:</p>
-<ul><li>**پایداری (<code>S</code>):** تعداد روزهایی که طول می‌کشد احتمال یادآوری یک کارت از ۱۰۰٪ به ۹۰٪ برسد.</li><li>**دشواری (<code>D ∈ [1, 10]</code>):** پیچیدگی ذاتی آن لغت برای کاربر مشخص که پس از هر پاسخ (<code>دوباره</code>، <code>سخت</code>، <code>خوب</code>، <code>آسان</code>) به‌روز می‌شود.</li><li>**احتمال یادآوری (<code>R</code>):** احتمال به خاطر آوردن واژه پس از گذشت <code>t</code> روز بر اساس منحنی فراموشی توانی:</li></ul>
+<ul><li><strong>پایداری (<code>S</code>):</strong> تعداد روزهایی که طول می‌کشد احتمال یادآوری یک کارت از ۱۰۰٪ به ۹۰٪ برسد.</li><li><strong>دشواری (<code>D ∈ [1, 10]</code>):</strong> پیچیدگی ذاتی آن لغت برای کاربر مشخص که پس از هر پاسخ (<code>دوباره</code>، <code>سخت</code>، <code>خوب</code>، <code>آسان</code>) به‌روز می‌شود.</li><li><strong>احتمال یادآوری (<code>R</code>):</strong> احتمال به خاطر آوردن واژه پس از گذشت <code>t</code> روز بر اساس منحنی فراموشی توانی:</li></ul>
 <div class="code-block">
         <div class="code-head"><span>JAVASCRIPT</span><button type="button" class="copy-btn" data-copy-code>کپی کد</button></div>
         <pre><code><span class="tok-cmt">// FSRS v4.5 power-law forgetting curve and target interval solver</span>
