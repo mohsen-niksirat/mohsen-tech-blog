@@ -1,6 +1,6 @@
-// Progressive enhancement for Mohsen Niksirat's Engineering Journal.
-// Zero external dependencies; handles theme persistence, reading progress,
-// font scaling, TOC tracking, code copying, topic filtering, and Cmd/Ctrl+K search.
+// Interactive enhancements for Mohsen Niksirat's Engineering Publication.
+// Zero dependencies: handles Theme switch, Hero showcase tabs, Grid/Ledger toggle,
+// Gateway HTTP 429 simulator, FSRS curve slider, Client-side token estimator, Lightbox & Search.
 
 (function () {
   const docEl = document.documentElement;
@@ -18,16 +18,18 @@
     toastTimer = setTimeout(() => el.classList.remove("is-visible"), 2400);
   }
 
-  // 2. Theme Toggle (Light Archival Paper <-> Dark Obsidian Slate)
+  // 2. Theme Toggle (Obsidian Studio Dark <-> Warm Editorial Paper Light)
   const themeBtns = document.querySelectorAll("[data-theme-toggle]");
   function syncThemeAria() {
     const dark = docEl.getAttribute("data-theme") === "dark";
     themeBtns.forEach((btn) => {
       btn.setAttribute("aria-pressed", String(dark));
-      const label = isFa
-        ? dark ? "تغییر به پوسته روشن" : "تغییر به پوسته تاریک"
-        : dark ? "Switch to light paper theme" : "Switch to dark slate theme";
-      btn.setAttribute("aria-label", label);
+      btn.setAttribute(
+        "aria-label",
+        isFa
+          ? dark ? "تغییر به پوسته روشن" : "تغییر به پوسته تاریک"
+          : dark ? "Switch to light archival theme" : "Switch to dark studio theme"
+      );
     });
   }
   syncThemeAria();
@@ -41,7 +43,6 @@
       } catch (_) {}
       syncThemeAria();
 
-      // Sync Utterances iframe if loaded
       const frame = document.querySelector("iframe.utterances-frame");
       if (frame && frame.contentWindow) {
         frame.contentWindow.postMessage(
@@ -62,7 +63,210 @@
     });
   }
 
-  // 4. Reading Progress Hairline (GPU scaleX)
+  // 4. Hero Multi-System Showcase Tabs
+  const heroTabs = [...document.querySelectorAll("[data-hero-tab]")];
+  const heroPanels = [...document.querySelectorAll("[data-hero-panel]")];
+  if (heroTabs.length) {
+    heroTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.heroTab;
+        heroTabs.forEach((t) => t.setAttribute("aria-selected", String(t.dataset.heroTab === target)));
+        heroPanels.forEach((p) => {
+          p.hidden = p.dataset.heroPanel !== target;
+        });
+      });
+    });
+  }
+
+  // 5. Visual Grid / Compact Index Switcher + Topic Filters
+  const collectionEl = document.getElementById("essay-collection");
+  const viewBtns = [...document.querySelectorAll("[data-view-mode]")];
+  if (collectionEl && viewBtns.length) {
+    viewBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const mode = btn.dataset.viewMode;
+        collectionEl.setAttribute("data-layout", mode);
+        viewBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.viewMode === mode)));
+      });
+    });
+  }
+
+  const filterTabs = [...document.querySelectorAll("[data-topic-filter]")];
+  const essayCards = [...document.querySelectorAll("[data-essay-topic]")];
+  const emptyBox = document.getElementById("ledger-empty");
+  const resetBtn = document.querySelector("[data-reset-filter]");
+
+  function applyTopicFilter(topic) {
+    filterTabs.forEach((t) => t.setAttribute("aria-pressed", String(t.dataset.topicFilter === topic)));
+    let shown = 0;
+    essayCards.forEach((card) => {
+      const match = topic === "all" || card.dataset.essayTopic === topic;
+      card.hidden = !match;
+      if (match) shown++;
+    });
+    if (emptyBox) emptyBox.hidden = shown > 0;
+  }
+
+  if (filterTabs.length) {
+    filterTabs.forEach((tab) => tab.addEventListener("click", () => applyTopicFilter(tab.dataset.topicFilter)));
+    if (resetBtn) resetBtn.addEventListener("click", () => applyTopicFilter("all"));
+  }
+
+  // 6. Interactive Gateway HTTP 429 Failover Simulator
+  document.querySelectorAll("[data-gateway-sim]").forEach((sim) => {
+    const btn = sim.querySelector("[data-gw-toggle]");
+    const statusTxt = sim.querySelector("[data-gw-status]");
+    const badge = sim.querySelector("[data-gw-badge]");
+    const geminiWire = sim.querySelector('[data-gw-wire="gemini"]');
+    const dsWire = sim.querySelector('[data-gw-wire="deepseek"]');
+    const geminiText = sim.querySelector("[data-gw-gemini-txt]");
+    const dsText = sim.querySelector("[data-gw-ds-txt]");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+      const fault = sim.getAttribute("data-fault") !== "true";
+      sim.setAttribute("data-fault", String(fault));
+      if (fault) {
+        if (geminiWire) {
+          geminiWire.setAttribute("stroke", "var(--diag-rose)");
+          geminiWire.setAttribute("opacity", "0.55");
+          geminiWire.classList.remove("flow-pulse");
+        }
+        if (dsWire) {
+          dsWire.setAttribute("stroke", "var(--diag-emerald)");
+          dsWire.setAttribute("stroke-width", "2.6");
+          dsWire.setAttribute("stroke-dasharray", "7 7");
+          dsWire.classList.add("flow-pulse");
+        }
+        if (geminiText) geminiText.textContent = "Gemini 2.5 · 429 Cooldown";
+        if (dsText) dsText.textContent = "DeepSeek V3 · Active";
+        if (statusTxt) statusTxt.textContent = "Failover: DeepSeek (17ms)";
+        if (badge) {
+          badge.classList.add("is-alert");
+          badge.textContent = isFa ? "جایگزینی خودکار -> DeepSeek (17ms)" : "Failover Active -> DeepSeek V3 (17ms)";
+        }
+        btn.textContent = isFa ? "بازگردانی کلید Gemini" : "Restore Gemini Primary Key";
+      } else {
+        if (geminiWire) {
+          geminiWire.setAttribute("stroke", "var(--diag-emerald)");
+          geminiWire.setAttribute("opacity", "1");
+          geminiWire.classList.add("flow-pulse");
+        }
+        if (dsWire) {
+          dsWire.setAttribute("stroke", "var(--border-strong)");
+          dsWire.setAttribute("stroke-width", "1.6");
+          dsWire.removeAttribute("stroke-dasharray");
+          dsWire.classList.remove("flow-pulse");
+        }
+        if (geminiText) geminiText.textContent = "Gemini 2.5 · Healthy";
+        if (dsText) dsText.textContent = "DeepSeek V3 · Ready";
+        if (statusTxt) statusTxt.textContent = "Active: Gemini 2.5 (14ms)";
+        if (badge) {
+          badge.classList.remove("is-alert");
+          badge.textContent = isFa ? "سالم · Gemini 2.5 (14ms)" : "Primary · Gemini 2.5 (14ms)";
+        }
+        btn.textContent = isFa ? "شبیه‌سازی خطای ۴۲۹ روی Gemini" : "Simulate HTTP 429 on Gemini";
+      }
+    });
+  });
+
+  // 7. Interactive FSRS Retrievability Calculator
+  document.querySelectorAll("[data-fsrs-widget]").forEach((box) => {
+    const sSlider = box.querySelector("[data-fsrs-s]");
+    const tSlider = box.querySelector("[data-fsrs-t]");
+    const sOut = box.querySelector("[data-fsrs-s-val]");
+    const tOut = box.querySelector("[data-fsrs-t-val]");
+    const rOut = box.querySelector("[data-fsrs-out]");
+    if (!sSlider || !tSlider || !rOut) return;
+
+    const update = () => {
+      const s = Number(sSlider.value);
+      const t = Number(tSlider.value);
+      const r = Math.pow(1 + ((19 / 81) * t) / s, -0.5) * 100;
+      if (sOut) sOut.textContent = String(s);
+      if (tOut) tOut.textContent = String(t);
+      rOut.textContent = `${r.toFixed(1)}%`;
+      rOut.classList.toggle("is-alert", r < 85);
+    };
+    sSlider.addEventListener("input", update);
+    tSlider.addEventListener("input", update);
+    update();
+  });
+
+  // 8. Interactive Local Token Budget Simulator
+  document.querySelectorAll("[data-token-sim]").forEach((box) => {
+    const input = box.querySelector("[data-token-input]");
+    const out = box.querySelector("[data-token-out]");
+    if (!input || !out) return;
+    const calc = () => {
+      const len = input.value.length;
+      const toks = len === 0 ? 0 : Math.ceil(len / 3.8);
+      out.textContent = isFa ? `~${toks} توکن · ${len} کاراکتر` : `~${toks} tokens · ${len} chars`;
+    };
+    input.addEventListener("input", calc);
+    calc();
+  });
+
+  // 9. Image Lightbox Modal
+  const lbBackdrop = document.getElementById("lightbox-backdrop");
+  const lbImg = document.getElementById("lightbox-img");
+  const lbCaption = document.getElementById("lightbox-caption");
+
+  function closeLightbox() {
+    if (!lbBackdrop) return;
+    lbBackdrop.hidden = true;
+    if (lbImg) lbImg.removeAttribute("src");
+  }
+
+  document.querySelectorAll("[data-lightbox-src]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (!lbBackdrop || !lbImg || !lbCaption) return;
+      lbImg.src = btn.dataset.lightboxSrc;
+      lbImg.alt = btn.dataset.lightboxAlt || "";
+      lbCaption.textContent = btn.dataset.lightboxAlt || "";
+      lbBackdrop.hidden = false;
+    });
+  });
+
+  document.querySelectorAll("[data-close-lightbox]").forEach((btn) => {
+    btn.addEventListener("click", closeLightbox);
+  });
+
+  if (lbBackdrop) {
+    lbBackdrop.addEventListener("click", (e) => {
+      if (e.target === lbBackdrop) closeLightbox();
+    });
+  }
+
+  // 10. Subtle IntersectionObserver Scroll Reveal (never blocks immediate visibility on load)
+  const revealEls = [...document.querySelectorAll("[data-reveal]")];
+  if (
+    revealEls.length &&
+    "IntersectionObserver" in window &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove("is-pending");
+            entry.target.classList.add("is-visible");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08 }
+    );
+    revealEls.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top > window.innerHeight * 0.92) {
+        el.classList.add("is-pending");
+        io.observe(el);
+      }
+    });
+  }
+
+  // 11. Reading Progress, Font Scaling, Sticky TOC & Code Copying
   const progressEl = document.querySelector(".reading-progress");
   const articleEl = document.querySelector(".prose");
   if (progressEl && articleEl) {
@@ -87,7 +291,6 @@
     updateProgress();
   }
 
-  // 5. Article Font-Size Switcher (sm / md / lg)
   const sizeBtns = document.querySelectorAll("[data-font-scale]");
   if (sizeBtns.length) {
     const applySize = (val) => {
@@ -106,7 +309,6 @@
     sizeBtns.forEach((b) => b.addEventListener("click", () => applySize(b.dataset.fontScale)));
   }
 
-  // 6. Sticky TOC IntersectionObserver
   const tocLinks = [...document.querySelectorAll(".toc-list a")];
   if (tocLinks.length && "IntersectionObserver" in window) {
     const targets = tocLinks
@@ -125,7 +327,6 @@
     targets.forEach((t) => observer.observe(t));
   }
 
-  // 7. Copy Code & Copy Article Link Buttons
   document.querySelectorAll("[data-copy-code]").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const code = btn.closest(".code-block")?.querySelector("pre code")?.textContent || "";
@@ -149,31 +350,7 @@
     });
   });
 
-  // 8. Topic Filter Tabs on Essay Ledger (with Empty State & Reset)
-  const filterTabs = [...document.querySelectorAll("[data-topic-filter]")];
-  const ledgerRows = [...document.querySelectorAll("[data-essay-topic]")];
-  const emptyBox = document.getElementById("ledger-empty");
-  const resetBtn = document.querySelector("[data-reset-filter]");
-
-  function applyTopicFilter(topic) {
-    filterTabs.forEach((t) => t.setAttribute("aria-pressed", String(t.dataset.topicFilter === topic)));
-    let shown = 0;
-    ledgerRows.forEach((row) => {
-      const match = topic === "all" || row.dataset.essayTopic === topic;
-      row.hidden = !match;
-      if (match) shown++;
-    });
-    if (emptyBox) emptyBox.hidden = shown > 0;
-  }
-
-  if (filterTabs.length) {
-    filterTabs.forEach((tab) => {
-      tab.addEventListener("click", () => applyTopicFilter(tab.dataset.topicFilter));
-    });
-    if (resetBtn) resetBtn.addEventListener("click", () => applyTopicFilter("all"));
-  }
-
-  // 9. On-Demand GitHub Discussions / Utterances Comments (zero third-party script until requested)
+  // 12. Lazy Utterances Comments
   const loadCommentsBtn = document.querySelector("[data-load-comments]");
   if (loadCommentsBtn) {
     loadCommentsBtn.addEventListener("click", () => {
@@ -187,22 +364,17 @@
       s.crossOrigin = "anonymous";
       s.setAttribute("repo", "mohsen-niksirat/mohsen-tech-blog");
       s.setAttribute("issue-term", "pathname");
-      s.setAttribute(
-        "theme",
-        docEl.getAttribute("data-theme") === "dark" ? "github-dark" : "github-light"
-      );
+      s.setAttribute("theme", docEl.getAttribute("data-theme") === "dark" ? "github-dark" : "github-light");
       s.onload = () => loadCommentsBtn.remove();
       s.onerror = () => {
         loadCommentsBtn.disabled = false;
-        loadCommentsBtn.textContent = isFa
-          ? "خطا در اتصال به گیت‌هاب؛ تلاش مجدد"
-          : "Could not reach GitHub; click to retry";
+        loadCommentsBtn.textContent = isFa ? "خطا در اتصال؛ تلاش مجدد" : "Could not reach GitHub; click to retry";
       };
       container.appendChild(s);
     });
   }
 
-  // 10. Bilingual Search Engine (Modal Cmd/Ctrl+K + Dedicated /search/ Page)
+  // 13. Bilingual Instant Search Engine (⌘K + /search/)
   let searchCache = null;
   let searchPromise = null;
 
@@ -258,7 +430,6 @@
     return str.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
 
-  // Modal setup
   const backdrop = document.getElementById("search-backdrop");
   const dialogInput = document.getElementById("search-modal-input");
   const dialogList = document.getElementById("search-modal-results");
@@ -303,17 +474,11 @@
   }
 
   function closeSearchModal() {
-    if (!backdrop) return;
-    backdrop.hidden = true;
+    if (backdrop) backdrop.hidden = true;
   }
 
-  document.querySelectorAll("[data-open-search]").forEach((btn) => {
-    btn.addEventListener("click", openSearchModal);
-  });
-
-  document.querySelectorAll("[data-close-search]").forEach((btn) => {
-    btn.addEventListener("click", closeSearchModal);
-  });
+  document.querySelectorAll("[data-open-search]").forEach((btn) => btn.addEventListener("click", openSearchModal));
+  document.querySelectorAll("[data-close-search]").forEach((btn) => btn.addEventListener("click", closeSearchModal));
 
   if (backdrop) {
     backdrop.addEventListener("click", (e) => {
@@ -362,12 +527,12 @@
     ) {
       e.preventDefault();
       openSearchModal();
-    } else if (e.key === "Escape" && backdrop && !backdrop.hidden) {
-      closeSearchModal();
+    } else if (e.key === "Escape") {
+      if (backdrop && !backdrop.hidden) closeSearchModal();
+      if (lbBackdrop && !lbBackdrop.hidden) closeLightbox();
     }
   });
 
-  // Dedicated /search/ page input
   const pageSearchInput = document.getElementById("page-search-input");
   const pageSearchOut = document.getElementById("page-search-results");
   if (pageSearchInput && pageSearchOut) {
@@ -384,18 +549,20 @@
           }</p></div>`;
           return;
         }
-        pageSearchOut.innerHTML = `<ul class="essay-ledger">${matches
+        pageSearchOut.innerHTML = `<ul class="archive-list">${matches
           .map(
-            (m) => `<li class="ledger-row">
-              <div class="ledger-date tabular">
-                <span>${escapeHtml(m.dateLabel)}</span>
-                <span class="ledger-readtime">${escapeHtml(m.readTime)}</span>
-              </div>
-              <div class="ledger-main">
-                <h3><a href="${escapeHtml(m.url)}">${escapeHtml(m.title)}</a></h3>
+            (m) => `<li class="archive-row">
+              <div class="archive-main">
+                <div class="archive-meta tabular">
+                  <span class="topic-label">${escapeHtml(m.topic)}</span>
+                  <span class="meta-dot" aria-hidden="true">·</span>
+                  <span>${escapeHtml(m.dateLabel)}</span>
+                  <span class="meta-dot" aria-hidden="true">·</span>
+                  <span>${escapeHtml(m.readTime)}</span>
+                </div>
+                <h2><a href="${escapeHtml(m.url)}">${escapeHtml(m.title)}</a></h2>
                 <p>${escapeHtml(m.summary)}</p>
               </div>
-              <div class="ledger-topic">${escapeHtml(m.topic)}</div>
             </li>`
           )
           .join("")}</ul>`;

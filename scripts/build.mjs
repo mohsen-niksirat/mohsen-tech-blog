@@ -33,6 +33,65 @@ function formatDate(iso, locale = "en") {
   }).format(d);
 }
 
+// ─── Real Visual Covers Per Monograph ────────────────────────────────────────
+
+const POST_VISUALS = {
+  "multi-provider-ai-gateway": {
+    src: `${BASE}/assets/shots/9router.webp`,
+    w: 800,
+    h: 450,
+    alt: "9router universal multi-provider AI gateway routing across Gemini, Groq, DeepSeek, OpenAI, and OpenRouter.",
+    altFa: "نمای سیستم درگاه چندسرویس‌دهنده 9router برای مدیریت و مسیریابی مدل‌های Gemini، Groq و DeepSeek.",
+    caption: "9router multi-provider gateway & Telegram Mini App routing console",
+    captionFa: "پلتفرم 9router و مینی‌اپ تلگرام برای چرخش هوشمند کلیدهای هوش مصنوعی",
+  },
+  "fsrs-spaced-repetition-architecture": {
+    src: `${BASE}/assets/shots/leitner-pro-max.webp`,
+    w: 800,
+    h: 406,
+    alt: "Readner Leitner Pro Max interface showing CEFR vocabulary decks alongside PDF reading workspace.",
+    altFa: "محیط کاربری Readner لایتنر پرو مکس شامل بسته‌های واژگان CEFR و خواننده PDF.",
+    caption: "Readner offline PWA combining FSRS scheduling with live PDF word extraction",
+    captionFa: "وب‌اپ آفلاین Readner با ترکیب الگوریتم FSRS و استخراج لغت از فایل PDF",
+  },
+  "browser-only-developer-tools": {
+    src: `${BASE}/assets/shots/repodest.webp`,
+    w: 800,
+    h: 500,
+    alt: "Repodest client-side GitHub repository analyzer displaying repository health score and file explorer.",
+    altFa: "داشبورد تحلیلگر کاملاً محلی Repodest برای امتیاز سلامت مخزن و بسته‌بندی فایل‌های کد.",
+    caption: "Repodest analyzing GitHub repositories and packing LLM prompts purely client-side",
+    captionFa: "ابزار Repodest برای تحلیل مخزن‌های گیت‌هاب و ساخت پرامپت هوش مصنوعی کاملاً در مرورگر",
+  },
+  "godot4-wasm-horde-survival": {
+    src: `${BASE}/assets/shots/horde-survival-3d.webp`,
+    w: 800,
+    h: 403,
+    alt: "Horde Survival 3D running at 60 FPS inside WebGL 2 with active swarm combat and XP pickups.",
+    altFa: "گیم‌پلی ۶۰ فریم بازی سه‌بعدی Horde Survival 3D اجراشده در مرورگر با WebGL 2.",
+    caption: "Horde Survival 3D WebAssembly gameplay running in browser",
+    captionFa: "اجرای زنده بازی بقای سه‌بعدی Horde Survival 3D در مرورگر",
+  },
+  "inspecting-mcp-servers-visually": {
+    src: `${BASE}/assets/shots/mcp-studio.webp`,
+    w: 800,
+    h: 500,
+    alt: "MCP Studio IDE testing Model Context Protocol tool schemas and inspecting JSON-RPC responses.",
+    altFa: "محیط استودیوی گرافیکی MCP Studio برای بررسی اسکیمای ابزارها و ترافیک JSON-RPC.",
+    caption: "MCP Studio visual workbench for Model Context Protocol servers",
+    captionFa: "محیط گرافیکی MCP Studio برای تست ابزارهای استاندارد MCP",
+  },
+  "deterministic-canvas-cs-animations": {
+    src: `${BASE}/assets/shots/codevis.webp`,
+    w: 800,
+    h: 420,
+    alt: "CodeVis interactive HTML5 Canvas visualizer stepping through algorithms with synchronized code highlights.",
+    altFa: "محیط آموزش بصری CodeVis با نمایش همزمان گرافیک Canvas و خط فعال کد.",
+    caption: "CodeVis stepping deterministically through 49 computer science concepts",
+    captionFa: "آموزش گام‌به‌گام ۴۹ مفهوم علوم کامپیوتر روی بوم Canvas در CodeVis",
+  },
+};
+
 // ─── Single-Pass Code Syntax Highlighter ─────────────────────────────────────
 
 const TOKEN_RE =
@@ -85,7 +144,6 @@ function parseFrontmatter(raw) {
 }
 
 function renderInline(text) {
-  // Split by inline code first so code spans are never mangled
   return text
     .split(/(`[^`]+`)/g)
     .map((part) => {
@@ -93,13 +151,11 @@ function renderInline(text) {
         return `<code>${esc(part.slice(1, -1))}</code>`;
       }
       let s = esc(part);
-      // Links [label](href)
       s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, href) => {
         const external = /^https?:\/\//.test(href);
         const attrs = external ? ' target="_blank" rel="noopener noreferrer"' : "";
         return `<a href="${href}"${attrs}>${label}</a>`;
       });
-      // Bold & italic
       s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
       s = s.replace(/\*([^*]+)\*/g, "<em>$1</em>");
       return s;
@@ -193,7 +249,7 @@ function renderMarkdown(md, locale = "en", diagramKey = "") {
   return { html: htmlParts.join("\n"), toc };
 }
 
-// ─── SVG Icons (1.75px stroke, zero emoji controls) ──────────────────────────
+// ─── Unified 1.75px Stroke SVG Iconography ───────────────────────────────────
 
 const ICONS = {
   search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`,
@@ -201,14 +257,19 @@ const ICONS = {
   menu: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>`,
   rss: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>`,
   link: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`,
+  zoom: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg>`,
+  grid: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
+  list: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>`,
 };
 
-// ─── Curated Real Projects Data ──────────────────────────────────────────────
+// ─── Real Shipped Projects Showcase Data ─────────────────────────────────────
 
 const PROJECTS = [
   {
     name: "Repodest",
     stack: "JavaScript · GitHub REST API · Chrome MV3",
+    shot: `${BASE}/assets/shots/repodest.webp`,
+    essaySlug: "browser-only-developer-tools",
     desc: "Client-side GitHub repository health analyzer and token-aware Markdown prompt packer for ChatGPT, Claude, and Gemini.",
     descFa: "تحلیلگر کاملاً سمت کاربر برای مخزن‌های گیت‌هاب همراه با محاسبه امتیاز سلامت و بسته‌بندی فایل‌ها برای مدل‌های زبانی.",
     live: "https://mohsen-niksirat.github.io/Repodest/",
@@ -217,6 +278,8 @@ const PROJECTS = [
   {
     name: "Readner · Leitner Pro Max",
     stack: "PWA · IndexedDB · FSRS · Kotlin Android",
+    shot: `${BASE}/assets/shots/leitner-pro-max.webp`,
+    essaySlug: "fsrs-spaced-repetition-architecture",
     desc: "Offline-first vocabulary suite combining FSRS spaced repetition, an integrated PDF reader, WordWeb semantic graphs, and 4,500+ CEFR words.",
     descFa: "مجموعه یادگیری واژگان آفلاین مجهز به زمان‌بند علمی FSRS، خواننده PDF، شبکه معنایی WordWeb و ۴٬۵۰۰ لغت سطح‌بندی‌شده CEFR.",
     live: "https://mohsen-niksirat.github.io/Leitner-Pro-Max/",
@@ -225,22 +288,18 @@ const PROJECTS = [
   {
     name: "9router AI Gateway",
     stack: "JavaScript · Serverless · Telegram Mini App",
+    shot: `${BASE}/assets/shots/9router.webp`,
+    essaySlug: "multi-provider-ai-gateway",
     desc: "Multi-provider AI gateway pooling Gemini, Groq, DeepSeek, OpenAI, and OpenRouter keys with automatic HTTP 429 failover and AES-GCM vaults.",
     descFa: "درگاه چندسرویس‌دهنده هوش مصنوعی و مینی‌اپ تلگرام با توزیع بار کلیدها، جایگزینی خودکار روی خطای ۴۲۹ و رمزنگاری اختصاصی.",
     live: "",
     repo: "https://github.com/mohsen-niksirat/9router_TG_Bot",
   },
   {
-    name: "AIDahl",
-    stack: "Python · OpenRouter · Supabase · Telegram",
-    desc: "Bring-Your-Own-Key Telegram AI assistant featuring live coalesced SSE streaming, named threads, and Manus research/image workflows.",
-    descFa: "دستیار هوش مصنوعی تلگرام با معماری BYOK، استریم زنده پیام‌ها، گفتگوهای نام‌گذاری‌شده و ابزارهای تولید تصویر و پژوهش.",
-    live: "",
-    repo: "https://github.com/mohsen-niksirat/AIDahl",
-  },
-  {
     name: "Horde Survival 3D",
     stack: "Godot 4 · GDScript · WebAssembly / WebGL",
+    shot: `${BASE}/assets/shots/horde-survival-3d.webp`,
+    essaySlug: "godot4-wasm-horde-survival",
     desc: "Browser-playable 3D survival roguelite running at 60 FPS with spatial-hash swarm combat, evolving weapons, and a three-phase boss.",
     descFa: "بازی بقای روگ‌لایت سه‌بعدی با خروجی WebAssembly در مرورگر، برخورد مکانی بهینه، ارتقای سلاح‌ها و مبارزه با باس سه‌فازی.",
     live: "https://mohsen-niksirat.github.io/Horde_Survival_3D_Godot/",
@@ -249,6 +308,8 @@ const PROJECTS = [
   {
     name: "MCP Studio",
     stack: "TypeScript · JSON-RPC 2.0 · JSON Schema",
+    shot: `${BASE}/assets/shots/mcp-studio.webp`,
+    essaySlug: "inspecting-mcp-servers-visually",
     desc: "Visual browser workbench for inspecting Model Context Protocol tool schemas, testing invocations, and tracing JSON-RPC payloads.",
     descFa: "استودیوی گرافیکی تست و بازرسی سرورهای استاندارد MCP، فرم‌ساز خودکار از اسکیمای ابزارها و ردیاب پیام‌های JSON-RPC.",
     live: "https://mohsen-niksirat.github.io/Mcp-Studio/",
@@ -257,6 +318,8 @@ const PROJECTS = [
   {
     name: "CodeVis",
     stack: "HTML5 Canvas · Zero Dependencies · Single File",
+    shot: `${BASE}/assets/shots/codevis.webp`,
+    essaySlug: "deterministic-canvas-cs-animations",
     desc: "49 computer science algorithms and patterns animated step-by-step with bidirectional timeline scrubbing and synced code pointers.",
     descFa: "آموزش تعاملی ۴۹ مفهوم علوم کامپیوتر روی بوم Canvas با قابلیت حرکت دوطرفه بین گام‌ها و هایلایت همگام کد.",
     live: "https://mohsen-niksirat.github.io/CodeVis/",
@@ -265,6 +328,8 @@ const PROJECTS = [
   {
     name: "DataLens",
     stack: "JavaScript · SVG Charts · Offline PWA",
+    shot: `${BASE}/assets/shots/datalens.webp`,
+    essaySlug: "browser-only-developer-tools",
     desc: "Zero-upload in-browser data workbench supporting CSV, JSON, YAML, XML, SQL, and Excel inspection and conversion.",
     descFa: "میزکار تحلیل، آمارگیری و تبدیل فایل‌های داده در ۶ فرمت مختلف کاملاً آفلاین و بدون ارسال فایل به سرور.",
     live: "https://mohsen-niksirat.github.io/DataLens/",
@@ -273,6 +338,7 @@ const PROJECTS = [
   {
     name: "SpeakAI Coach",
     stack: "TypeScript · Voice AI · PWA",
+    shot: `${BASE}/assets/shots/speakai-coach.webp`,
     desc: "Real-time spoken English conversation tutor with 8 personas, turn-by-turn grammar feedback, and 6-axis IELTS Speaking band estimation.",
     descFa: "مربی هوشمند مکالمه صوتی انگلیسی همراه با ۸ نقش گفتگو، اصلاح لحظه‌ای گرامر و تخمین شش‌محوری نمره اسپیکینگ آیلتس.",
     live: "https://mohsen-niksirat.github.io/SpeakAI-Coach/",
@@ -281,14 +347,27 @@ const PROJECTS = [
   {
     name: "A11y Inspector",
     stack: "JavaScript · WCAG 2.2 · PWA + Node CLI",
+    shot: `${BASE}/assets/shots/a11y-inspector.webp`,
+    essaySlug: "browser-only-developer-tools",
     desc: "Privacy-first HTML accessibility auditor checking contrast ratios, landmarks, headings, and ARIA rules in-browser and in CI.",
     descFa: "ابزار ممیزی دسترس‌پذیری وب بر اساس استاندارد WCAG 2.2 در مرورگر به‌همراه نسخه خط فرمان برای بررسی خودکار در CI.",
     live: "https://mohsen-niksirat.github.io/A11y-Inspector/",
     repo: "https://github.com/mohsen-niksirat/A11y-Inspector",
   },
   {
+    name: "AIDahl",
+    stack: "Python · OpenRouter · Supabase · Telegram",
+    shot: `${BASE}/assets/shots/aidahl.webp`,
+    essaySlug: "multi-provider-ai-gateway",
+    desc: "Bring-Your-Own-Key Telegram AI assistant featuring live coalesced SSE streaming, named threads, and Manus research/image workflows.",
+    descFa: "دستیار هوش مصنوعی تلگرام با معماری BYOK، استریم زنده پیام‌ها، گفتگوهای نام‌گذاری‌شده و ابزارهای تولید تصویر و پژوهش.",
+    live: "",
+    repo: "https://github.com/mohsen-niksirat/AIDahl",
+  },
+  {
     name: "Kite Downloader",
     stack: "Rust · Tauri v2 · Tokio Async",
+    shot: `${BASE}/assets/shots/kite-downloader.webp`,
     desc: "Lightweight native Windows download manager under 8 MB featuring segmented range downloads and clipboard sniffing.",
     descFa: "مدیریت دانلود سبک و سریع دسکتاپ با Rust و Tauri v2 با حجم زیر ۸ مگابایت و دانلود چندبخشی فایل‌ها.",
     live: "",
@@ -297,6 +376,7 @@ const PROJECTS = [
   {
     name: "Interactive macOS & iOS Portfolio",
     stack: "React 19 · Vite · Tailwind 4 · GSAP",
+    shot: `${BASE}/assets/shots/macos-portfolio.png`,
     desc: "Bilingual desktop and mobile operating-system portfolio featuring Finder, Safari case studies, zsh Terminal, Spotlight, and live GitHub telemetry.",
     descFa: "پورتفولیوی تعاملی دوزبانه به سبک سیستم‌عامل macOS و iOS مجهز به ترمینال، مرورگر پروژه‌ها، ویجت‌های زنده و رزومه.",
     live: "https://mohsen-niksirat.github.io/Profile/",
@@ -327,23 +407,23 @@ function renderShell({
     ? [
         { key: "home", label: "مقالات", href: `${prefix}/` },
         { key: "notes", label: "یادداشت‌های فنی", href: `${prefix}/notes/` },
-        { key: "projects", label: "پروژه‌ها", href: `${prefix}/projects/` },
+        { key: "projects", label: "گالری پروژه‌ها", href: `${prefix}/projects/` },
         { key: "archive", label: "آرشیو", href: `${prefix}/archive/` },
         { key: "about", label: "درباره من", href: `${prefix}/about/` },
       ]
     : [
         { key: "home", label: "Essays", href: `${prefix}/` },
         { key: "notes", label: "Field Notes", href: `${prefix}/notes/` },
-        { key: "projects", label: "Projects", href: `${prefix}/projects/` },
+        { key: "projects", label: "Systems", href: `${prefix}/projects/` },
         { key: "archive", label: "Archive", href: `${prefix}/archive/` },
         { key: "about", label: "About", href: `${prefix}/about/` },
       ];
 
-  const siteName = fa ? "یادداشت‌های مهندسی محسن نیک‌سیرت" : "Mohsen Niksirat · Engineering Monograph";
+  const siteName = fa ? "نشریه مهندسی محسن نیک‌سیرت" : "Mohsen Niksirat · Engineering Publication";
   const fullTitle = title === siteName ? siteName : `${title} | ${siteName}`;
 
   return `<!DOCTYPE html>
-<html lang="${fa ? "fa" : "en"}" dir="${fa ? "rtl" : "ltr"}">
+<html lang="${fa ? "fa" : "en"}" dir="${fa ? "rtl" : "ltr"}" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -374,7 +454,7 @@ function renderShell({
   <link rel="manifest" href="${BASE}/manifest.webmanifest">
 
   <script>
-    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
   </script>
   <link rel="stylesheet" href="${BASE}/assets/style.css">
   <script defer src="${BASE}/assets/app.js"></script>
@@ -390,7 +470,7 @@ function renderShell({
         <span class="brand-mark" aria-hidden="true">MN</span>
         <span class="brand-text">
           <span class="brand-name">${fa ? "محسن نیک‌سیرت" : "Mohsen Niksirat"}</span>
-          <span class="brand-sub">${fa ? "دفترچه مهندسی نرم‌افزار و هوش مصنوعی" : "Engineering Monograph & Lab Notes"}</span>
+          <span class="brand-sub">${fa ? "نشریه مهندسی نرم‌افزار و هوش مصنوعی" : "Engineering Publication & Lab"}</span>
         </span>
       </a>
 
@@ -472,6 +552,17 @@ function renderShell({
     </div>
   </div>
 
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <div class="lightbox-bar">
+        <p id="lightbox-caption"></p>
+        <button type="button" class="tool-btn" data-close-lightbox>${fa ? "بستن (Esc)" : "Close (Esc)"}</button>
+      </div>
+      <img id="lightbox-img" alt="">
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>`;
@@ -491,11 +582,21 @@ function loadPosts(locale) {
     const { html, toc } = renderMarkdown(body, locale, meta.diagram);
     const urlPath = locale === "fa" ? `/fa/posts/${meta.slug}/` : `/posts/${meta.slug}/`;
     const altPath = locale === "fa" ? `/posts/${meta.slug}/` : `/fa/posts/${meta.slug}/`;
+    const visual = POST_VISUALS[meta.slug] || {
+      src: `${BASE}/assets/og/${meta.slug}.png`,
+      w: 1200,
+      h: 630,
+      alt: meta.title,
+      altFa: meta.title,
+      caption: meta.projectName || meta.title,
+      captionFa: meta.projectName || meta.title,
+    };
 
     return {
       ...meta,
       tags: Array.isArray(meta.tags) ? meta.tags : [],
       locale,
+      visual,
       bodyRaw: body.replace(/\{\{DIAGRAM\}\}/g, "").replace(/[#*`>_]/g, " "),
       html,
       toc,
@@ -526,43 +627,90 @@ function buildHomePage(posts, locale) {
   const prefix = fa ? `${BASE}/fa` : BASE;
   const lead = posts.find((p) => p.featured) || posts[0];
   const topics = [...new Set(posts.map((p) => p.topic))];
+  const showcaseTabs = [
+    posts.find((p) => p.slug === "browser-only-developer-tools") || posts[0],
+    posts.find((p) => p.slug === "fsrs-spaced-repetition-architecture") || posts[1],
+    posts.find((p) => p.slug === "godot4-wasm-horde-survival") || posts[2],
+  ];
+  const featuredSystems = [PROJECTS[0], PROJECTS[3], PROJECTS[7], PROJECTS[4]];
 
   const bodyHtml = `
-    <section class="masthead-intro">
-      <div class="masthead-grid">
-        <div>
-          <h1 class="masthead-title">${
-            fa
-              ? "یادداشت‌های معماری نرم‌افزار، درگاه‌های هوش مصنوعی و ابزارهای وب محلی"
-              : "Systems notes on resilient AI gateways, cognitive learning tools, and local-first web craft"
-          }</h1>
-        </div>
-        <div>
-          <p class="masthead-lede">${
-            fa
-              ? "اینجا دفترچه فنی من است: کالبدشکافی تصمیم‌های واقعی مهندسی، الگوریتم‌ها و ساختار کدهایی که در بیش از ۴۷ مخزن متن‌باز، وب‌اپ‌های آفلاین و ابزارهای هوش مصنوعی ساخته‌ام."
-              : "Long-form engineering essays and lab dispatches distilled from building 47+ open-source repositories across serverless AI routing, spaced-repetition engines, WebAssembly games, and zero-backend developer tools."
-          }</p>
-        </div>
-      </div>
+    <!-- 1. Atmospheric Visual Studio Hero with Live Multi-System Showcase -->
+    <section class="studio-hero">
+      <div class="hero-stage-grid">
+        <div class="hero-copy">
+          <div class="author-strip">
+            <img class="author-avatar" src="${BASE}/assets/shots/avatar.webp" alt="${fa ? "پرتره محسن نیک‌سیرت" : "Portrait of Mohsen Niksirat"}" width="48" height="48">
+            <div class="author-meta">
+              <strong class="author-name">${fa ? "محسن نیک‌سیرت" : "Mohsen Niksirat"}</strong>
+              <span class="author-role">${fa ? "کارشناسی ارشد معماری کامپیوتر · تبریز" : "M.Sc. Computer Architecture · Open-Source Systems Builder"}</span>
+            </div>
+          </div>
 
-      <div class="colophon-bar">
-        <span class="tabular">${
-          fa
-            ? `${toFaDigits(posts.length)} مقاله تحلیلی · ${toFaDigits(notesRaw.length)} یادداشت آزمایشگاهی · دوزبانه (فارسی و انگلیسی)`
-            : `${posts.length} Deep-Dive Monographs · ${notesRaw.length} Lab Field Notes · Bilingual Edition (EN / FA)`
-        }</span>
-        <div class="colophon-links">
-          <a href="https://mohsen-niksirat.github.io/Profile/${fa ? "fa/" : ""}" target="_blank" rel="noopener noreferrer">${fa ? "مشاهده دسکتاپ تعاملی من" : "Open Interactive macOS Portfolio"}</a>
-          <a href="https://github.com/mohsen-niksirat" target="_blank" rel="noopener noreferrer">@mohsen-niksirat</a>
-          <a href="${fa ? `${BASE}/fa/feed.xml` : `${BASE}/feed.xml`}">${fa ? "خوراک RSS" : "RSS Feed"}</a>
+          <h1 class="hero-display">${
+            fa
+              ? "معماری سیستم‌های هوش مصنوعی، موتورهای یادگیری و ابزارهای وب بدون سرور"
+              : "Architecting resilient AI gateways, cognitive engines & zero-backend web software"
+          }</h1>
+
+          <p class="hero-lede">${
+            fa
+              ? "مقالات فنی مصور، دیاگرام‌های تعاملی و تجربه واقعی ساخت ۴۷ مخزن متن‌باز: از توزیع بار مدل‌های زبانی در 9router تا الگوریتم حافظه FSRS در Readner و گرافیک WebAssembly در Godot 4."
+              : "Visual engineering essays, interactive architecture sandboxes, and field notes distilled from shipping 47+ open-source repositories across serverless AI routing, FSRS spaced repetition, and WebAssembly engines."
+          }</p>
+
+          <div class="btn-row">
+            <a class="btn-primary" href="${lead.url}">${fa ? "مطالعه سرمقاله ویژه" : "Read Lead Monograph"}</a>
+            <a class="btn-secondary" href="https://mohsen-niksirat.github.io/Profile/${fa ? "fa/" : ""}" target="_blank" rel="noopener noreferrer">${fa ? "ورود به دسکتاپ macOS من" : "Launch OS Portfolio"}</a>
+          </div>
+        </div>
+
+        <!-- Layered App Visual Showcase Window (hero <img> with fetchpriority="high") -->
+        <div class="hero-showcase" data-hero-showcase>
+          <div class="showcase-tabs" role="tablist" aria-label="${fa ? "پیش‌نمایش سیستم‌های برجسته" : "Featured engineering systems"}">
+            ${showcaseTabs
+              .map(
+                (item, idx) => `<button type="button" role="tab" class="showcase-tab" data-hero-tab="${idx}" aria-selected="${idx === 0}">${esc(item.projectName.split("·")[0].trim())}</button>`
+              )
+              .join("")}
+          </div>
+
+          ${showcaseTabs
+            .map(
+              (item, idx) => `<div class="showcase-panel" data-hero-panel="${idx}"${idx === 0 ? "" : " hidden"}>
+                <div class="window-chrome">
+                  <div class="chrome-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                  <span class="chrome-url ltr">${esc(item.projectLive || item.projectRepo)}</span>
+                  <button type="button" class="chrome-zoom" data-lightbox-src="${item.visual.src}" data-lightbox-alt="${esc(fa ? item.visual.altFa : item.visual.alt)}" aria-label="${fa ? "بزرگنمایی تصویر" : "Expand screenshot"}">${ICONS.zoom}</button>
+                </div>
+                <div class="showcase-img-wrap">
+                  <img
+                    src="${item.visual.src}"
+                    alt="${esc(fa ? item.visual.altFa : item.visual.alt)}"
+                    width="${item.visual.w}"
+                    height="${item.visual.h}"
+                    ${idx === 0 ? 'fetchpriority="high"' : 'decoding="async"'}
+                  >
+                </div>
+                <div class="showcase-foot">
+                  <div>
+                    <span class="showcase-topic">${esc(item.topic)}</span>
+                    <strong class="showcase-title">${esc(item.title)}</strong>
+                  </div>
+                  <a class="showcase-read" href="${item.url}">${fa ? "خواندن مقاله" : "Read Essay"}</a>
+                </div>
+              </div>`
+            )
+            .join("")}
         </div>
       </div>
     </section>
 
-    <section class="lead-spread" aria-labelledby="lead-essay-heading">
+    <!-- 2. Lead Monograph Interactive Failover Sandbox Spread -->
+    <section class="lead-spread" aria-labelledby="lead-essay-heading" data-reveal>
       <div class="lead-grid">
         <div>
+          <span class="section-pill">${fa ? "شبیه‌ساز زنده معماری" : "Interactive Architecture Study"}</span>
           <h2 id="lead-essay-heading" class="lead-heading">
             <a href="${lead.url}">${esc(lead.title)}</a>
           </h2>
@@ -575,8 +723,8 @@ function buildHomePage(posts, locale) {
             <span>${esc(lead.readTime)}</span>
           </div>
           <div class="btn-row">
-            <a class="btn-primary" href="${lead.url}">${fa ? "مطالعه مقاله کامل" : "Read Full Monograph"}</a>
-            <a class="btn-secondary" href="${lead.projectRepo}" target="_blank" rel="noopener noreferrer">${fa ? "مخزن کد در گیت‌هاب" : "Inspect Source on GitHub"}</a>
+            <a class="btn-primary" href="${lead.url}">${fa ? "باز کردن مقاله کامل" : "Read Full Monograph"}</a>
+            <a class="btn-secondary" href="${lead.projectRepo}" target="_blank" rel="noopener noreferrer">${fa ? "مشاهده سورس گیت‌هاب" : "Inspect on GitHub"}</a>
           </div>
         </div>
         <div class="lead-visual">
@@ -585,10 +733,17 @@ function buildHomePage(posts, locale) {
       </div>
     </section>
 
-    <section class="ledger-section" aria-labelledby="ledger-heading">
+    <!-- 3. Visual Monographs Gallery (16:10 Framed Real Screenshots + Grid/Ledger Switch) -->
+    <section class="ledger-section" aria-labelledby="ledger-heading" data-reveal>
       <div class="section-head">
-        <h2 id="ledger-heading" class="section-title">${fa ? "فهرست مقالات مهندسی" : "Published Monographs"}</h2>
-        <a href="${prefix}/archive/">${fa ? "مشاهده آرشیو کامل" : "Browse complete archive"}</a>
+        <div>
+          <h2 id="ledger-heading" class="section-title">${fa ? "مقالات مهندسی و کالبدشکافی سیستم‌ها" : "Published Engineering Monographs"}</h2>
+          <p class="section-desc">${fa ? "هر مقاله همراه با تصاویر واقعی اپلیکیشن، دیاگرام تعاملی و کد عملی پیاده‌سازی شده است." : "Every essay pairs real application screenshots, interactive schematics, and production source patterns."}</p>
+        </div>
+        <div class="view-switcher" role="group" aria-label="${fa ? "حالت نمایش مقالات" : "Switch essay layout"}">
+          <button type="button" class="view-btn" data-view-mode="grid" aria-pressed="true" aria-label="${fa ? "نمایش کارت‌های تصویری" : "Visual grid view"}">${ICONS.grid}<span>${fa ? "گرافیکی" : "Visual"}</span></button>
+          <button type="button" class="view-btn" data-view-mode="ledger" aria-pressed="false" aria-label="${fa ? "نمایش فهرست فشرده" : "Compact ledger view"}">${ICONS.list}<span>${fa ? "فهرستی" : "Index"}</span></button>
+        </div>
       </div>
 
       <div class="filter-bar" role="group" aria-label="${fa ? "فیلتر بر اساس حوزه فنی" : "Filter essays by engineering topic"}">
@@ -607,23 +762,38 @@ function buildHomePage(posts, locale) {
           .join("")}
       </div>
 
-      <ul class="essay-ledger">
+      <div class="essay-cards" id="essay-collection" data-layout="grid">
         ${posts
           .map(
-            (p) => `<li class="ledger-row" data-essay-topic="${esc(p.topic)}">
-              <div class="ledger-date tabular">
-                <time datetime="${p.date}">${esc(p.dateLabel)}</time>
-                <span class="ledger-readtime">${esc(p.readTime)}</span>
-              </div>
-              <div class="ledger-main">
+            (p) => `<article class="essay-card" data-essay-topic="${esc(p.topic)}">
+              <a class="essay-media" href="${p.url}">
+                <img
+                  src="${p.visual.src}"
+                  alt="${esc(fa ? p.visual.altFa : p.visual.alt)}"
+                  width="${p.visual.w}"
+                  height="${p.visual.h}"
+                  loading="lazy"
+                  decoding="async"
+                >
+                <span class="essay-topic-tag">${esc(p.topic)}</span>
+              </a>
+              <div class="essay-body">
+                <div class="essay-meta tabular">
+                  <time datetime="${p.date}">${esc(p.dateLabel)}</time>
+                  <span class="meta-dot" aria-hidden="true">·</span>
+                  <span>${esc(p.readTime)}</span>
+                </div>
                 <h3><a href="${p.url}">${esc(p.title)}</a></h3>
                 <p>${esc(p.summary)}</p>
+                <div class="essay-foot">
+                  <span class="essay-project ltr">${esc(p.projectName)}</span>
+                  <a class="essay-cta" href="${p.url}">${fa ? "مطالعه مقاله" : "Read Monograph"}</a>
+                </div>
               </div>
-              <div class="ledger-topic">${esc(p.topic)}</div>
-            </li>`
+            </article>`
           )
           .join("")}
-      </ul>
+      </div>
 
       <div class="empty-state" id="ledger-empty" hidden>
         <p>${fa ? "هیچ مقاله‌ای در این دسته‌بندی یافت نشد." : "No essays match the selected topic."}</p>
@@ -631,9 +801,49 @@ function buildHomePage(posts, locale) {
       </div>
     </section>
 
-    <section class="notes-section" aria-labelledby="notes-heading">
+    <!-- 4. Visual Gallery of Live Systems Behind the Essays -->
+    <section class="systems-band" aria-labelledby="systems-heading" data-reveal>
       <div class="section-head">
-        <h2 id="notes-heading" class="section-title">${fa ? "یادداشت‌های کوتاه آزمایشگاهی" : "Recent Lab Field Notes"}</h2>
+        <div>
+          <h2 id="systems-heading" class="section-title">${fa ? "نرم‌افزارها و دموی زنده پشت این مقالات" : "Live Systems Behind the Writing"}</h2>
+          <p class="section-desc">${fa ? "نمای مستقیم از رابط کاربری اپلیکیشن‌های اجراشده؛ برای بزرگنمایی روی تصویر کلیک کنید." : "Authentic captures of deployed interfaces running client-side. Click any screenshot to inspect full-size."}</p>
+        </div>
+        <a href="${prefix}/projects/">${fa ? "مشاهده تمام ۱۲ سیستم" : "Browse all 12 systems"}</a>
+      </div>
+
+      <div class="systems-showcase-grid">
+        ${featuredSystems
+          .map(
+            (sys) => `<article class="system-tile">
+              <div class="system-shot">
+                <img src="${sys.shot}" alt="${esc(sys.name)}" width="800" height="500" loading="lazy" decoding="async">
+                <button type="button" class="shot-zoom-btn" data-lightbox-src="${sys.shot}" data-lightbox-alt="${esc(sys.name)}" aria-label="${fa ? `بزرگنمایی ${sys.name}` : `Zoom ${sys.name} screenshot`}">${ICONS.zoom}</button>
+              </div>
+              <div class="system-tile-body">
+                <div class="system-tile-head">
+                  <h3>${esc(sys.name)}</h3>
+                  <span class="project-stack ltr">${esc(sys.stack)}</span>
+                </div>
+                <p>${esc(fa ? sys.descFa : sys.desc)}</p>
+                <div class="btn-row">
+                  ${
+                    sys.live
+                      ? `<a class="btn-primary btn-sm" href="${esc(sys.live)}" target="_blank" rel="noopener noreferrer">${fa ? "اجرای زنده" : "Open Live"}</a>`
+                      : ""
+                  }
+                  <a class="btn-secondary btn-sm" href="${esc(sys.repo)}" target="_blank" rel="noopener noreferrer">${fa ? "کد گیت‌هاب" : "GitHub"}</a>
+                </div>
+              </div>
+            </article>`
+          )
+          .join("")}
+      </div>
+    </section>
+
+    <!-- 5. Recent Lab Field Notes -->
+    <section class="notes-section" aria-labelledby="notes-heading" data-reveal>
+      <div class="section-head">
+        <h2 id="notes-heading" class="section-title">${fa ? "یادداشت‌های آزمایشگاهی و بنچمارک‌ها" : "Recent Lab Field Notes"}</h2>
         <a href="${prefix}/notes/">${fa ? "همه یادداشت‌های فنی" : "Read all field notes"}</a>
       </div>
 
@@ -660,17 +870,17 @@ function buildHomePage(posts, locale) {
 
   return renderShell({
     locale,
-    title: fa ? "یادداشت‌های مهندسی محسن نیک‌سیرت" : "Mohsen Niksirat · Engineering Monograph",
+    title: fa ? "نشریه مهندسی محسن نیک‌سیرت" : "Mohsen Niksirat · Engineering Publication",
     description: fa
       ? "مقالات عمیق مهندسی نرم‌افزار، سیستم‌های هوش مصنوعی، الگوریتم FSRS، WebAssembly و ابزارهای وب محلی نوشته محسن نیک‌سیرت."
-      : "Technical essays and field notes by Mohsen Niksirat on multi-provider AI gateways, FSRS spaced repetition, Godot 4 WebAssembly, MCP tooling, and local-first web architecture.",
+      : "Visual technical essays, live architecture sandboxes, and field notes by Mohsen Niksirat.",
     canonicalPath: fa ? "/fa/" : "/",
     altLangPath: fa ? "/" : "/fa/",
     activeNav: "home",
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "Blog",
-      name: fa ? "یادداشت‌های مهندسی محسن نیک‌سیرت" : "Mohsen Niksirat · Engineering Monograph",
+      name: fa ? "نشریه مهندسی محسن نیک‌سیرت" : "Mohsen Niksirat · Engineering Publication",
       url: `${FULL_URL}${fa ? "/fa/" : "/"}`,
       inLanguage: fa ? "fa-IR" : "en-US",
       author: {
@@ -705,6 +915,23 @@ function buildPostPage(post, index, allPosts) {
         </div>
       </header>
 
+      <!-- Framed Real Project Cover Screenshot (R-40 hero <img> with fetchpriority="high") -->
+      <figure class="article-cover">
+        <div class="window-chrome">
+          <div class="chrome-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span class="chrome-url ltr">${esc(post.projectLive || post.projectRepo)}</span>
+          <button type="button" class="chrome-zoom" data-lightbox-src="${post.visual.src}" data-lightbox-alt="${esc(fa ? post.visual.altFa : post.visual.alt)}" aria-label="${fa ? "بزرگنمایی تصویر" : "Expand screenshot"}">${ICONS.zoom}</button>
+        </div>
+        <img
+          src="${post.visual.src}"
+          alt="${esc(fa ? post.visual.altFa : post.visual.alt)}"
+          width="${post.visual.w}"
+          height="${post.visual.h}"
+          fetchpriority="high"
+        >
+        <figcaption>${esc(fa ? post.visual.captionFa : post.visual.caption)}</figcaption>
+      </figure>
+
       <div class="article-layout">
         <div class="prose">
           ${post.html}
@@ -728,7 +955,7 @@ function buildPostPage(post, index, allPosts) {
             </div>
           </section>
 
-          <nav class="post-Matrix-nav" aria-label="${fa ? "مقاله قبلی و بعدی" : "Adjacent monographs"}">
+          <nav class="post-matrix-nav" aria-label="${fa ? "مقاله قبلی و بعدی" : "Adjacent monographs"}">
             ${
               newer
                 ? `<a class="adj-link" href="${newer.url}">
@@ -871,32 +1098,44 @@ function buildNotesPage(locale) {
 
 function buildProjectsPage(locale) {
   const fa = locale === "fa";
+  const prefix = fa ? `${BASE}/fa` : BASE;
   const bodyHtml = `
     <section class="page-section">
       <header class="page-header">
-        <h1 class="page-title">${fa ? "فهرست سیستم‌ها و پروژه‌های متن‌باز" : "Shipped Open-Source Systems"}</h1>
+        <h1 class="page-title">${fa ? "گالری گرافیکی سیستم‌ها و پروژه‌های متن‌باز" : "Shipped Open-Source Systems Gallery"}</h1>
         <p class="page-sub">${
           fa
-            ? "گزیده‌ای از پروژه‌هایی که مقالات این وبلاگ بر پایه معماری واقعی آن‌ها نوشته شده‌اند. برای تجربه نمای کامل دسکتاپ به پورتفولیوی تعاملی سر بزنید."
-            : "Every essay in this journal comes from real shipped software. Launch any live web build below or explore full case studies inside my interactive OS portfolio."
+            ? "پیش‌نمایش تصویری واقعی ۱۲ پروژه شاخص؛ برای مشاهده تمام جزئیات روی تصاویر کلیک کنید یا مستقیماً نسخه زنده را باز کنید."
+            : "Visual directory of deployed applications, AI gateways, games, and developer tools documented across this publication."
         }</p>
       </header>
 
-      <div class="project-directory">
+      <div class="systems-showcase-grid">
         ${PROJECTS.map(
-          (p) => `<article class="project-row">
-            <div>
-              <h2>${esc(p.name)}</h2>
-              <span class="project-stack ltr">${esc(p.stack)}</span>
+          (p) => `<article class="system-tile">
+            <div class="system-shot">
+              <img src="${p.shot}" alt="${esc(p.name)}" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="${p.shot}" data-lightbox-alt="${esc(p.name)}" aria-label="${fa ? `بزرگنمایی ${p.name}` : `Expand ${p.name}`}">${ICONS.zoom}</button>
             </div>
-            <p class="project-desc">${esc(fa ? p.descFa : p.desc)}</p>
-            <div class="project-links">
-              ${
-                p.live
-                  ? `<a class="btn-primary" href="${esc(p.live)}" target="_blank" rel="noopener noreferrer">${fa ? "اجرای زنده" : "Live App"}</a>`
-                  : ""
-              }
-              <a class="btn-secondary" href="${esc(p.repo)}" target="_blank" rel="noopener noreferrer">${fa ? "سورس گیت‌هاب" : "Source"}</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>${esc(p.name)}</h2>
+                <span class="project-stack ltr">${esc(p.stack)}</span>
+              </div>
+              <p>${esc(fa ? p.descFa : p.desc)}</p>
+              <div class="btn-row">
+                ${
+                  p.live
+                    ? `<a class="btn-primary btn-sm" href="${esc(p.live)}" target="_blank" rel="noopener noreferrer">${fa ? "اجرای زنده" : "Live App"}</a>`
+                    : ""
+                }
+                ${
+                  p.essaySlug
+                    ? `<a class="btn-secondary btn-sm" href="${prefix}/posts/${p.essaySlug}/">${fa ? "مقاله فنی" : "Essay"}</a>`
+                    : ""
+                }
+                <a class="btn-secondary btn-sm" href="${esc(p.repo)}" target="_blank" rel="noopener noreferrer">${fa ? "سورس گیت‌هاب" : "Source"}</a>
+              </div>
             </div>
           </article>`
         ).join("")}
@@ -906,10 +1145,10 @@ function buildProjectsPage(locale) {
 
   return renderShell({
     locale,
-    title: fa ? "پروژه‌های متن‌باز" : "Projects",
+    title: fa ? "گالری پروژه‌ها" : "Shipped Systems",
     description: fa
-      ? "فهرست اپلیکیشن‌ها، درگاه‌های هوش مصنوعی و ابزارهای متن‌باز ساخته‌شده توسط محسن نیک‌سیرت."
-      : "Open-source web apps, AI gateways, learning tools, and games built by Mohsen Niksirat.",
+      ? "فهرست مصور اپلیکیشن‌ها، درگاه‌های هوش مصنوعی و ابزارهای متن‌باز ساخته‌شده توسط محسن نیک‌سیرت."
+      : "Visual showcase of open-source web apps, AI gateways, learning tools, and games built by Mohsen Niksirat.",
     canonicalPath: fa ? "/fa/projects/" : "/projects/",
     altLangPath: fa ? "/projects/" : "/fa/projects/",
     activeNav: "projects",
@@ -935,19 +1174,24 @@ function buildArchivePage(posts, locale) {
         <a class="btn-secondary" href="${fa ? `${BASE}/fa/search/` : `${BASE}/search/`}">${ICONS.search}<span>${fa ? "جستجوی تمام‌متن" : "Full-Text Search"}</span></a>
       </div>
 
-      <ul class="essay-ledger">
+      <ul class="archive-list">
         ${posts
           .map(
-            (p) => `<li class="ledger-row">
-              <div class="ledger-date tabular">
-                <time datetime="${p.date}">${esc(p.dateLabel)}</time>
-                <span class="ledger-readtime">${esc(p.readTime)}</span>
-              </div>
-              <div class="ledger-main">
-                <h2 style="font-family:var(--font-serif);font-size:1.3rem;font-weight:600;margin-bottom:6px;"><a href="${p.url}" style="color:var(--text-primary);text-decoration:none;">${esc(p.title)}</a></h2>
+            (p) => `<li class="archive-row">
+              <a class="archive-thumb" href="${p.url}">
+                <img src="${p.visual.src}" alt="" width="200" height="125" loading="lazy">
+              </a>
+              <div class="archive-main">
+                <div class="archive-meta tabular">
+                  <span class="topic-label">${esc(p.topic)}</span>
+                  <span class="meta-dot" aria-hidden="true">·</span>
+                  <time datetime="${p.date}">${esc(p.dateLabel)}</time>
+                  <span class="meta-dot" aria-hidden="true">·</span>
+                  <span>${esc(p.readTime)}</span>
+                </div>
+                <h2><a href="${p.url}">${esc(p.title)}</a></h2>
                 <p>${esc(p.summary)}</p>
               </div>
-              <div class="ledger-topic">${esc(p.topic)}</div>
             </li>`
           )
           .join("")}
@@ -975,7 +1219,14 @@ function buildAboutPage(locale) {
   const bodyHtml = `
     <section class="page-section">
       <header class="page-header">
-        <h1 class="page-title">${fa ? "درباره محسن نیک‌سیرت" : "About Mohsen Niksirat"}</h1>
+        <div class="author-strip" style="margin-bottom:20px;">
+          <img class="author-avatar" src="${BASE}/assets/shots/avatar.webp" alt="${fa ? "پرتره محسن نیک‌سیرت" : "Portrait of Mohsen Niksirat"}" width="64" height="64" style="width:64px;height:64px;">
+          <div class="author-meta">
+            <strong class="author-name" style="font-size:1.1rem;">${fa ? "محسن نیک‌سیرت" : "Mohsen Niksirat"}</strong>
+            <span class="author-role">${fa ? "کارشناسی ارشد معماری کامپیوتر · تبریز" : "M.Sc. Computer Architecture · Tabriz"}</span>
+          </div>
+        </div>
+        <h1 class="page-title">${fa ? "درباره من و این نشریه مهندسی" : "About Mohsen Niksirat"}</h1>
         <p class="page-sub">${
           fa
             ? "مهندس نرم‌افزار، کارشناس ارشد معماری سیستم‌های کامپیوتری و سازنده محصولات متن‌باز در حوزه هوش مصنوعی و وب محلی."
@@ -988,8 +1239,8 @@ function buildAboutPage(locale) {
           ${
             fa
               ? `<p>من محسن نیک‌سیرت هستم؛ مهندس نرم‌افزار ساکن تبریز با پیش‌زمینه آکادمیک <strong>کارشناسی ارشد معماری کامپیوتر</strong>. علاقه اصلی من ساخت ابزارهایی است که هم از نظر مهندسی سیستم دقیق و کم‌اصطکاک باشند و هم در عمل گره واقعی روزمره توسعه‌دهندگان و یادگیرندگان را باز کنند.</p>
-                 <h2>چرا این وبلاگ را می‌نویسم؟</h2>
-                 <p>در طول ساخت بیش از ۴۷ مخزن متن‌باز در گیت‌هاب (از درگاه‌های توزیع بار مدل‌های زبانی مثل <strong>9router</strong> و <strong>AIDahl</strong> تا پلتفرم یادگیری واژگان <strong>Readner</strong>، ابزار <strong>Repodest</strong> و بازی سه‌بعدی تحت وب <strong>Horde Survival 3D</strong>)، بارها با مسائل جذابی روبه‌رو شده‌ام که پاسخ آماده‌ای در مستندات رسمی نداشتند. این دفترچه جایی برای مستندسازی شفاف همان تصمیم‌های معماری، بنچمارک‌ها و الگوهای کد است.</p>
+                 <h2>چرا این نشریه را می‌نویسم؟</h2>
+                 <p>در طول ساخت بیش از ۴۷ مخزن متن‌باز در گیت‌هاب (از درگاه‌های توزیع بار مدل‌های زبانی مثل <strong>9router</strong> و <strong>AIDahl</strong> تا پلتفرم یادگیری واژگان <strong>Readner</strong>، ابزار <strong>Repodest</strong> و بازی سه‌بعدی تحت وب <strong>Horde Survival 3D</strong>)، بارها با مسائل جذابی روبه‌رو شده‌ام که پاسخ آماده‌ای در مستندات رسمی نداشتند. این نشریه جایی برای مستندسازی شفاف همان تصمیم‌های معماری، دیاگرام‌های تعاملی و الگوهای کد است.</p>
                  <h2>اصول مهندسی که به آن‌ها پایبندم</h2>
                  <ul>
                    <li><strong>اولویت با پردازش محلی و حریم خصوصی:</strong> هر کاری که بتوان درون مرورگر یا دستگاه کاربر با WebCrypto، IndexedDB و WebAssembly انجام داد نباید به سرور واسط وابسته شود.</li>
@@ -997,8 +1248,8 @@ function buildAboutPage(locale) {
                    <li><strong>تایپوگرافی و تجربه دوزبانه اصیل:</strong> نرم‌افزار و محتوای فنی فارسی سزاوار همان دقت تایپوگرافی، دسترس‌پذیری صفحه‌کلید و سرعت بارگذاری است که در بهترین نشریات مهندسی دنیا می‌بینیم.</li>
                  </ul>`
               : `<p>I am Mohsen Niksirat, a software engineer based in Tabriz holding an <strong>M.Sc. in Computer Architecture</strong>. My work sits at the intersection of practical web engineering, multi-provider AI infrastructure, interactive educational software, and cross-engine systems programming.</p>
-                 <h2>Why This Monograph Exists</h2>
-                 <p>Across shipping 47+ public repositories on GitHub (ranging from AI gateways like <strong>9router</strong> and <strong>AIDahl</strong> to the FSRS-powered <strong>Readner</strong> suite, <strong>Repodest</strong>, <strong>MCP Studio</strong>, and the WebAssembly roguelite <strong>Horde Survival 3D</strong>), the most valuable engineering lessons always lived in the edge cases: rate-limit storms, browser memory ceilings, offline ACID storage, and bidirectional RTL typography. This publication documents those architectural trade-offs with real code and zero filler.</p>
+                 <h2>Why This Publication Exists</h2>
+                 <p>Across shipping 47+ public repositories on GitHub (ranging from AI gateways like <strong>9router</strong> and <strong>AIDahl</strong> to the FSRS-powered <strong>Readner</strong> suite, <strong>Repodest</strong>, <strong>MCP Studio</strong>, and the WebAssembly roguelite <strong>Horde Survival 3D</strong>), the most valuable engineering lessons always lived in the edge cases: rate-limit storms, browser memory ceilings, offline ACID storage, and bidirectional RTL typography. This publication documents those architectural trade-offs with real code, interactive sandboxes, and zero filler.</p>
                  <h2>Engineering Principles</h2>
                  <ul>
                    <li><strong>Local-first by default:</strong> Whenever a developer utility or data workbench can execute inside browser memory with zero uploads, eliminating the backend makes the tool faster, cheaper, and inherently private.</li>
@@ -1094,10 +1345,10 @@ function buildRss(posts, locale) {
   const fa = locale === "fa";
   const feedPath = fa ? "/fa/feed.xml" : "/feed.xml";
   const siteLink = `${FULL_URL}${fa ? "/fa/" : "/"}`;
-  const title = fa ? "یادداشت‌های مهندسی محسن نیک‌سیرت" : "Mohsen Niksirat · Engineering Monograph";
+  const title = fa ? "نشریه مهندسی محسن نیک‌سیرت" : "Mohsen Niksirat · Engineering Publication";
   const desc = fa
     ? "مقالات مهندسی نرم‌افزار، درگاه‌های هوش مصنوعی و معماری وب محلی"
-    : "Long-form engineering essays on AI gateways, spaced repetition, WebAssembly, and local-first tools.";
+    : "Visual engineering essays on AI gateways, spaced repetition, WebAssembly, and local-first tools.";
 
   const items = posts
     .map(
@@ -1146,15 +1397,12 @@ function buildRedirectStub(targetUrl, title = "Redirecting...") {
 const enPosts = loadPosts("en");
 const faPosts = loadPosts("fa");
 
-// Homepages
 writeOut("index.html", buildHomePage(enPosts, "en"));
 writeOut("fa/index.html", buildHomePage(faPosts, "fa"));
 
-// Article pages
 enPosts.forEach((p, idx) => writeOut(`posts/${p.slug}/index.html`, buildPostPage(p, idx, enPosts)));
 faPosts.forEach((p, idx) => writeOut(`fa/posts/${p.slug}/index.html`, buildPostPage(p, idx, faPosts)));
 
-// Section pages
 writeOut("notes/index.html", buildNotesPage("en"));
 writeOut("fa/notes/index.html", buildNotesPage("fa"));
 writeOut("projects/index.html", buildProjectsPage("en"));
@@ -1166,23 +1414,21 @@ writeOut("fa/about/index.html", buildAboutPage("fa"));
 writeOut("search/index.html", buildSearchPage("en"));
 writeOut("fa/search/index.html", buildSearchPage("fa"));
 
-// Legacy Jekyll post redirects so historical links never 404
-writeOut("2024/06/10/welcome-to-my-blog/index.html", buildRedirectStub(`${FULL_URL}/`, "Mohsen Niksirat Engineering Monograph"));
-writeOut("2024/06/12/building-my-blog/index.html", buildRedirectStub(`${FULL_URL}/`, "Mohsen Niksirat Engineering Monograph"));
+writeOut("2024/06/10/welcome-to-my-blog/index.html", buildRedirectStub(`${FULL_URL}/`, "Mohsen Niksirat Engineering Publication"));
+writeOut("2024/06/12/building-my-blog/index.html", buildRedirectStub(`${FULL_URL}/`, "Mohsen Niksirat Engineering Publication"));
 
-// 404 Page
 writeOut(
   "404.html",
   renderShell({
     locale: "en",
     title: "Page Not Found",
-    description: "The requested page could not be found in Mohsen Niksirat's Engineering Monograph.",
+    description: "The requested page could not be found in Mohsen Niksirat's Engineering Publication.",
     canonicalPath: "/404.html",
     altLangPath: "/fa/",
     bodyHtml: `<section class="page-section">
       <header class="page-header">
         <h1 class="page-title">404: Page Not Found</h1>
-        <p class="page-sub">The URL you followed may have moved during the bilingual monograph redesign. Use the links below or press <code>⌘K</code> to search every essay.</p>
+        <p class="page-sub">The URL you followed may have moved. Use the links below or press <code>⌘K</code> to search every monograph.</p>
       </header>
       <div class="btn-row">
         <a class="btn-primary" href="${BASE}/">Back to English Edition</a>
@@ -1192,7 +1438,6 @@ writeOut(
   })
 );
 
-// Search Index (EN + FA essays + Field Notes)
 const searchIndex = [
   ...enPosts.map((p) => ({
     lang: "en",
@@ -1241,11 +1486,9 @@ const searchIndex = [
 ];
 writeOut("search-index.json", JSON.stringify(searchIndex, null, 2));
 
-// RSS Feeds
 writeOut("feed.xml", buildRss(enPosts, "en"));
 writeOut("fa/feed.xml", buildRss(faPosts, "fa"));
 
-// Sitemap & Robots & Manifest
 const sitemapPaths = [
   "/",
   "/fa/",
@@ -1286,14 +1529,14 @@ writeOut(
   "manifest.webmanifest",
   JSON.stringify(
     {
-      name: "Mohsen Niksirat · Engineering Monograph",
+      name: "Mohsen Niksirat · Engineering Publication",
       short_name: "Mohsen Blog",
-      description: "Bilingual engineering essays and lab notes by Mohsen Niksirat.",
+      description: "Visual bilingual engineering essays and lab notes by Mohsen Niksirat.",
       start_url: `${BASE}/`,
       scope: `${BASE}/`,
       display: "standalone",
-      background_color: "#FBF9F5",
-      theme_color: "#181614",
+      background_color: "#0B0E14",
+      theme_color: "#0B0E14",
       icons: [
         { src: `${BASE}/assets/icons/icon-192.png`, sizes: "192x192", type: "image/png" },
         { src: `${BASE}/assets/icons/icon-512.png`, sizes: "512x512", type: "image/png" },
@@ -1304,4 +1547,4 @@ writeOut(
   )
 );
 
-console.log(`✓ Built ${enPosts.length} EN + ${faPosts.length} FA monographs, ${notesRaw.length} field notes, RSS feeds, search index (${searchIndex.length} entries), and sitemap (${sitemapPaths.length} URLs).`);
+console.log(`✓ Built graphical publication: ${enPosts.length} EN + ${faPosts.length} FA essays, ${PROJECTS.length} visual systems, ${notesRaw.length} notes, RSS, search (${searchIndex.length}), sitemap (${sitemapPaths.length}).`);

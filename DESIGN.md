@@ -1,48 +1,42 @@
-# DESIGN.md: Mohsen Niksirat Engineering Journal (`mohsen-tech-blog`)
+# DESIGN.md: Mohsen Niksirat Engineering Publication (`mohsen-tech-blog`)
 
 ## 1. Visual World & Surface Mode
-- **Identity:** *Archival Engineering Monograph* (inspired by technical print journals such as *Stripe Press*, *Increment*, and *MIT Press* monographs, adapted for bilingual English LTR and Persian RTL publishing).
-- **Surface Mode:** **Read** (long-form technical comprehension, zero visual fatigue) paired with **Operate** (instant `Cmd/Ctrl + K` search palette, topic filtering, bilingual switching, and code inspection).
-- **Anti-Reference:** Distinct from Mohsen's macOS Sonoma interactive desktop portfolio (`/Profile/`), and strictly avoids SaaS landing-page tropes (no purple-blue gradients, no 3-card feature grids, no eyebrow badges above `<h1>`, no fake terminal hero props).
+- **Identity:** *Obsidian Studio Engineering Publication* (inspired by technical digital monographs and developer engineering labs, combining rich atmospheric dark chrome with crisp editorial typography, real software screenshots, and live interactive simulations — plus full parity in *Warm Editorial Paper* Light Mode).
+- **Surface Mode:** **Experience + Read + Operate**:
+  - **First Viewport (`Experience`):** Layered editorial showcase framing a real shipped product interface (`9router` / `Repodest` / `Readner`) alongside Mohsen's portrait (`avatar.webp`) and a subtle interactive architecture preview.
+  - **Monographs (`Read`):** `68ch` optimal reading measure, Optical-size `Newsreader` + `Plus Jakarta Sans` (and native `Vazirmatn` for Persian RTL), sticky Table of Contents, font scaling (`A- / A / A+`), and interactive simulators inside the diagrams.
+  - **Tooling (`Operate`):** Instant `⌘K` / `/` bilingual full-text search, view mode switch (`Visual Grid | Compact Ledger`), topic filtering, lightbox zoom, and copyable highlighted code blocks.
 
 ## 2. Liveliness Dials
-- **ENERGY: 2 (Editorial Authority)**: Typographic scale, hairline architectural rules, and bespoke geometric technical schematics carry the first viewport.
-- **RHYTHM: 3 (Asymmetric Publication)**:
-  1. Editorial Masthead & Publication Colophon Strip
-  2. Two-Column Lead Monograph Spread (essay narrative + bespoke SVG architecture schematic)
-  3. Filterable Chronological Essay Ledger (tabular numerals, reading time, series tags)
-  4. Two-Column Engineering Field Notes (concise implementation dispatches)
-- **MOTION: 2 (Physical, Sub-250ms)**:
-  - GPU-composited reading progress hairline (`transform: scaleX(...)`)
-  - Tactile button press (`transform: scale(0.97)` over `150ms cubic-bezier(0.23, 1, 0.32, 1)`)
-  - `0ms` instant open on keyboard-triggered search (`Cmd/Ctrl + K` or `/`)
-  - Full `prefers-reduced-motion: reduce` support
+- **ENERGY: 3 (Visual & Architectural Presence):** Framed real application screenshots, masked coordinate backdrop in the hero stage, signature Signal Coral/Vermilion primary ink paired with Telemetry Cyan on live vector schematics.
+- **RHYTHM: 3 (Asymmetric Editorial Magazine):**
+  1. Masked Studio Hero with Interactive Multi-System Preview Frame
+  2. Lead Monograph Interactive Split (Failover Topology Simulator + Essay Narrative)
+  3. Visual Essay Showcase Grid (`16:10` real screenshots, toggleable to Compact Ledger)
+  4. Shipped Systems 2x2 Visual Gallery (`Repodest`, `Horde Survival 3D`, `SpeakAI Coach`, `DataLens`)
+  5. Two-Column Engineering Field Notes
+- **MOTION: 2 (Physical, Sub-250ms):**
+  - GPU `scaleX` reading progress hairline
+  - Subtle hover image zoom (`scale(1.03)` over `220ms cubic-bezier(0.23, 1, 0.32, 1)`) behind `@media (hover: hover) and (pointer: fine)`
+  - Tactile button press (`transform: scale(0.97)`)
+  - Animated SVG telemetry wire pulses on technical diagrams (paused automatically under `prefers-reduced-motion: reduce`)
+  - `0ms` keyboard modal open (`⌘K`) per raycast/command craft rules
 
-## 3. Typography (100% Self-Hosted Variable `.woff2`)
-- **English Display & Essay Headings:** `Newsreader Variable` (optical-size literary serif that gives long-form engineering essays print-grade hierarchy).
-- **English UI & Body Copy:** `Plus Jakarta Sans Variable` (`68ch` measure, `1.75` line-height for effortless sustained technical reading).
-- **Persian (`فارسی` RTL) Display & Body:** `Vazirmatn Variable` (`1.88` line-height, native Persian numerals and Jalali calendar dates).
-- **Code, CLI & Measurements:** `JetBrains Mono Variable` (used strictly for source code, JSON-RPC payloads, formulas, and tabular metadata; never as decorative headline styling).
+## 3. Color Palette & WCAG 2.1 AA Compliance
+Palette holds 2 neutral studio surface tiers + 1 primary signature accent (Signal Coral/Vermilion) + 1 technical telemetry accent (Cyan):
 
-## 4. Color Tokens & Verified WCAG 2.1 AA Contrast
-Active palette uses 2 core neutral paper/slate surfaces + 1 signature burnt-vermilion editorial ink accent:
-
-| Token | Light Mode (Archival Paper) | Dark Mode (Obsidian Slate) | Usage & Contrast Verification |
+| Token | Obsidian Studio (Default Dark) | Warm Paper (Light) | Verified Contrast |
 | :--- | :--- | :--- | :--- |
-| `--bg-canvas` | `#FBF9F5` | `#131416` | Primary reading surface (avoids harsh `#FFF` glare and `#000` halation) |
-| `--bg-surface` | `#F3EFE7` | `#1B1D21` | Code blocks, callouts, TOC, and Field Note inset panels |
-| `--bg-elevated` | `#FFFFFF` | `#23262C` | Search command palette and floating toast |
-| `--text-primary` | `#181614` | `#EDE9E2` | Primary ink (`16.8:1` Light / `15.1:1` Dark, AAA) |
-| `--text-secondary` | `#4E4942` | `#B8B2A7` | Excerpts & secondary prose (`8.2:1` Light / `8.9:1` Dark, AAA) |
-| `--text-muted` | `#6B645C` | `#918B80` | Dates, reading times & captions (`5.3:1` Light / `5.5:1` Dark, AA) |
-| `--accent` | `#B33E19` | `#F2825C` | Editorial vermilion ink links & active states (`5.6:1` Light / `7.1:1` Dark, AA) |
-| `--accent-soft` | `#F6E5DF` | `#2D1F1A` | Text selection & active filter chip surface |
-| `--border` | `#E3DCD0` | `#2A2E36` | Crisp `1px` structural hairlines |
-
-## 5. One-Line Reasons for Major Decisions
-- **Warm Paper (`#FBF9F5`) & Obsidian (`#131416`):** Reduces contrast halation during 10-minute technical reading sessions compared to pure white or pure black.
-- **Burnt Vermilion Accent (`#B33E19` / `#F2825C`):** Echoes classical editorial rubrics and margin annotations while achieving >5.5:1 contrast in both themes.
-- **Newsreader + Plus Jakarta Sans + Vazirmatn:** Pairs optical-size editorial authority on English titles with crisp technical legibility in body prose and native Persian RTL script.
-- **Asymmetric Lead Spread + Tabular Ledger:** Distinguishes a flagship deep-dive monograph from chronological essays and short field notes without resorting to uniform card grids.
-- **Authored Geometric Inline SVGs:** Visualizes real system topologies (AI gateway failover, FSRS memory stability curves, browser-local AST/repo pipelines) that adapt automatically to Light and Dark tokens.
-- **Zero-Dependency Static HTML Build (`scripts/build.mjs`):** Compiles Markdown essays into fast, SEO-indexed static HTML, RSS, JSON search index, and Sitemap for instant GitHub Pages serving with `.nojekyll`.
+| `--bg-canvas` | `#0B0E14` | `#F7F4ED` | Primary backdrop |
+| `--bg-surface` | `#131822` | `#EDE8DE` | Cards, diagrams, code frames |
+| `--bg-elevated` | `#1A2130` | `#FFFFFF` | Modals & elevated frames |
+| `--text-primary` | `#F1EFEA` | `#161513` | > 14:1 (AAA) |
+| `--text-secondary` | `#B5BAC5` | `#47433E` | > 7.8:1 (AAA) |
+| `--text-muted` | `#9BA3B5` | `#5F5951` | > 5.0:1 (AA on surface & elevated) |
+| `--accent` | `#FF784E` | `#B33610` | > 4.9:1 (AA) |
+| `--accent-ink` | `#0B0E14` | `#FFFFFF` | > 5.4:1 on solid accent CTA |
+| `--diag-cyan` | `#38BDF8` | `#0369A1` | > 5.3:1 on `--diag-node` |
+| `--diag-emerald` | `#34D399` | `#047857` | > 4.8:1 on `--diag-node` |
+| `--diag-rose` | `#FB7185` | `#BE123C` | > 4.9:1 on `--diag-node` |
+| `--diag-amber` | `#FBBF24` | `#B45309` | > 4.6:1 on `--diag-node` |
+| `--diag-violet` | `#C084FC` | `#6D28D9` | > 5.2:1 on `--diag-node` |

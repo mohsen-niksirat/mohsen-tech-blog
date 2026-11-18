@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Teaching Algorithms with Deterministic Canvas Engines: Inside CodeVis | Mohsen Niksirat · Engineering Monograph</title>
+  <title>Teaching Algorithms with Deterministic Canvas Engines: Inside CodeVis | Mohsen Niksirat · Engineering Publication</title>
   <meta name="description" content="How CodeVis packs 49 interactive computer science visualizations, synchronized code stepping, and PNG export cards into a single zero-dependency HTML file.">
   <meta name="author" content="Mohsen Niksirat">
   <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/deterministic-canvas-cs-animations/">
   <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/deterministic-canvas-cs-animations/">
   <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/deterministic-canvas-cs-animations/">
-  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Publication" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
 
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Publication">
   <meta property="og:title" content="Teaching Algorithms with Deterministic Canvas Engines: Inside CodeVis">
   <meta property="og:description" content="How CodeVis packs 49 interactive computer science visualizations, synchronized code stepping, and PNG export cards into a single zero-dependency HTML file.">
   <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/deterministic-canvas-cs-animations/">
@@ -30,7 +30,7 @@
   <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
 
   <script>
-    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
   </script>
   <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
   <script defer src="/mohsen-tech-blog/assets/app.js"></script>
@@ -46,12 +46,12 @@
         <span class="brand-mark" aria-hidden="true">MN</span>
         <span class="brand-text">
           <span class="brand-name">Mohsen Niksirat</span>
-          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+          <span class="brand-sub">Engineering Publication & Lab</span>
         </span>
       </a>
 
       <nav class="primary-nav" aria-label="Primary navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
       </nav>
 
       <div class="header-tools">
@@ -77,7 +77,7 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
       <nav aria-label="Mobile navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
       </nav>
     </div>
   </header>
@@ -99,42 +99,58 @@
         </div>
       </header>
 
+      <!-- Framed Real Project Cover Screenshot (R-40 hero <img> with fetchpriority="high") -->
+      <figure class="article-cover">
+        <div class="window-chrome">
+          <div class="chrome-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span class="chrome-url ltr">https://mohsen-niksirat.github.io/CodeVis/</span>
+          <button type="button" class="chrome-zoom" data-lightbox-src="/mohsen-tech-blog/assets/shots/codevis.webp" data-lightbox-alt="CodeVis interactive HTML5 Canvas visualizer stepping through algorithms with synchronized code highlights." aria-label="Expand screenshot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
+        </div>
+        <img
+          src="/mohsen-tech-blog/assets/shots/codevis.webp"
+          alt="CodeVis interactive HTML5 Canvas visualizer stepping through algorithms with synchronized code highlights."
+          width="800"
+          height="420"
+          fetchpriority="high"
+        >
+        <figcaption>CodeVis stepping deterministically through 49 computer science concepts</figcaption>
+      </figure>
+
       <div class="article-layout">
         <div class="prose">
           <p>Most algorithm visualizers online fall into one of two traps: either they play a pre-rendered video where you cannot inspect variables, or they mutate live DOM nodes inside <code>setTimeout</code> loops that break the instant you try stepping backward.</p>
 <p>When designing <strong><a href="https://mohsen-niksirat.github.io/CodeVis/" target="_blank" rel="noopener noreferrer">CodeVis</a></strong> to teach 49 computer science concepts (spanning sorting, graph traversal, trees, dynamic programming, networking handshakes, and design patterns), I wanted two guarantees: <strong>instant bidirectional scrubbing</strong> and <strong>single-file portability</strong> (zero npm dependencies, works offline from a USB drive or browser tab).</p>
-<figure class="schematic" role="group" aria-label="Immutable step tape synchronizing Canvas 2D state and code line highlights in CodeVis">
-  <svg viewBox="0 0 760 220" width="760" height="220" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
-    <rect x="1" y="1" width="758" height="218" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
-    <!-- Step Tape -->
-    <rect x="44" y="34" width="672" height="48" rx="7" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
-    <text x="64" y="62" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="10.5">TAPE:</text>
-    <rect x="116" y="44" width="84" height="28" rx="4" fill="var(--bg-surface)" stroke="var(--border)" />
-    <text x="158" y="62" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">Step 04</text>
-    <rect x="212" y="44" width="84" height="28" rx="4" fill="var(--bg-surface)" stroke="var(--border)" />
-    <text x="254" y="62" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">Step 05</text>
-    <rect x="308" y="42" width="108" height="32" rx="5" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5" />
-    <text x="362" y="62" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="11" font-weight="700">Step 06 ●</text>
-    <rect x="428" y="44" width="84" height="28" rx="4" fill="var(--bg-surface)" stroke="var(--border)" />
-    <text x="470" y="62" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">Step 07</text>
-    <text x="614" y="62" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="10.5">◀ Scrub / 1.5x ▶</text>
+<figure class="schematic" role="group" aria-label="Immutable step-tape playback architecture in CodeVis">
+  <div class="schematic-stage">
+    <svg viewBox="0 0 820 235" width="820" height="235" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+      <rect x="36" y="26" width="748" height="58" rx="12" fill="var(--diag-node)" stroke="var(--border-strong)" />
+      <text x="62" y="60" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="11" font-weight="600">STEP TAPE:</text>
+      <rect x="148" y="38" width="92" height="34" rx="7" fill="var(--bg-surface)" stroke="var(--border)" />
+      <text x="194" y="59" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="11">Step 04</text>
+      <rect x="252" y="38" width="92" height="34" rx="7" fill="var(--bg-surface)" stroke="var(--border)" />
+      <text x="298" y="59" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="11">Step 05</text>
+      <rect x="356" y="36" width="118" height="38" rx="8" fill="var(--diag-emerald)" fill-opacity="0.16" stroke="var(--diag-emerald)" stroke-width="1.8" />
+      <text x="415" y="59" text-anchor="middle" fill="var(--diag-emerald)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">Step 06 ●</text>
+      <rect x="486" y="38" width="92" height="34" rx="7" fill="var(--bg-surface)" stroke="var(--border)" />
+      <text x="532" y="59" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="11">Step 07</text>
+      <text x="682" y="59" text-anchor="middle" fill="var(--diag-cyan)" font-family="var(--font-mono)" font-size="11" font-weight="600">◀ O(1) Scrub ▶</text>
 
-    <!-- Dual Projections -->
-    <line x1="362" y1="82" x2="220" y2="114" stroke="var(--accent)" stroke-width="1.5" />
-    <line x1="362" y1="82" x2="536" y2="114" stroke="var(--accent)" stroke-width="1.5" />
+      <path d="M415 84 L236 126" stroke="var(--diag-emerald)" stroke-width="2" stroke-dasharray="5 5" class="flow-pulse" />
+      <path d="M415 84 L588 126" stroke="var(--diag-emerald)" stroke-width="2" stroke-dasharray="5 5" class="flow-pulse" />
 
-    <rect x="74" y="114" width="286" height="74" rx="7" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
-    <text x="217" y="142" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">Canvas 2D Frame Interpolation</text>
-    <text x="217" y="164" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">Node positions, swap arcs &amp; pointer badges</text>
+      <rect x="68" y="126" width="330" height="82" rx="12" fill="var(--diag-node)" stroke="var(--diag-emerald)" stroke-opacity="0.65" />
+      <text x="233" y="158" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">HiDPI Canvas 2D Projection</text>
+      <text x="233" y="182" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11.5">Interpolated pointers, swap arcs &amp; PNG export</text>
 
-    <rect x="400" y="114" width="286" height="74" rx="7" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
-    <text x="543" y="142" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">Synchronized Code Trace</text>
-    <text x="543" y="164" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">Active line highlight + call-stack variables</text>
-  </svg>
-  <figcaption>Figure 1: Deterministic step-tape architecture in CodeVis. Recording immutable snapshots decouples algorithm execution from 60 FPS Canvas scrubbing.</figcaption>
+      <rect x="422" y="126" width="330" height="82" rx="12" fill="var(--diag-node)" stroke="var(--diag-cyan)" stroke-opacity="0.65" />
+      <text x="587" y="158" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">Synchronized Code &amp; Stack</text>
+      <text x="587" y="182" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11.5">Exact active source line + live variable watch</text>
+    </svg>
+  </div>
+  <figcaption>Figure 1: Immutable step snapshots decouple algorithm execution from 60 FPS bidirectional scrubbing in CodeVis.</figcaption>
 </figure>
 <h2 id="sec-1">Decoupling Execution from Rendering via Immutable Step Tapes</h2>
-<p>The cleanest way to make any algorithm reversible is never to animate inside the algorithm itself. Instead, each algorithm runs synchronously to completion once on a small input ($N \le 32$), emitting an array of immutable <strong>Step Snapshots</strong>:</p>
+<p>The cleanest way to make any algorithm reversible is never to animate inside the algorithm itself. Instead, each algorithm runs synchronously to completion once on a small input (<em>N</em> ≤ 32), emitting an array of immutable <strong>Step Snapshots</strong>:</p>
 <div class="code-block">
         <div class="code-head"><span>JAVASCRIPT</span><button type="button" class="copy-btn" data-copy-code>Copy</button></div>
         <pre><code><span class="tok-kw">export</span> <span class="tok-kw">function</span> <span class="tok-fn">recordBinarySearch</span>(sortedArray, target) {
@@ -172,7 +188,7 @@
 }</code></pre>
       </div>
 <p>Once <code>tape</code> exists in memory, the player UI becomes a pure function <code>render(tape[stepIndex], interpolationAlpha)</code>:</p>
-<ul><li>Clicking <strong>Step Back</strong> simply decrements <code>stepIndex</code> with zero state corruption.</li><li>Dragging the timeline scrubber jumps to any frame in $O(1)$ time.</li><li>The code pane highlights <code>tape[stepIndex].line</code> and renders <code>tape[stepIndex].vars</code> in exact lockstep with the HTML5 Canvas drawing.</li></ul>
+<ul><li>Clicking <strong>Step Back</strong> simply decrements <code>stepIndex</code> with zero state corruption.</li><li>Dragging the timeline scrubber jumps to any frame in <code>O(1)</code> time.</li><li>The code pane highlights <code>tape[stepIndex].line</code> and renders <code>tape[stepIndex].vars</code> in exact lockstep with the HTML5 Canvas drawing.</li></ul>
 <h2 id="sec-2">Crisp High-DPI Canvas Rendering</h2>
 <p>Blurry text on Retina and Windows 125%/150% fractional-scaling laptops ruins technical diagrams. Scaling the backing bitmap by <code>window.devicePixelRatio</code> while keeping layout math in logical CSS pixels keeps node labels razor-sharp everywhere:</p>
 <div class="code-block">
@@ -202,7 +218,7 @@
             </div>
           </section>
 
-          <nav class="post-Matrix-nav" aria-label="Adjacent monographs">
+          <nav class="post-matrix-nav" aria-label="Adjacent monographs">
             <a class="adj-link" href="/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/">
                     <span class="adj-dir">Newer Monograph</span>
                     <span class="adj-title">Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench</span>
@@ -274,6 +290,17 @@
         <button type="button" class="tool-btn" data-close-search>Esc</button>
       </div>
       <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <div class="lightbox-bar">
+        <p id="lightbox-caption"></p>
+        <button type="button" class="tool-btn" data-close-lightbox>Close (Esc)</button>
+      </div>
+      <img id="lightbox-img" alt="">
     </div>
   </div>
 

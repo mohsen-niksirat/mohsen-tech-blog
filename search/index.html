@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Search | Mohsen Niksirat · Engineering Monograph</title>
+  <title>Search | Mohsen Niksirat · Engineering Publication</title>
   <meta name="description" content="Search all engineering essays and field notes by Mohsen Niksirat.">
   <meta name="author" content="Mohsen Niksirat">
   <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/search/">
   <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/search/">
   <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/search/">
-  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Publication" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Publication">
   <meta property="og:title" content="Search">
   <meta property="og:description" content="Search all engineering essays and field notes by Mohsen Niksirat.">
   <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/search/">
@@ -30,7 +30,7 @@
   <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
 
   <script>
-    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
   </script>
   <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
   <script defer src="/mohsen-tech-blog/assets/app.js"></script>
@@ -46,12 +46,12 @@
         <span class="brand-mark" aria-hidden="true">MN</span>
         <span class="brand-text">
           <span class="brand-name">Mohsen Niksirat</span>
-          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+          <span class="brand-sub">Engineering Publication & Lab</span>
         </span>
       </a>
 
       <nav class="primary-nav" aria-label="Primary navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
       </nav>
 
       <div class="header-tools">
@@ -77,7 +77,7 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
       <nav aria-label="Mobile navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
       </nav>
     </div>
   </header>
@@ -123,6 +123,17 @@
         <button type="button" class="tool-btn" data-close-search>Esc</button>
       </div>
       <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <div class="lightbox-bar">
+        <p id="lightbox-caption"></p>
+        <button type="button" class="tool-btn" data-close-lightbox>Close (Esc)</button>
+      </div>
+      <img id="lightbox-img" alt="">
     </div>
   </div>
 

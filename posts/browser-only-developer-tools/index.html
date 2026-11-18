@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Zero-Backend Developer Tools: Analyzing Repos and Datasets Entirely in the Browser | Mohsen Niksirat · Engineering Monograph</title>
+  <title>Zero-Backend Developer Tools: Analyzing Repos and Datasets Entirely in the Browser | Mohsen Niksirat · Engineering Publication</title>
   <meta name="description" content="Architectural lessons from building Repodest, DataLens, and A11y Inspector so developers can inspect codebases, chart sensitive CSVs, and audit WCAG compliance with zero server uploads.">
   <meta name="author" content="Mohsen Niksirat">
   <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/browser-only-developer-tools/">
   <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/browser-only-developer-tools/">
   <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/browser-only-developer-tools/">
-  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Publication" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
 
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Publication">
   <meta property="og:title" content="Zero-Backend Developer Tools: Analyzing Repos and Datasets Entirely in the Browser">
   <meta property="og:description" content="Architectural lessons from building Repodest, DataLens, and A11y Inspector so developers can inspect codebases, chart sensitive CSVs, and audit WCAG compliance with zero server uploads.">
   <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/browser-only-developer-tools/">
@@ -30,7 +30,7 @@
   <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
 
   <script>
-    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
   </script>
   <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
   <script defer src="/mohsen-tech-blog/assets/app.js"></script>
@@ -46,12 +46,12 @@
         <span class="brand-mark" aria-hidden="true">MN</span>
         <span class="brand-text">
           <span class="brand-name">Mohsen Niksirat</span>
-          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+          <span class="brand-sub">Engineering Publication & Lab</span>
         </span>
       </a>
 
       <nav class="primary-nav" aria-label="Primary navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
       </nav>
 
       <div class="header-tools">
@@ -77,7 +77,7 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
       <nav aria-label="Mobile navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
       </nav>
     </div>
   </header>
@@ -99,51 +99,69 @@
         </div>
       </header>
 
+      <!-- Framed Real Project Cover Screenshot (R-40 hero <img> with fetchpriority="high") -->
+      <figure class="article-cover">
+        <div class="window-chrome">
+          <div class="chrome-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span class="chrome-url ltr">https://mohsen-niksirat.github.io/Repodest/</span>
+          <button type="button" class="chrome-zoom" data-lightbox-src="/mohsen-tech-blog/assets/shots/repodest.webp" data-lightbox-alt="Repodest client-side GitHub repository analyzer displaying repository health score and file explorer." aria-label="Expand screenshot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
+        </div>
+        <img
+          src="/mohsen-tech-blog/assets/shots/repodest.webp"
+          alt="Repodest client-side GitHub repository analyzer displaying repository health score and file explorer."
+          width="800"
+          height="500"
+          fetchpriority="high"
+        >
+        <figcaption>Repodest analyzing GitHub repositories and packing LLM prompts purely client-side</figcaption>
+      </figure>
+
       <div class="article-layout">
         <div class="prose">
           <p>Developers have grown rightfully skeptical of pasting internal CSV exports, HTML staging dumps, or repository trees into random web utilities. Every unnecessary backend introduces three costs at once: server hosting bills, latency round-trips, and data-privacy risk.</p>
 <p>Across three of my open-source web tools, <strong><a href="https://mohsen-niksirat.github.io/Repodest/" target="_blank" rel="noopener noreferrer">Repodest</a></strong> (GitHub repository analyzer and LLM prompt packer), <strong><a href="https://mohsen-niksirat.github.io/DataLens/" target="_blank" rel="noopener noreferrer">DataLens</a></strong> (multi-format tabular workbench), and <strong><a href="https://mohsen-niksirat.github.io/A11y-Inspector/" target="_blank" rel="noopener noreferrer">A11y Inspector</a></strong> (WCAG 2.2 accessibility auditor), I pushed a strict architectural constraint: <strong>zero application backend, zero telemetry, and 100% in-browser execution.</strong></p>
-<figure class="schematic" role="group" aria-label="Browser-only repository and dataset analysis pipeline with zero server uploads">
-  <svg viewBox="0 0 760 230" width="760" height="230" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
-    <rect x="1" y="1" width="758" height="228" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
-    <!-- Browser Sandbox Boundary -->
-    <rect x="22" y="24" width="716" height="182" rx="8" fill="var(--bg-canvas)" stroke="var(--accent)" stroke-dasharray="6 4" stroke-width="1.4" />
-    <text x="38" y="46" fill="var(--accent)" font-family="var(--font-mono)" font-size="10.5" font-weight="700">BROWSER SANDBOX BOUNDARY · ZERO THIRD-PARTY UPLOADS</text>
+<figure class="schematic" role="group" aria-label="Zero-upload browser sandbox execution pipeline">
+  <div class="schematic-stage">
+    <svg viewBox="0 0 820 245" width="820" height="245" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+      <rect x="20" y="20" width="780" height="205" rx="16" fill="var(--diag-node)" stroke="var(--diag-cyan)" stroke-dasharray="7 5" stroke-width="1.6" />
+      <text x="42" y="48" fill="var(--diag-cyan)" font-family="var(--font-mono)" font-size="11" font-weight="700">BROWSER SANDBOX · ZERO THIRD-PARTY SERVER UPLOADS</text>
 
-    <!-- Step 1 -->
-    <rect x="42" y="72" width="150" height="98" rx="7" fill="var(--bg-surface)" stroke="var(--border-strong)" />
-    <text x="117" y="102" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">1. INGEST</text>
-    <text x="117" y="124" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">Git Trees API (?recursive=1)</text>
-    <text x="117" y="142" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="10.5">or Local CSV / XLSX File</text>
+      <rect x="42" y="74" width="166" height="122" rx="12" fill="var(--bg-surface)" stroke="var(--border-strong)" />
+      <text x="125" y="106" text-anchor="middle" fill="var(--diag-cyan)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">01 · INGEST</text>
+      <text x="125" y="132" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5">Git Trees (?recursive=1)</text>
+      <text x="125" y="154" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">CSV / XLSX / HTML</text>
 
-    <line x1="192" y1="121" x2="222" y2="121" stroke="var(--text-muted)" stroke-width="1.5" />
-    <polygon points="222,121 214,116 214,126" fill="var(--text-muted)" />
+      <line x1="208" y1="135" x2="238" y2="135" stroke="var(--diag-cyan)" stroke-width="2.2" stroke-dasharray="5 5" class="flow-pulse" />
 
-    <!-- Step 2 -->
-    <rect x="226" y="72" width="152" height="98" rx="7" fill="var(--bg-surface)" stroke="var(--border-strong)" />
-    <text x="302" y="102" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">2. PRUNE &amp; PARSE</text>
-    <text x="302" y="124" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">Ignore Lockfiles &amp; Binaries</text>
-    <text x="302" y="142" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="10.5">Typed Column Inference</text>
+      <rect x="240" y="74" width="166" height="122" rx="12" fill="var(--bg-surface)" stroke="var(--border-strong)" />
+      <text x="323" y="106" text-anchor="middle" fill="var(--diag-violet)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">02 · PRUNE</text>
+      <text x="323" y="132" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5">Drop Lockfiles &amp; Noise</text>
+      <text x="323" y="154" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">Inert DOMParser</text>
 
-    <line x1="378" y1="121" x2="408" y2="121" stroke="var(--text-muted)" stroke-width="1.5" />
-    <polygon points="408,121 400,116 400,126" fill="var(--text-muted)" />
+      <line x1="406" y1="135" x2="436" y2="135" stroke="var(--diag-violet)" stroke-width="2.2" stroke-dasharray="5 5" class="flow-pulse" />
 
-    <!-- Step 3 -->
-    <rect x="412" y="72" width="146" height="98" rx="7" fill="var(--bg-surface)" stroke="var(--border-strong)" />
-    <text x="485" y="102" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">3. SCORE &amp; BUDGET</text>
-    <text x="485" y="124" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">0–100 Health / WCAG</text>
-    <text x="485" y="142" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="10.5">Token Window Counter</text>
+      <rect x="438" y="74" width="166" height="122" rx="12" fill="var(--bg-surface)" stroke="var(--border-strong)" />
+      <text x="521" y="106" text-anchor="middle" fill="var(--diag-emerald)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">03 · SCORE</text>
+      <text x="521" y="132" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5">0–100 Health / WCAG</text>
+      <text x="521" y="154" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">Token Budget Counter</text>
 
-    <line x1="558" y1="121" x2="588" y2="121" stroke="var(--accent)" stroke-width="1.5" />
-    <polygon points="588,121 580,116 580,126" fill="var(--accent)" />
+      <line x1="604" y1="135" x2="634" y2="135" stroke="var(--diag-emerald)" stroke-width="2.2" stroke-dasharray="5 5" class="flow-pulse" />
 
-    <!-- Step 4 -->
-    <rect x="592" y="72" width="126" height="98" rx="7" fill="var(--accent-soft)" stroke="var(--accent)" />
-    <text x="655" y="102" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="11" font-weight="700">4. ARTIFACT</text>
-    <text x="655" y="124" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11">LLM Digest MD</text>
-    <text x="655" y="142" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="10.5">SVG Chart / Audit</text>
-  </svg>
-  <figcaption>Figure 1: Shared local-first execution model across Repodest, DataLens, and A11y Inspector. Ingestion, pruning, scoring, and export execute entirely inside browser memory.</figcaption>
+      <rect x="636" y="74" width="142" height="122" rx="12" fill="var(--bg-surface)" stroke="var(--diag-emerald)" stroke-width="1.6" />
+      <text x="707" y="106" text-anchor="middle" fill="var(--diag-emerald)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">04 · EXPORT</text>
+      <text x="707" y="132" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5">LLM Prompt MD</text>
+      <text x="707" y="154" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">SVG Chart / Audit</text>
+    </svg>
+
+    <div class="sim-controls" data-token-sim>
+      <input type="text" class="sim-text-input ltr" data-token-input value="export async function fetchRepoTree(owner, repo) { return fetch(`https://api.github.com/repos/${owner}/${repo}`); }" aria-label="Sample snippet for local token estimation">
+      <div class="sim-readout">
+        <span>Client-Side Estimate:</span>
+        <strong class="sim-badge ltr" data-token-out>~30 tokens · 113 chars</strong>
+      </div>
+    </div>
+  </div>
+  <figcaption>Figure 1: Shared zero-upload pipeline across Repodest, DataLens, and A11y Inspector. Type or paste in the bar above to test Repodest's client-side token estimator.</figcaption>
 </figure>
 <h2 id="sec-1">Single-Trip Repository Indexing with Git Trees</h2>
 <p>A naive client-side GitHub explorer recursively calls <code>/repos/{owner}/{repo}/contents/{path}</code> for every directory. On a medium TypeScript monorepo with 40 subdirectories, that burns 41 of GitHub&#39;s 60 unauthenticated hourly REST requests in two seconds.</p>
@@ -204,7 +222,7 @@
             </div>
           </section>
 
-          <nav class="post-Matrix-nav" aria-label="Adjacent monographs">
+          <nav class="post-matrix-nav" aria-label="Adjacent monographs">
             <a class="adj-link" href="/mohsen-tech-blog/posts/fsrs-spaced-repetition-architecture/">
                     <span class="adj-dir">Newer Monograph</span>
                     <span class="adj-title">Beyond Rigid Leitner Boxes: Implementing FSRS in an Offline-First Reader</span>
@@ -279,6 +297,17 @@
         <button type="button" class="tool-btn" data-close-search>Esc</button>
       </div>
       <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <div class="lightbox-bar">
+        <p id="lightbox-caption"></p>
+        <button type="button" class="tool-btn" data-close-lightbox>Close (Esc)</button>
+      </div>
+      <img id="lightbox-img" alt="">
     </div>
   </div>
 

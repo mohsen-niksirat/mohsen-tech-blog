@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>یادداشت‌های فنی | یادداشت‌های مهندسی محسن نیک‌سیرت</title>
+  <title>یادداشت‌های فنی | نشریه مهندسی محسن نیک‌سیرت</title>
   <meta name="description" content="یادداشت‌های کوتاه مهندسی و نکات پیاده‌سازی از پروژه‌های متن‌باز محسن نیک‌سیرت.">
   <meta name="author" content="محسن نیک‌سیرت">
   <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/notes/">
   <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/notes/">
   <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/notes/">
-  <link rel="alternate" type="application/rss+xml" title="یادداشت‌های مهندسی محسن نیک‌سیرت" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="نشریه مهندسی محسن نیک‌سیرت" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/feed.xml">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="یادداشت‌های مهندسی محسن نیک‌سیرت">
+  <meta property="og:site_name" content="نشریه مهندسی محسن نیک‌سیرت">
   <meta property="og:title" content="یادداشت‌های فنی">
   <meta property="og:description" content="یادداشت‌های کوتاه مهندسی و نکات پیاده‌سازی از پروژه‌های متن‌باز محسن نیک‌سیرت.">
   <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/notes/">
@@ -30,7 +30,7 @@
   <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
 
   <script>
-    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
   </script>
   <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
   <script defer src="/mohsen-tech-blog/assets/app.js"></script>
@@ -46,12 +46,12 @@
         <span class="brand-mark" aria-hidden="true">MN</span>
         <span class="brand-text">
           <span class="brand-name">محسن نیک‌سیرت</span>
-          <span class="brand-sub">دفترچه مهندسی نرم‌افزار و هوش مصنوعی</span>
+          <span class="brand-sub">نشریه مهندسی نرم‌افزار و هوش مصنوعی</span>
         </span>
       </a>
 
       <nav class="primary-nav" aria-label="ناوبری اصلی">
-        <a class="nav-link" href="/mohsen-tech-blog/fa/">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/" aria-current="page">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
+        <a class="nav-link" href="/mohsen-tech-blog/fa/">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/" aria-current="page">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">گالری پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
       </nav>
 
       <div class="header-tools">
@@ -77,7 +77,7 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
       <nav aria-label="منوی موبایل">
-        <a class="nav-link" href="/mohsen-tech-blog/fa/">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/" aria-current="page">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
+        <a class="nav-link" href="/mohsen-tech-blog/fa/">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/" aria-current="page">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">گالری پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
       </nav>
     </div>
   </header>
@@ -180,6 +180,17 @@
         <button type="button" class="tool-btn" data-close-search>بستن</button>
       </div>
       <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <div class="lightbox-bar">
+        <p id="lightbox-caption"></p>
+        <button type="button" class="tool-btn" data-close-lightbox>بستن (Esc)</button>
+      </div>
+      <img id="lightbox-img" alt="">
     </div>
   </div>
 

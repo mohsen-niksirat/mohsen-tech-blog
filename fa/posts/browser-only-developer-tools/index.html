@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ابزارهای توسعه‌دهنده بدون سرور: تحلیل مخزن‌های گیت‌هاب و داده‌ها کاملاً درون مرورگر | یادداشت‌های مهندسی محسن نیک‌سیرت</title>
+  <title>ابزارهای توسعه‌دهنده بدون سرور: تحلیل مخزن‌های گیت‌هاب و داده‌ها کاملاً درون مرورگر | نشریه مهندسی محسن نیک‌سیرت</title>
   <meta name="description" content="تجربه‌های معماری از ساخت Repodest، DataLens و A11y Inspector برای تحلیل کدبیس، مصورسازی فایل‌های داده حساس و ممیزی دسترس‌پذیری وب بدون ارسال حتی یک بایت به سرور.">
   <meta name="author" content="محسن نیک‌سیرت">
   <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/browser-only-developer-tools/">
   <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/browser-only-developer-tools/">
   <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/browser-only-developer-tools/">
-  <link rel="alternate" type="application/rss+xml" title="یادداشت‌های مهندسی محسن نیک‌سیرت" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="نشریه مهندسی محسن نیک‌سیرت" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/feed.xml">
 
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="یادداشت‌های مهندسی محسن نیک‌سیرت">
+  <meta property="og:site_name" content="نشریه مهندسی محسن نیک‌سیرت">
   <meta property="og:title" content="ابزارهای توسعه‌دهنده بدون سرور: تحلیل مخزن‌های گیت‌هاب و داده‌ها کاملاً درون مرورگر">
   <meta property="og:description" content="تجربه‌های معماری از ساخت Repodest، DataLens و A11y Inspector برای تحلیل کدبیس، مصورسازی فایل‌های داده حساس و ممیزی دسترس‌پذیری وب بدون ارسال حتی یک بایت به سرور.">
   <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/browser-only-developer-tools/">
@@ -30,7 +30,7 @@
   <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
 
   <script>
-    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
   </script>
   <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
   <script defer src="/mohsen-tech-blog/assets/app.js"></script>
@@ -46,12 +46,12 @@
         <span class="brand-mark" aria-hidden="true">MN</span>
         <span class="brand-text">
           <span class="brand-name">محسن نیک‌سیرت</span>
-          <span class="brand-sub">دفترچه مهندسی نرم‌افزار و هوش مصنوعی</span>
+          <span class="brand-sub">نشریه مهندسی نرم‌افزار و هوش مصنوعی</span>
         </span>
       </a>
 
       <nav class="primary-nav" aria-label="ناوبری اصلی">
-        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
+        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">گالری پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
       </nav>
 
       <div class="header-tools">
@@ -77,7 +77,7 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
       <nav aria-label="منوی موبایل">
-        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
+        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">گالری پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
       </nav>
     </div>
   </header>
@@ -99,51 +99,69 @@
         </div>
       </header>
 
+      <!-- Framed Real Project Cover Screenshot (R-40 hero <img> with fetchpriority="high") -->
+      <figure class="article-cover">
+        <div class="window-chrome">
+          <div class="chrome-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span class="chrome-url ltr">https://mohsen-niksirat.github.io/Repodest/</span>
+          <button type="button" class="chrome-zoom" data-lightbox-src="/mohsen-tech-blog/assets/shots/repodest.webp" data-lightbox-alt="داشبورد تحلیلگر کاملاً محلی Repodest برای امتیاز سلامت مخزن و بسته‌بندی فایل‌های کد." aria-label="بزرگنمایی تصویر"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
+        </div>
+        <img
+          src="/mohsen-tech-blog/assets/shots/repodest.webp"
+          alt="داشبورد تحلیلگر کاملاً محلی Repodest برای امتیاز سلامت مخزن و بسته‌بندی فایل‌های کد."
+          width="800"
+          height="500"
+          fetchpriority="high"
+        >
+        <figcaption>ابزار Repodest برای تحلیل مخزن‌های گیت‌هاب و ساخت پرامپت هوش مصنوعی کاملاً در مرورگر</figcaption>
+      </figure>
+
       <div class="article-layout">
         <div class="prose">
           <p>توسعه‌دهندگان حق دارند نسبت به آپلود خروجی‌های CSV سازمانی، کدهای HTML محیط تست یا ساختار مخزن‌های کاری در ابزارهای آنلاین ناشناس محتاط باشند. هر سرور واسط غیرضروری همزمان سه هزینه ایجاد می‌کند: هزینه نگهداری زیرساخت، تأخیر رفت‌وبرگشت شبکه و ریسک افشای داده.</p>
 <p>در طراحی سه ابزار متن‌باز <strong><a href="https://mohsen-niksirat.github.io/Repodest/" target="_blank" rel="noopener noreferrer">Repodest</a></strong> (تحلیلگر مخزن گیت‌هاب و بسته‌بندی پرامپت برای مدل‌های زبانی)، <strong><a href="https://mohsen-niksirat.github.io/DataLens/" target="_blank" rel="noopener noreferrer">DataLens</a></strong> (میزکار تحلیل و تبدیل فرمت‌های داده) و <strong><a href="https://mohsen-niksirat.github.io/A11y-Inspector/" target="_blank" rel="noopener noreferrer">A11y Inspector</a></strong> (ممیزی دسترس‌پذیری استاندارد WCAG 2.2)، یک محدودیت سخت‌گیرانه تعیین کردم: <strong>صفر سرور بک‌اند، صفر تله‌متری و اجرای ۱۰۰٪ درون مرورگر کاربر.</strong></p>
-<figure class="schematic" role="group" aria-label="خط لوله پردازش کاملاً محلی در مرورگر بدون ارسال داده به سرور">
-  <svg viewBox="0 0 760 230" width="760" height="230" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
-    <rect x="1" y="1" width="758" height="228" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
-    <!-- Browser Sandbox Boundary -->
-    <rect x="22" y="24" width="716" height="182" rx="8" fill="var(--bg-canvas)" stroke="var(--accent)" stroke-dasharray="6 4" stroke-width="1.4" />
-    <text x="38" y="46" fill="var(--accent)" font-family="var(--font-mono)" font-size="10.5" font-weight="700">BROWSER SANDBOX BOUNDARY · ZERO THIRD-PARTY UPLOADS</text>
+<figure class="schematic" role="group" aria-label="خط لوله پردازش محلی مرورگر">
+  <div class="schematic-stage">
+    <svg viewBox="0 0 820 245" width="820" height="245" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+      <rect x="20" y="20" width="780" height="205" rx="16" fill="var(--diag-node)" stroke="var(--diag-cyan)" stroke-dasharray="7 5" stroke-width="1.6" />
+      <text x="42" y="48" fill="var(--diag-cyan)" font-family="var(--font-mono)" font-size="11" font-weight="700">BROWSER SANDBOX · ZERO THIRD-PARTY SERVER UPLOADS</text>
 
-    <!-- Step 1 -->
-    <rect x="42" y="72" width="150" height="98" rx="7" fill="var(--bg-surface)" stroke="var(--border-strong)" />
-    <text x="117" y="102" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">1. INGEST</text>
-    <text x="117" y="124" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">Git Trees API (?recursive=1)</text>
-    <text x="117" y="142" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="10.5">or Local CSV / XLSX File</text>
+      <rect x="42" y="74" width="166" height="122" rx="12" fill="var(--bg-surface)" stroke="var(--border-strong)" />
+      <text x="125" y="106" text-anchor="middle" fill="var(--diag-cyan)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">01 · INGEST</text>
+      <text x="125" y="132" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5">Git Trees (?recursive=1)</text>
+      <text x="125" y="154" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">CSV / XLSX / HTML</text>
 
-    <line x1="192" y1="121" x2="222" y2="121" stroke="var(--text-muted)" stroke-width="1.5" />
-    <polygon points="222,121 214,116 214,126" fill="var(--text-muted)" />
+      <line x1="208" y1="135" x2="238" y2="135" stroke="var(--diag-cyan)" stroke-width="2.2" stroke-dasharray="5 5" class="flow-pulse" />
 
-    <!-- Step 2 -->
-    <rect x="226" y="72" width="152" height="98" rx="7" fill="var(--bg-surface)" stroke="var(--border-strong)" />
-    <text x="302" y="102" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">2. PRUNE &amp; PARSE</text>
-    <text x="302" y="124" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">Ignore Lockfiles &amp; Binaries</text>
-    <text x="302" y="142" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="10.5">Typed Column Inference</text>
+      <rect x="240" y="74" width="166" height="122" rx="12" fill="var(--bg-surface)" stroke="var(--border-strong)" />
+      <text x="323" y="106" text-anchor="middle" fill="var(--diag-violet)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">02 · PRUNE</text>
+      <text x="323" y="132" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5">Drop Lockfiles &amp; Noise</text>
+      <text x="323" y="154" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">Inert DOMParser</text>
 
-    <line x1="378" y1="121" x2="408" y2="121" stroke="var(--text-muted)" stroke-width="1.5" />
-    <polygon points="408,121 400,116 400,126" fill="var(--text-muted)" />
+      <line x1="406" y1="135" x2="436" y2="135" stroke="var(--diag-violet)" stroke-width="2.2" stroke-dasharray="5 5" class="flow-pulse" />
 
-    <!-- Step 3 -->
-    <rect x="412" y="72" width="146" height="98" rx="7" fill="var(--bg-surface)" stroke="var(--border-strong)" />
-    <text x="485" y="102" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">3. SCORE &amp; BUDGET</text>
-    <text x="485" y="124" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">0–100 Health / WCAG</text>
-    <text x="485" y="142" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="10.5">Token Window Counter</text>
+      <rect x="438" y="74" width="166" height="122" rx="12" fill="var(--bg-surface)" stroke="var(--border-strong)" />
+      <text x="521" y="106" text-anchor="middle" fill="var(--diag-emerald)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">03 · SCORE</text>
+      <text x="521" y="132" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5">0–100 Health / WCAG</text>
+      <text x="521" y="154" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">Token Budget Counter</text>
 
-    <line x1="558" y1="121" x2="588" y2="121" stroke="var(--accent)" stroke-width="1.5" />
-    <polygon points="588,121 580,116 580,126" fill="var(--accent)" />
+      <line x1="604" y1="135" x2="634" y2="135" stroke="var(--diag-emerald)" stroke-width="2.2" stroke-dasharray="5 5" class="flow-pulse" />
 
-    <!-- Step 4 -->
-    <rect x="592" y="72" width="126" height="98" rx="7" fill="var(--accent-soft)" stroke="var(--accent)" />
-    <text x="655" y="102" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="11" font-weight="700">4. ARTIFACT</text>
-    <text x="655" y="124" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11">LLM Digest MD</text>
-    <text x="655" y="142" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="10.5">SVG Chart / Audit</text>
-  </svg>
-  <figcaption>شکل ۱: معماری مشترک در Repodest، DataLens و A11y Inspector؛ کل چرخه دریافت، پارس، امتیازدهی و تولید خروجی درون حافظه مرورگر کاربر انجام می‌شود.</figcaption>
+      <rect x="636" y="74" width="142" height="122" rx="12" fill="var(--bg-surface)" stroke="var(--diag-emerald)" stroke-width="1.6" />
+      <text x="707" y="106" text-anchor="middle" fill="var(--diag-emerald)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">04 · EXPORT</text>
+      <text x="707" y="132" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5">LLM Prompt MD</text>
+      <text x="707" y="154" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">SVG Chart / Audit</text>
+    </svg>
+
+    <div class="sim-controls" data-token-sim>
+      <input type="text" class="sim-text-input ltr" data-token-input value="export async function fetchRepoTree(owner, repo) { return fetch(`https://api.github.com/repos/${owner}/${repo}`); }" aria-label="نمونه کد برای تخمین توکن">
+      <div class="sim-readout">
+        <span>تخمین محلی Repodest:</span>
+        <strong class="sim-badge ltr" data-token-out>~30 tokens · 113 chars</strong>
+      </div>
+    </div>
+  </div>
+  <figcaption>شکل ۱: معماری محلی مشترک بین Repodest، DataLens و A11y Inspector؛ درون کادر بالا بنویسید تا مصرف توکن کاملاً آفلاین محاسبه شود.</figcaption>
 </figure>
 <h2 id="sec-1">دریافت کل درخت مخزن گیت‌هاب تنها با یک درخواست</h2>
 <p>یک پیاده‌سازی ساده برای نمایش پوشه‌های گیت‌هاب معمولاً مسیر <code>/repos/{owner}/{repo}/contents/{path}</code> را به شکل بازگشتی برای هر پوشه صدا می‌زند. روی یک پروژه متوسط با ۴۰ زیرپوشه، این کار ۴۱ درخواست از سهمیه ۶۰تایی ساعتانه GitHub API بدون توکن را در دو ثانیه می‌سوزاند.</p>
@@ -201,7 +219,7 @@
             </div>
           </section>
 
-          <nav class="post-Matrix-nav" aria-label="مقاله قبلی و بعدی">
+          <nav class="post-matrix-nav" aria-label="مقاله قبلی و بعدی">
             <a class="adj-link" href="/mohsen-tech-blog/fa/posts/fsrs-spaced-repetition-architecture/">
                     <span class="adj-dir">مقاله جدیدتر</span>
                     <span class="adj-title">فراتر از جعبه‌های سنتی لایتنر: پیاده‌سازی الگوریتم FSRS در خواننده آفلاین واژگان</span>
@@ -276,6 +294,17 @@
         <button type="button" class="tool-btn" data-close-search>بستن</button>
       </div>
       <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <div class="lightbox-bar">
+        <p id="lightbox-caption"></p>
+        <button type="button" class="tool-btn" data-close-lightbox>بستن (Esc)</button>
+      </div>
+      <img id="lightbox-img" alt="">
     </div>
   </div>
 

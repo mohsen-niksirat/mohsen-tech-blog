@@ -22,9 +22,9 @@ When building **[Readner (Leitner Pro Max)](https://mohsen-niksirat.github.io/Le
 
 Human long-term memory does not reset to zero after a single lapse; a word you knew for a month re-stabilizes much faster than an unfamiliar term. FSRS formalizes this through the **DSR (Difficulty, Stability, Retrievability)** three-component model of memory:
 
-* **Stability ($S$):** The number of days it takes for recall probability to decay from $100\%$ down to $90\%$.
-* **Difficulty ($D \in [1, 10]$):** Intrinsic complexity of the item for this learner, updated after each rating (`Again`, `Hard`, `Good`, `Easy`).
-* **Retrievability ($R$):** Instantaneous probability of recall after $t$ elapsed days, governed by a power-law forgetting curve:
+* **Stability (*S*):** The number of days it takes for recall probability to decay from 100% down to 90%.
+* **Difficulty (*D* ∈ [1, 10]):** Intrinsic complexity of the item for this learner, updated after each rating (`Again`, `Hard`, `Good`, `Easy`).
+* **Retrievability (*R*):** Instantaneous probability of recall after *t* elapsed days, governed by a power-law forgetting curve:
 
 ```javascript
 // FSRS v4.5 power-law forgetting curve and target interval solver
@@ -42,7 +42,7 @@ export function nextIntervalDays(stability, desiredRetention = 0.9) {
 }
 ```
 
-Notice the elegance of `FACTOR = 19 / 81` with `DECAY = -0.5`: when `elapsedDays === stability`, $(1 + 19/81)^{-0.5} = (100/81)^{-0.5} = 9/10 = 0.90$. If a learner reviews a card late (say at day 14 when $S = 9$) and still recalls it, their demonstrated retrievability was lower, so FSRS rewards them with a **larger** stability boost than if they had crammed early.
+Notice the elegance of `FACTOR = 19 / 81` with `DECAY = -0.5`: when `elapsedDays === stability`, `(1 + 19/81)^(-0.5) = (100/81)^(-0.5) = 9/10 = 0.90`. If a learner reviews a card late (say at day 14 when *S* = 9) and still recalls it, their demonstrated retrievability was lower, so FSRS rewards them with a **larger** stability boost than if they had crammed early.
 
 ## Closing the Gap Between Reading and Flashcards
 

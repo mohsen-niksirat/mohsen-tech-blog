@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench | Mohsen Niksirat · Engineering Monograph</title>
+  <title>Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench | Mohsen Niksirat · Engineering Publication</title>
   <meta name="description" content="Inside MCP Studio: turning raw Model Context Protocol JSON Schemas and JSON-RPC 2.0 traffic into an interactive browser IDE for testing agent tools, resources, and prompts.">
   <meta name="author" content="Mohsen Niksirat">
   <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/">
   <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/">
   <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/inspecting-mcp-servers-visually/">
-  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Publication" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
 
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Publication">
   <meta property="og:title" content="Inspecting the Model Context Protocol: Building a Visual JSON-RPC Workbench">
   <meta property="og:description" content="Inside MCP Studio: turning raw Model Context Protocol JSON Schemas and JSON-RPC 2.0 traffic into an interactive browser IDE for testing agent tools, resources, and prompts.">
   <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/">
@@ -30,7 +30,7 @@
   <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
 
   <script>
-    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
   </script>
   <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
   <script defer src="/mohsen-tech-blog/assets/app.js"></script>
@@ -46,12 +46,12 @@
         <span class="brand-mark" aria-hidden="true">MN</span>
         <span class="brand-text">
           <span class="brand-name">Mohsen Niksirat</span>
-          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+          <span class="brand-sub">Engineering Publication & Lab</span>
         </span>
       </a>
 
       <nav class="primary-nav" aria-label="Primary navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
       </nav>
 
       <div class="header-tools">
@@ -77,7 +77,7 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
       <nav aria-label="Mobile navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/" aria-current="page">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
       </nav>
     </div>
   </header>
@@ -99,35 +99,51 @@
         </div>
       </header>
 
+      <!-- Framed Real Project Cover Screenshot (R-40 hero <img> with fetchpriority="high") -->
+      <figure class="article-cover">
+        <div class="window-chrome">
+          <div class="chrome-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span class="chrome-url ltr">https://mohsen-niksirat.github.io/Mcp-Studio/</span>
+          <button type="button" class="chrome-zoom" data-lightbox-src="/mohsen-tech-blog/assets/shots/mcp-studio.webp" data-lightbox-alt="MCP Studio IDE testing Model Context Protocol tool schemas and inspecting JSON-RPC responses." aria-label="Expand screenshot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
+        </div>
+        <img
+          src="/mohsen-tech-blog/assets/shots/mcp-studio.webp"
+          alt="MCP Studio IDE testing Model Context Protocol tool schemas and inspecting JSON-RPC responses."
+          width="800"
+          height="500"
+          fetchpriority="high"
+        >
+        <figcaption>MCP Studio visual workbench for Model Context Protocol servers</figcaption>
+      </figure>
+
       <div class="article-layout">
         <div class="prose">
           <p>As AI coding agents and desktop assistants adopt the <strong>Model Context Protocol (MCP)</strong>, backend engineers suddenly find themselves building tool servers whose primary consumer is an LLM rather than a human clicking buttons. When a tool call fails, staring at interleaved <code>stdio</code> or Server-Sent Event JSON lines makes it surprisingly tedious to tell whether the bug lives in your Zod schema, your argument coercion, or the protocol handshake.</p>
 <p>I built <strong><a href="https://mohsen-niksirat.github.io/Mcp-Studio/" target="_blank" rel="noopener noreferrer">MCP Studio</a></strong> to bring the ergonomics of Postman and GraphQL Playground to MCP server development: connect an endpoint, inspect exposed capabilities, generate typed test forms automatically from <code>inputSchema</code>, and trace raw JSON-RPC 2.0 frames side by side.</p>
-<figure class="schematic" role="group" aria-label="JSON-RPC 2.0 inspection flow between MCP Studio and an MCP tool server">
-  <svg viewBox="0 0 760 220" width="760" height="220" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
-    <rect x="1" y="1" width="758" height="218" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
-    <rect x="32" y="42" width="196" height="136" rx="8" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
-    <text x="130" y="72" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">MCP STUDIO UI</text>
-    <text x="130" y="98" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">JSON Schema -> Form UI</text>
-    <text x="130" y="118" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11">Payload Diff &amp; Latency</text>
-    <text x="130" y="138" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="10.5">Interactive Replay</text>
+<figure class="schematic" role="group" aria-label="Bidirectional JSON-RPC 2.0 inspection inside MCP Studio">
+  <div class="schematic-stage">
+    <svg viewBox="0 0 820 235" width="820" height="235" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+      <rect x="32" y="34" width="224" height="166" rx="14" fill="var(--diag-node)" stroke="var(--diag-violet)" stroke-width="1.6" />
+      <text x="144" y="68" text-anchor="middle" fill="var(--diag-violet)" font-family="var(--font-mono)" font-size="12" font-weight="700">MCP STUDIO IDE</text>
+      <text x="144" y="98" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5">Auto Schema Form Builder</text>
+      <text x="144" y="122" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11.5">Live JSON-RPC Wire Diff</text>
+      <rect x="64" y="144" width="160" height="30" rx="7" fill="var(--bg-surface)" stroke="var(--border-strong)" />
+      <text x="144" y="163" text-anchor="middle" fill="var(--diag-cyan)" font-family="var(--font-mono)" font-size="10.5">1-Click Tool Replay</text>
 
-    <!-- Bidirectional Wire -->
-    <line x1="232" y1="88" x2="524" y2="88" stroke="var(--accent)" stroke-width="1.6" />
-    <polygon points="524,88 516,83 516,93" fill="var(--accent)" />
-    <text x="378" y="78" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="10.5" font-weight="600">tools/list · tools/call (JSON-RPC 2.0)</text>
+      <line x1="256" y1="92" x2="562" y2="92" stroke="var(--diag-violet)" stroke-width="2.4" stroke-dasharray="7 6" class="flow-pulse" />
+      <text x="409" y="80" text-anchor="middle" fill="var(--diag-violet)" font-family="var(--font-mono)" font-size="11" font-weight="600">initialize · tools/list · tools/call</text>
 
-    <line x1="524" y1="136" x2="232" y2="136" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="5 3" />
-    <polygon points="232,136 240,131 240,141" fill="var(--text-muted)" />
-    <text x="378" y="156" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">content[] + isError + structured trace</text>
+      <line x1="562" y1="146" x2="256" y2="146" stroke="var(--diag-emerald)" stroke-width="2.2" stroke-dasharray="6 6" class="flow-pulse" />
+      <text x="409" y="168" text-anchor="middle" fill="var(--diag-emerald)" font-family="var(--font-mono)" font-size="11">result.content[] · isError · latencyMs</text>
 
-    <rect x="528" y="42" width="200" height="136" rx="8" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
-    <text x="628" y="72" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">MCP SERVER</text>
-    <text x="628" y="98" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">Tools · Resources · Prompts</text>
-    <text x="628" y="118" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">SSE / Streamable HTTP</text>
-    <text x="628" y="138" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">Zod / Pydantic Schemas</text>
-  </svg>
-  <figcaption>Figure 1: Interactive debugging loop in MCP Studio. Exposed JSON Schemas become typed form inputs, capturing raw JSON-RPC frames and execution latency.</figcaption>
+      <rect x="564" y="34" width="224" height="166" rx="14" fill="var(--diag-node)" stroke="var(--border-strong)" stroke-width="1.5" />
+      <text x="676" y="68" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="12" font-weight="700">MCP TOOL SERVER</text>
+      <text x="676" y="98" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="11">Tools · Resources · Prompts</text>
+      <text x="676" y="122" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11.5">Streamable HTTP / SSE</text>
+      <text x="676" y="146" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11.5">Zod &amp; Pydantic Validators</text>
+    </svg>
+  </div>
+  <figcaption>Figure 1: Bidirectional JSON-RPC 2.0 inspection loop between MCP Studio's generated schema forms and an MCP server.</figcaption>
 </figure>
 <h2 id="sec-1">Anatomy of an MCP Capability Handshake</h2>
 <p>Underneath the SDK abstractions, MCP is clean stateful JSON-RPC 2.0. Before invoking any tool, a client and server negotiate protocol versions and capability flags (<code>tools</code>, <code>resources</code>, <code>prompts</code>, <code>logging</code>), followed by discovery calls:</p>
@@ -181,7 +197,7 @@
             </div>
           </section>
 
-          <nav class="post-Matrix-nav" aria-label="Adjacent monographs">
+          <nav class="post-matrix-nav" aria-label="Adjacent monographs">
             <a class="adj-link" href="/mohsen-tech-blog/posts/godot4-wasm-horde-survival/">
                     <span class="adj-dir">Newer Monograph</span>
                     <span class="adj-title">60 FPS Swarm Survival on the Web: Exporting Godot 4 3D Roguelites to WebAssembly</span>
@@ -256,6 +272,17 @@
         <button type="button" class="tool-btn" data-close-search>Esc</button>
       </div>
       <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <div class="lightbox-bar">
+        <p id="lightbox-caption"></p>
+        <button type="button" class="tool-btn" data-close-lightbox>Close (Esc)</button>
+      </div>
+      <img id="lightbox-img" alt="">
     </div>
   </div>
 

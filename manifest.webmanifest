@@ -1,12 +1,12 @@
 {
-  "name": "Mohsen Niksirat · Engineering Monograph",
+  "name": "Mohsen Niksirat · Engineering Publication",
   "short_name": "Mohsen Blog",
-  "description": "Bilingual engineering essays and lab notes by Mohsen Niksirat.",
+  "description": "Visual bilingual engineering essays and lab notes by Mohsen Niksirat.",
   "start_url": "/mohsen-tech-blog/",
   "scope": "/mohsen-tech-blog/",
   "display": "standalone",
-  "background_color": "#FBF9F5",
-  "theme_color": "#181614",
+  "background_color": "#0B0E14",
+  "theme_color": "#0B0E14",
   "icons": [
     {
       "src": "/mohsen-tech-blog/assets/icons/icon-192.png",

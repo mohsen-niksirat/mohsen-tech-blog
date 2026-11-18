@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>About | Mohsen Niksirat · Engineering Monograph</title>
+  <title>About | Mohsen Niksirat · Engineering Publication</title>
   <meta name="description" content="About Mohsen Niksirat, M.Sc. Computer Architecture and open-source software engineer.">
   <meta name="author" content="Mohsen Niksirat">
   <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/about/">
   <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/about/">
   <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/about/">
-  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Publication" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Publication">
   <meta property="og:title" content="About">
   <meta property="og:description" content="About Mohsen Niksirat, M.Sc. Computer Architecture and open-source software engineer.">
   <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/about/">
@@ -30,7 +30,7 @@
   <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
 
   <script>
-    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
   </script>
   <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
   <script defer src="/mohsen-tech-blog/assets/app.js"></script>
@@ -46,12 +46,12 @@
         <span class="brand-mark" aria-hidden="true">MN</span>
         <span class="brand-text">
           <span class="brand-name">Mohsen Niksirat</span>
-          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+          <span class="brand-sub">Engineering Publication & Lab</span>
         </span>
       </a>
 
       <nav class="primary-nav" aria-label="Primary navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/" aria-current="page">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/" aria-current="page">About</a>
       </nav>
 
       <div class="header-tools">
@@ -77,7 +77,7 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
       <nav aria-label="Mobile navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/" aria-current="page">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/" aria-current="page">About</a>
       </nav>
     </div>
   </header>
@@ -86,6 +86,13 @@
     
     <section class="page-section">
       <header class="page-header">
+        <div class="author-strip" style="margin-bottom:20px;">
+          <img class="author-avatar" src="/mohsen-tech-blog/assets/shots/avatar.webp" alt="Portrait of Mohsen Niksirat" width="64" height="64" style="width:64px;height:64px;">
+          <div class="author-meta">
+            <strong class="author-name" style="font-size:1.1rem;">Mohsen Niksirat</strong>
+            <span class="author-role">M.Sc. Computer Architecture · Tabriz</span>
+          </div>
+        </div>
         <h1 class="page-title">About Mohsen Niksirat</h1>
         <p class="page-sub">Software engineer, M.Sc. in Computer Architecture, and open-source builder focused on resilient AI infrastructure, cognitive learning systems, and local-first software.</p>
       </header>
@@ -93,8 +100,8 @@
       <div class="about-grid">
         <div class="prose">
           <p>I am Mohsen Niksirat, a software engineer based in Tabriz holding an <strong>M.Sc. in Computer Architecture</strong>. My work sits at the intersection of practical web engineering, multi-provider AI infrastructure, interactive educational software, and cross-engine systems programming.</p>
-                 <h2>Why This Monograph Exists</h2>
-                 <p>Across shipping 47+ public repositories on GitHub (ranging from AI gateways like <strong>9router</strong> and <strong>AIDahl</strong> to the FSRS-powered <strong>Readner</strong> suite, <strong>Repodest</strong>, <strong>MCP Studio</strong>, and the WebAssembly roguelite <strong>Horde Survival 3D</strong>), the most valuable engineering lessons always lived in the edge cases: rate-limit storms, browser memory ceilings, offline ACID storage, and bidirectional RTL typography. This publication documents those architectural trade-offs with real code and zero filler.</p>
+                 <h2>Why This Publication Exists</h2>
+                 <p>Across shipping 47+ public repositories on GitHub (ranging from AI gateways like <strong>9router</strong> and <strong>AIDahl</strong> to the FSRS-powered <strong>Readner</strong> suite, <strong>Repodest</strong>, <strong>MCP Studio</strong>, and the WebAssembly roguelite <strong>Horde Survival 3D</strong>), the most valuable engineering lessons always lived in the edge cases: rate-limit storms, browser memory ceilings, offline ACID storage, and bidirectional RTL typography. This publication documents those architectural trade-offs with real code, interactive sandboxes, and zero filler.</p>
                  <h2>Engineering Principles</h2>
                  <ul>
                    <li><strong>Local-first by default:</strong> Whenever a developer utility or data workbench can execute inside browser memory with zero uploads, eliminating the backend makes the tool faster, cheaper, and inherently private.</li>
@@ -161,6 +168,17 @@
         <button type="button" class="tool-btn" data-close-search>Esc</button>
       </div>
       <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <div class="lightbox-bar">
+        <p id="lightbox-caption"></p>
+        <button type="button" class="tool-btn" data-close-lightbox>Close (Esc)</button>
+      </div>
+      <img id="lightbox-img" alt="">
     </div>
   </div>
 

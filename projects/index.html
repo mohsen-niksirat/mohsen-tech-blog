@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Projects | Mohsen Niksirat · Engineering Monograph</title>
-  <meta name="description" content="Open-source web apps, AI gateways, learning tools, and games built by Mohsen Niksirat.">
+  <title>Shipped Systems | Mohsen Niksirat · Engineering Publication</title>
+  <meta name="description" content="Visual showcase of open-source web apps, AI gateways, learning tools, and games built by Mohsen Niksirat.">
   <meta name="author" content="Mohsen Niksirat">
   <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/projects/">
   <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/projects/">
   <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/projects/">
-  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Monograph" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Mohsen Niksirat · Engineering Publication" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/feed.xml">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Monograph">
-  <meta property="og:title" content="Projects">
-  <meta property="og:description" content="Open-source web apps, AI gateways, learning tools, and games built by Mohsen Niksirat.">
+  <meta property="og:site_name" content="Mohsen Niksirat · Engineering Publication">
+  <meta property="og:title" content="Shipped Systems">
+  <meta property="og:description" content="Visual showcase of open-source web apps, AI gateways, learning tools, and games built by Mohsen Niksirat.">
   <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/projects/">
   <meta property="og:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/og-default.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Projects">
-  <meta name="twitter:description" content="Open-source web apps, AI gateways, learning tools, and games built by Mohsen Niksirat.">
+  <meta name="twitter:title" content="Shipped Systems">
+  <meta name="twitter:description" content="Visual showcase of open-source web apps, AI gateways, learning tools, and games built by Mohsen Niksirat.">
   <meta name="twitter:image" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/assets/og/og-default.png">
 
   <link rel="icon" href="/mohsen-tech-blog/assets/icons/favicon.svg" type="image/svg+xml">
@@ -30,7 +30,7 @@
   <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
 
   <script>
-    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
   </script>
   <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
   <script defer src="/mohsen-tech-blog/assets/app.js"></script>
@@ -46,12 +46,12 @@
         <span class="brand-mark" aria-hidden="true">MN</span>
         <span class="brand-text">
           <span class="brand-name">Mohsen Niksirat</span>
-          <span class="brand-sub">Engineering Monograph & Lab Notes</span>
+          <span class="brand-sub">Engineering Publication & Lab</span>
         </span>
       </a>
 
       <nav class="primary-nav" aria-label="Primary navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/" aria-current="page">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/" aria-current="page">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
       </nav>
 
       <div class="header-tools">
@@ -77,7 +77,7 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
       <nav aria-label="Mobile navigation">
-        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/" aria-current="page">Projects</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
+        <a class="nav-link" href="/mohsen-tech-blog/">Essays</a><a class="nav-link" href="/mohsen-tech-blog/notes/">Field Notes</a><a class="nav-link" href="/mohsen-tech-blog/projects/" aria-current="page">Systems</a><a class="nav-link" href="/mohsen-tech-blog/archive/">Archive</a><a class="nav-link" href="/mohsen-tech-blog/about/">About</a>
       </nav>
     </div>
   </header>
@@ -86,130 +86,214 @@
     
     <section class="page-section">
       <header class="page-header">
-        <h1 class="page-title">Shipped Open-Source Systems</h1>
-        <p class="page-sub">Every essay in this journal comes from real shipped software. Launch any live web build below or explore full case studies inside my interactive OS portfolio.</p>
+        <h1 class="page-title">Shipped Open-Source Systems Gallery</h1>
+        <p class="page-sub">Visual directory of deployed applications, AI gateways, games, and developer tools documented across this publication.</p>
       </header>
 
-      <div class="project-directory">
-        <article class="project-row">
-            <div>
-              <h2>Repodest</h2>
-              <span class="project-stack ltr">JavaScript · GitHub REST API · Chrome MV3</span>
+      <div class="systems-showcase-grid">
+        <article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/repodest.webp" alt="Repodest" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/repodest.webp" data-lightbox-alt="Repodest" aria-label="Expand Repodest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">Client-side GitHub repository health analyzer and token-aware Markdown prompt packer for ChatGPT, Claude, and Gemini.</p>
-            <div class="project-links">
-              <a class="btn-primary" href="https://mohsen-niksirat.github.io/Repodest/" target="_blank" rel="noopener noreferrer">Live App</a>
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/Repodest" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>Repodest</h2>
+                <span class="project-stack ltr">JavaScript · GitHub REST API · Chrome MV3</span>
+              </div>
+              <p>Client-side GitHub repository health analyzer and token-aware Markdown prompt packer for ChatGPT, Claude, and Gemini.</p>
+              <div class="btn-row">
+                <a class="btn-primary btn-sm" href="https://mohsen-niksirat.github.io/Repodest/" target="_blank" rel="noopener noreferrer">Live App</a>
+                <a class="btn-secondary btn-sm" href="/mohsen-tech-blog/posts/browser-only-developer-tools/">Essay</a>
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/Repodest" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
-          </article><article class="project-row">
-            <div>
-              <h2>Readner · Leitner Pro Max</h2>
-              <span class="project-stack ltr">PWA · IndexedDB · FSRS · Kotlin Android</span>
+          </article><article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/leitner-pro-max.webp" alt="Readner · Leitner Pro Max" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/leitner-pro-max.webp" data-lightbox-alt="Readner · Leitner Pro Max" aria-label="Expand Readner · Leitner Pro Max"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">Offline-first vocabulary suite combining FSRS spaced repetition, an integrated PDF reader, WordWeb semantic graphs, and 4,500+ CEFR words.</p>
-            <div class="project-links">
-              <a class="btn-primary" href="https://mohsen-niksirat.github.io/Leitner-Pro-Max/" target="_blank" rel="noopener noreferrer">Live App</a>
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/Leitner-Pro-Max" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>Readner · Leitner Pro Max</h2>
+                <span class="project-stack ltr">PWA · IndexedDB · FSRS · Kotlin Android</span>
+              </div>
+              <p>Offline-first vocabulary suite combining FSRS spaced repetition, an integrated PDF reader, WordWeb semantic graphs, and 4,500+ CEFR words.</p>
+              <div class="btn-row">
+                <a class="btn-primary btn-sm" href="https://mohsen-niksirat.github.io/Leitner-Pro-Max/" target="_blank" rel="noopener noreferrer">Live App</a>
+                <a class="btn-secondary btn-sm" href="/mohsen-tech-blog/posts/fsrs-spaced-repetition-architecture/">Essay</a>
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/Leitner-Pro-Max" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
-          </article><article class="project-row">
-            <div>
-              <h2>9router AI Gateway</h2>
-              <span class="project-stack ltr">JavaScript · Serverless · Telegram Mini App</span>
+          </article><article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/9router.webp" alt="9router AI Gateway" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/9router.webp" data-lightbox-alt="9router AI Gateway" aria-label="Expand 9router AI Gateway"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">Multi-provider AI gateway pooling Gemini, Groq, DeepSeek, OpenAI, and OpenRouter keys with automatic HTTP 429 failover and AES-GCM vaults.</p>
-            <div class="project-links">
-              
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/9router_TG_Bot" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>9router AI Gateway</h2>
+                <span class="project-stack ltr">JavaScript · Serverless · Telegram Mini App</span>
+              </div>
+              <p>Multi-provider AI gateway pooling Gemini, Groq, DeepSeek, OpenAI, and OpenRouter keys with automatic HTTP 429 failover and AES-GCM vaults.</p>
+              <div class="btn-row">
+                
+                <a class="btn-secondary btn-sm" href="/mohsen-tech-blog/posts/multi-provider-ai-gateway/">Essay</a>
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/9router_TG_Bot" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
-          </article><article class="project-row">
-            <div>
-              <h2>AIDahl</h2>
-              <span class="project-stack ltr">Python · OpenRouter · Supabase · Telegram</span>
+          </article><article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/horde-survival-3d.webp" alt="Horde Survival 3D" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/horde-survival-3d.webp" data-lightbox-alt="Horde Survival 3D" aria-label="Expand Horde Survival 3D"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">Bring-Your-Own-Key Telegram AI assistant featuring live coalesced SSE streaming, named threads, and Manus research/image workflows.</p>
-            <div class="project-links">
-              
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/AIDahl" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>Horde Survival 3D</h2>
+                <span class="project-stack ltr">Godot 4 · GDScript · WebAssembly / WebGL</span>
+              </div>
+              <p>Browser-playable 3D survival roguelite running at 60 FPS with spatial-hash swarm combat, evolving weapons, and a three-phase boss.</p>
+              <div class="btn-row">
+                <a class="btn-primary btn-sm" href="https://mohsen-niksirat.github.io/Horde_Survival_3D_Godot/" target="_blank" rel="noopener noreferrer">Live App</a>
+                <a class="btn-secondary btn-sm" href="/mohsen-tech-blog/posts/godot4-wasm-horde-survival/">Essay</a>
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/Horde_Survival_3D_Godot" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
-          </article><article class="project-row">
-            <div>
-              <h2>Horde Survival 3D</h2>
-              <span class="project-stack ltr">Godot 4 · GDScript · WebAssembly / WebGL</span>
+          </article><article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/mcp-studio.webp" alt="MCP Studio" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/mcp-studio.webp" data-lightbox-alt="MCP Studio" aria-label="Expand MCP Studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">Browser-playable 3D survival roguelite running at 60 FPS with spatial-hash swarm combat, evolving weapons, and a three-phase boss.</p>
-            <div class="project-links">
-              <a class="btn-primary" href="https://mohsen-niksirat.github.io/Horde_Survival_3D_Godot/" target="_blank" rel="noopener noreferrer">Live App</a>
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/Horde_Survival_3D_Godot" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>MCP Studio</h2>
+                <span class="project-stack ltr">TypeScript · JSON-RPC 2.0 · JSON Schema</span>
+              </div>
+              <p>Visual browser workbench for inspecting Model Context Protocol tool schemas, testing invocations, and tracing JSON-RPC payloads.</p>
+              <div class="btn-row">
+                <a class="btn-primary btn-sm" href="https://mohsen-niksirat.github.io/Mcp-Studio/" target="_blank" rel="noopener noreferrer">Live App</a>
+                <a class="btn-secondary btn-sm" href="/mohsen-tech-blog/posts/inspecting-mcp-servers-visually/">Essay</a>
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/Mcp-Studio" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
-          </article><article class="project-row">
-            <div>
-              <h2>MCP Studio</h2>
-              <span class="project-stack ltr">TypeScript · JSON-RPC 2.0 · JSON Schema</span>
+          </article><article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/codevis.webp" alt="CodeVis" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/codevis.webp" data-lightbox-alt="CodeVis" aria-label="Expand CodeVis"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">Visual browser workbench for inspecting Model Context Protocol tool schemas, testing invocations, and tracing JSON-RPC payloads.</p>
-            <div class="project-links">
-              <a class="btn-primary" href="https://mohsen-niksirat.github.io/Mcp-Studio/" target="_blank" rel="noopener noreferrer">Live App</a>
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/Mcp-Studio" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>CodeVis</h2>
+                <span class="project-stack ltr">HTML5 Canvas · Zero Dependencies · Single File</span>
+              </div>
+              <p>49 computer science algorithms and patterns animated step-by-step with bidirectional timeline scrubbing and synced code pointers.</p>
+              <div class="btn-row">
+                <a class="btn-primary btn-sm" href="https://mohsen-niksirat.github.io/CodeVis/" target="_blank" rel="noopener noreferrer">Live App</a>
+                <a class="btn-secondary btn-sm" href="/mohsen-tech-blog/posts/deterministic-canvas-cs-animations/">Essay</a>
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/CodeVis" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
-          </article><article class="project-row">
-            <div>
-              <h2>CodeVis</h2>
-              <span class="project-stack ltr">HTML5 Canvas · Zero Dependencies · Single File</span>
+          </article><article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/datalens.webp" alt="DataLens" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/datalens.webp" data-lightbox-alt="DataLens" aria-label="Expand DataLens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">49 computer science algorithms and patterns animated step-by-step with bidirectional timeline scrubbing and synced code pointers.</p>
-            <div class="project-links">
-              <a class="btn-primary" href="https://mohsen-niksirat.github.io/CodeVis/" target="_blank" rel="noopener noreferrer">Live App</a>
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/CodeVis" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>DataLens</h2>
+                <span class="project-stack ltr">JavaScript · SVG Charts · Offline PWA</span>
+              </div>
+              <p>Zero-upload in-browser data workbench supporting CSV, JSON, YAML, XML, SQL, and Excel inspection and conversion.</p>
+              <div class="btn-row">
+                <a class="btn-primary btn-sm" href="https://mohsen-niksirat.github.io/DataLens/" target="_blank" rel="noopener noreferrer">Live App</a>
+                <a class="btn-secondary btn-sm" href="/mohsen-tech-blog/posts/browser-only-developer-tools/">Essay</a>
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/DataLens" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
-          </article><article class="project-row">
-            <div>
-              <h2>DataLens</h2>
-              <span class="project-stack ltr">JavaScript · SVG Charts · Offline PWA</span>
+          </article><article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/speakai-coach.webp" alt="SpeakAI Coach" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/speakai-coach.webp" data-lightbox-alt="SpeakAI Coach" aria-label="Expand SpeakAI Coach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">Zero-upload in-browser data workbench supporting CSV, JSON, YAML, XML, SQL, and Excel inspection and conversion.</p>
-            <div class="project-links">
-              <a class="btn-primary" href="https://mohsen-niksirat.github.io/DataLens/" target="_blank" rel="noopener noreferrer">Live App</a>
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/DataLens" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>SpeakAI Coach</h2>
+                <span class="project-stack ltr">TypeScript · Voice AI · PWA</span>
+              </div>
+              <p>Real-time spoken English conversation tutor with 8 personas, turn-by-turn grammar feedback, and 6-axis IELTS Speaking band estimation.</p>
+              <div class="btn-row">
+                <a class="btn-primary btn-sm" href="https://mohsen-niksirat.github.io/SpeakAI-Coach/" target="_blank" rel="noopener noreferrer">Live App</a>
+                
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/SpeakAI-Coach" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
-          </article><article class="project-row">
-            <div>
-              <h2>SpeakAI Coach</h2>
-              <span class="project-stack ltr">TypeScript · Voice AI · PWA</span>
+          </article><article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/a11y-inspector.webp" alt="A11y Inspector" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/a11y-inspector.webp" data-lightbox-alt="A11y Inspector" aria-label="Expand A11y Inspector"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">Real-time spoken English conversation tutor with 8 personas, turn-by-turn grammar feedback, and 6-axis IELTS Speaking band estimation.</p>
-            <div class="project-links">
-              <a class="btn-primary" href="https://mohsen-niksirat.github.io/SpeakAI-Coach/" target="_blank" rel="noopener noreferrer">Live App</a>
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/SpeakAI-Coach" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>A11y Inspector</h2>
+                <span class="project-stack ltr">JavaScript · WCAG 2.2 · PWA + Node CLI</span>
+              </div>
+              <p>Privacy-first HTML accessibility auditor checking contrast ratios, landmarks, headings, and ARIA rules in-browser and in CI.</p>
+              <div class="btn-row">
+                <a class="btn-primary btn-sm" href="https://mohsen-niksirat.github.io/A11y-Inspector/" target="_blank" rel="noopener noreferrer">Live App</a>
+                <a class="btn-secondary btn-sm" href="/mohsen-tech-blog/posts/browser-only-developer-tools/">Essay</a>
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/A11y-Inspector" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
-          </article><article class="project-row">
-            <div>
-              <h2>A11y Inspector</h2>
-              <span class="project-stack ltr">JavaScript · WCAG 2.2 · PWA + Node CLI</span>
+          </article><article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/aidahl.webp" alt="AIDahl" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/aidahl.webp" data-lightbox-alt="AIDahl" aria-label="Expand AIDahl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">Privacy-first HTML accessibility auditor checking contrast ratios, landmarks, headings, and ARIA rules in-browser and in CI.</p>
-            <div class="project-links">
-              <a class="btn-primary" href="https://mohsen-niksirat.github.io/A11y-Inspector/" target="_blank" rel="noopener noreferrer">Live App</a>
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/A11y-Inspector" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>AIDahl</h2>
+                <span class="project-stack ltr">Python · OpenRouter · Supabase · Telegram</span>
+              </div>
+              <p>Bring-Your-Own-Key Telegram AI assistant featuring live coalesced SSE streaming, named threads, and Manus research/image workflows.</p>
+              <div class="btn-row">
+                
+                <a class="btn-secondary btn-sm" href="/mohsen-tech-blog/posts/multi-provider-ai-gateway/">Essay</a>
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/AIDahl" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
-          </article><article class="project-row">
-            <div>
-              <h2>Kite Downloader</h2>
-              <span class="project-stack ltr">Rust · Tauri v2 · Tokio Async</span>
+          </article><article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/kite-downloader.webp" alt="Kite Downloader" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/kite-downloader.webp" data-lightbox-alt="Kite Downloader" aria-label="Expand Kite Downloader"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">Lightweight native Windows download manager under 8 MB featuring segmented range downloads and clipboard sniffing.</p>
-            <div class="project-links">
-              
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/kite-downloader" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>Kite Downloader</h2>
+                <span class="project-stack ltr">Rust · Tauri v2 · Tokio Async</span>
+              </div>
+              <p>Lightweight native Windows download manager under 8 MB featuring segmented range downloads and clipboard sniffing.</p>
+              <div class="btn-row">
+                
+                
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/kite-downloader" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
-          </article><article class="project-row">
-            <div>
-              <h2>Interactive macOS &amp; iOS Portfolio</h2>
-              <span class="project-stack ltr">React 19 · Vite · Tailwind 4 · GSAP</span>
+          </article><article class="system-tile">
+            <div class="system-shot">
+              <img src="/mohsen-tech-blog/assets/shots/macos-portfolio.png" alt="Interactive macOS &amp; iOS Portfolio" width="800" height="500" loading="lazy" decoding="async">
+              <button type="button" class="shot-zoom-btn" data-lightbox-src="/mohsen-tech-blog/assets/shots/macos-portfolio.png" data-lightbox-alt="Interactive macOS &amp; iOS Portfolio" aria-label="Expand Interactive macOS & iOS Portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
             </div>
-            <p class="project-desc">Bilingual desktop and mobile operating-system portfolio featuring Finder, Safari case studies, zsh Terminal, Spotlight, and live GitHub telemetry.</p>
-            <div class="project-links">
-              <a class="btn-primary" href="https://mohsen-niksirat.github.io/Profile/" target="_blank" rel="noopener noreferrer">Live App</a>
-              <a class="btn-secondary" href="https://github.com/mohsen-niksirat/Profile" target="_blank" rel="noopener noreferrer">Source</a>
+            <div class="system-tile-body">
+              <div class="system-tile-head">
+                <h2>Interactive macOS &amp; iOS Portfolio</h2>
+                <span class="project-stack ltr">React 19 · Vite · Tailwind 4 · GSAP</span>
+              </div>
+              <p>Bilingual desktop and mobile operating-system portfolio featuring Finder, Safari case studies, zsh Terminal, Spotlight, and live GitHub telemetry.</p>
+              <div class="btn-row">
+                <a class="btn-primary btn-sm" href="https://mohsen-niksirat.github.io/Profile/" target="_blank" rel="noopener noreferrer">Live App</a>
+                
+                <a class="btn-secondary btn-sm" href="https://github.com/mohsen-niksirat/Profile" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </div>
           </article>
       </div>
@@ -240,6 +324,17 @@
         <button type="button" class="tool-btn" data-close-search>Esc</button>
       </div>
       <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <div class="lightbox-bar">
+        <p id="lightbox-caption"></p>
+        <button type="button" class="tool-btn" data-close-lightbox>Close (Esc)</button>
+      </div>
+      <img id="lightbox-img" alt="">
     </div>
   </div>
 

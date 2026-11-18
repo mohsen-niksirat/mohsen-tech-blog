@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>معماری درگاه چندسرویس‌دهنده هوش مصنوعی با Failover خودکار روی بستر Serverless | یادداشت‌های مهندسی محسن نیک‌سیرت</title>
+  <title>معماری درگاه چندسرویس‌دهنده هوش مصنوعی با Failover خودکار روی بستر Serverless | نشریه مهندسی محسن نیک‌سیرت</title>
   <meta name="description" content="چگونه در 9router و AIDahl کلیدهای Gemini، Groq، DeepSeek، OpenAI و OpenRouter با جایگزینی خودکار زیر ۲۰ میلی‌ثانیه هنگام خطای ۴۲۹، رمزنگاری AES-GCM و استریم ایمن تلگرام مدیریت می‌شوند.">
   <meta name="author" content="محسن نیک‌سیرت">
   <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/">
   <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/">
   <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/multi-provider-ai-gateway/">
-  <link rel="alternate" type="application/rss+xml" title="یادداشت‌های مهندسی محسن نیک‌سیرت" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="نشریه مهندسی محسن نیک‌سیرت" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/feed.xml">
 
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="یادداشت‌های مهندسی محسن نیک‌سیرت">
+  <meta property="og:site_name" content="نشریه مهندسی محسن نیک‌سیرت">
   <meta property="og:title" content="معماری درگاه چندسرویس‌دهنده هوش مصنوعی با Failover خودکار روی بستر Serverless">
   <meta property="og:description" content="چگونه در 9router و AIDahl کلیدهای Gemini، Groq، DeepSeek، OpenAI و OpenRouter با جایگزینی خودکار زیر ۲۰ میلی‌ثانیه هنگام خطای ۴۲۹، رمزنگاری AES-GCM و استریم ایمن تلگرام مدیریت می‌شوند.">
   <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/multi-provider-ai-gateway/">
@@ -30,7 +30,7 @@
   <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
 
   <script>
-    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
   </script>
   <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
   <script defer src="/mohsen-tech-blog/assets/app.js"></script>
@@ -46,12 +46,12 @@
         <span class="brand-mark" aria-hidden="true">MN</span>
         <span class="brand-text">
           <span class="brand-name">محسن نیک‌سیرت</span>
-          <span class="brand-sub">دفترچه مهندسی نرم‌افزار و هوش مصنوعی</span>
+          <span class="brand-sub">نشریه مهندسی نرم‌افزار و هوش مصنوعی</span>
         </span>
       </a>
 
       <nav class="primary-nav" aria-label="ناوبری اصلی">
-        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
+        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">گالری پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
       </nav>
 
       <div class="header-tools">
@@ -77,7 +77,7 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
       <nav aria-label="منوی موبایل">
-        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
+        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">گالری پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
       </nav>
     </div>
   </header>
@@ -99,62 +99,89 @@
         </div>
       </header>
 
+      <!-- Framed Real Project Cover Screenshot (R-40 hero <img> with fetchpriority="high") -->
+      <figure class="article-cover">
+        <div class="window-chrome">
+          <div class="chrome-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span class="chrome-url ltr">https://github.com/mohsen-niksirat/AIDahl</span>
+          <button type="button" class="chrome-zoom" data-lightbox-src="/mohsen-tech-blog/assets/shots/9router.webp" data-lightbox-alt="نمای سیستم درگاه چندسرویس‌دهنده 9router برای مدیریت و مسیریابی مدل‌های Gemini، Groq و DeepSeek." aria-label="بزرگنمایی تصویر"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
+        </div>
+        <img
+          src="/mohsen-tech-blog/assets/shots/9router.webp"
+          alt="نمای سیستم درگاه چندسرویس‌دهنده 9router برای مدیریت و مسیریابی مدل‌های Gemini، Groq و DeepSeek."
+          width="800"
+          height="450"
+          fetchpriority="high"
+        >
+        <figcaption>پلتفرم 9router و مینی‌اپ تلگرام برای چرخش هوشمند کلیدهای هوش مصنوعی</figcaption>
+      </figure>
+
       <div class="article-layout">
         <div class="prose">
           <p>وقتی یک محصول هوش مصنوعی را از مرحله دمو به استفاده روزمره کاربران واقعی می‌برید، دشوارترین چالش‌ها دیگر مهندسی پرامپت نیستند؛ بلکه پایداری سرویس‌های بالادستی است: خطاهای ناگهانی <code>HTTP 429</code> روی سهمیه‌های دقیقه‌ای، نوسان تأخیر منطقه‌ای، قطعی موقت سرورها و مسئولیت امنیتی نگهداری کلیدهای شخصی کاربران (BYOK).</p>
 <p>در جریان ساخت <strong><a href="https://github.com/mohsen-niksirat/9router_TG_Bot" target="_blank" rel="noopener noreferrer">9router</a></strong> (درگاه چندسرویس‌دهنده هوش مصنوعی و مینی‌اپ تلگرام) و <strong><a href="https://github.com/mohsen-niksirat/AIDahl" target="_blank" rel="noopener noreferrer">AIDahl</a></strong> (دستیار پژوهشی تلگرام بر پایه کلید شخصی کاربر)، به لایه‌ای نیاز داشتم که پنج اکوسیستم متفاوت (Gemini، Groq، DeepSeek، OpenAI و OpenRouter) را به یک استخر پردازشی واحد و مقاوم در برابر خطا تبدیل کند.</p>
-<figure class="schematic" role="group" aria-label="معماری درگاه چندسرویس‌دهنده هوش مصنوعی و مدیریت خطای ۴۲۹">
-  <svg viewBox="0 0 760 270" width="760" height="270" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
-    <rect x="1" y="1" width="758" height="268" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
-    <!-- Client Node -->
-    <rect x="26" y="92" width="144" height="86" rx="8" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
-    <text x="98" y="122" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="600">CLIENT / TMA</text>
-    <text x="98" y="142" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">SSE Stream +</text>
-    <text x="98" y="158" text-anchor="middle" fill="var(--text-muted)" font-family="var(--font-sans)" font-size="11">AES-GCM BYOK</text>
+<figure class="schematic" role="group" aria-label="شبیه‌ساز تعاملی درگاه 9router و مدیریت خطای ۴۲۹">
+  <div class="schematic-stage" data-gateway-sim data-fault="false">
+    <svg viewBox="0 0 820 295" width="820" height="295" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+      <rect x="20" y="90" width="166" height="114" rx="14" fill="var(--diag-node)" stroke="var(--border-strong)" stroke-width="1.5" />
+      <circle cx="44" cy="118" r="5" fill="var(--diag-cyan)" />
+      <text x="58" y="122" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">CLIENT / TMA</text>
+      <text x="40" y="148" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11.5">SSE Token Stream</text>
+      <rect x="40" y="164" width="126" height="26" rx="6" fill="var(--bg-surface)" stroke="var(--border)" />
+      <text x="103" y="181" text-anchor="middle" fill="var(--diag-cyan)" font-family="var(--font-mono)" font-size="10" font-weight="700">AES-256-GCM BYOK</text>
 
-    <!-- Connector Client -> Router -->
-    <line x1="170" y1="135" x2="246" y2="135" stroke="var(--text-muted)" stroke-width="1.5" />
-    <polygon points="246,135 238,130 238,140" fill="var(--text-muted)" />
+      <!-- Inbound Signal Wire -->
+      <line x1="186" y1="147" x2="270" y2="147" stroke="var(--border-strong)" stroke-width="2" />
+      <line x1="186" y1="147" x2="270" y2="147" stroke="var(--diag-cyan)" stroke-width="2.5" stroke-dasharray="8 7" class="flow-pulse" />
 
-    <!-- Router Core -->
-    <rect x="250" y="54" width="214" height="162" rx="10" fill="var(--bg-canvas)" stroke="var(--accent)" stroke-width="1.6" />
-    <text x="357" y="82" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">9ROUTER ENGINE</text>
-    <line x1="268" y1="94" x2="446" y2="94" stroke="var(--border)" />
-    <text x="357" y="116" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5" font-weight="600">Health-Weighted Pool</text>
-    <text x="357" y="136" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">1. Round-Robin / Latency</text>
-    <text x="357" y="154" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">2. 429 Cooldown + Jitter</text>
-    <text x="357" y="172" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">3. Auto Provider Failover</text>
-    <rect x="274" y="185" width="166" height="20" rx="4" fill="var(--accent-soft)" />
-    <text x="357" y="199" text-anchor="middle" fill="var(--accent)" font-family="var(--font-mono)" font-size="10" font-weight="600">failover &lt; 18ms overhead</text>
+      <!-- 9Router Core -->
+      <rect x="272" y="48" width="244" height="198" rx="16" fill="var(--diag-node)" stroke="var(--diag-cyan)" stroke-width="1.8" />
+      <text x="394" y="78" text-anchor="middle" fill="var(--diag-cyan)" font-family="var(--font-mono)" font-size="12" font-weight="700">9ROUTER SMART ENGINE</text>
+      <line x1="294" y1="92" x2="494" y2="92" stroke="var(--border)" />
+      <text x="394" y="116" text-anchor="middle" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="12" font-weight="600">EWMA Latency + Health Pool</text>
+      <text x="394" y="140" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">• Round-Robin / Smart Weight</text>
+      <text x="394" y="160" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">• HTTP 429 Cooldown + Jitter</text>
+      <text x="394" y="180" text-anchor="middle" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="10.5">• OpenAI / Gemini Adapter</text>
+      <rect x="304" y="198" width="180" height="28" rx="8" fill="var(--bg-surface)" stroke="var(--border-strong)" />
+      <text x="394" y="216" text-anchor="middle" fill="var(--diag-emerald)" font-family="var(--font-mono)" font-size="10.5" font-weight="700" data-gw-status>Active: Gemini 2.5 (14ms)</text>
 
-    <!-- Provider Pool -->
-    <path d="M464 102 C505 102, 505 56, 548 56" stroke="var(--accent)" stroke-width="1.5" />
-    <polygon points="548,56 540,52 540,60" fill="var(--accent)" />
+      <!-- Route Wires -->
+      <path data-gw-wire="gemini" d="M516 108 C560 108, 560 54, 606 54" stroke="var(--diag-emerald)" stroke-width="2.4" stroke-dasharray="7 7" class="flow-pulse" />
+      <path data-gw-wire="groq" d="M516 134 C560 134, 560 116, 606 116" stroke="var(--diag-rose)" stroke-width="1.6" stroke-dasharray="4 4" opacity="0.65" />
+      <path data-gw-wire="deepseek" d="M516 160 C560 160, 560 178, 606 178" stroke="var(--border-strong)" stroke-width="1.6" />
+      <path data-gw-wire="openrouter" d="M516 186 C560 186, 560 240, 606 240" stroke="var(--border-strong)" stroke-width="1.6" />
 
-    <path d="M464 124 C505 124, 505 108, 548 108" stroke="var(--text-muted)" stroke-width="1.3" stroke-dasharray="4 3" />
-    <path d="M464 146 C505 146, 505 160, 548 160" stroke="var(--accent)" stroke-width="1.5" />
-    <polygon points="548,160 540,156 540,164" fill="var(--accent)" />
-    <path d="M464 168 C505 168, 505 212, 548 212" stroke="var(--text-muted)" stroke-width="1.3" />
+      <!-- Upstream Nodes -->
+      <g data-gw-node="gemini">
+        <rect x="608" y="32" width="190" height="44" rx="10" fill="var(--diag-node)" stroke="var(--diag-emerald)" stroke-width="1.6" />
+        <circle cx="628" cy="54" r="5" fill="var(--diag-emerald)" />
+        <text x="642" y="58" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600" data-gw-gemini-txt>Gemini 2.5 · Healthy</text>
+      </g>
 
-    <!-- Upstream Cards -->
-    <rect x="552" y="36" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--accent)" />
-    <circle cx="570" cy="56" r="4.5" fill="var(--accent)" />
-    <text x="584" y="60" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">Gemini 2.5 · Healthy</text>
+      <rect x="608" y="94" width="190" height="44" rx="10" fill="var(--diag-node)" stroke="var(--diag-rose)" stroke-opacity="0.65" />
+      <circle cx="628" cy="116" r="5" fill="var(--diag-rose)" />
+      <text x="642" y="120" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="11">Groq · 429 Cooldown 30s</text>
 
-    <rect x="552" y="88" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--border)" opacity="0.72" />
-    <line x1="566" y1="104" x2="574" y2="112" stroke="var(--text-muted)" stroke-width="1.6" />
-    <line x1="574" y1="104" x2="566" y2="112" stroke="var(--text-muted)" stroke-width="1.6" />
-    <text x="584" y="112" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="11">Groq · 429 Cooldown 30s</text>
+      <g data-gw-node="deepseek">
+        <rect x="608" y="156" width="190" height="44" rx="10" fill="var(--diag-node)" stroke="var(--border-strong)" stroke-width="1.4" />
+        <circle cx="628" cy="178" r="5" fill="var(--diag-cyan)" />
+        <text x="642" y="182" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600" data-gw-ds-txt>DeepSeek V3 · Ready</text>
+      </g>
 
-    <rect x="552" y="140" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--accent)" />
-    <circle cx="570" cy="160" r="4.5" fill="var(--accent)" />
-    <text x="584" y="164" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11" font-weight="600">DeepSeek · Fallback #1</text>
+      <rect x="608" y="218" width="190" height="44" rx="10" fill="var(--diag-node)" stroke="var(--border-strong)" />
+      <circle cx="628" cy="240" r="5" fill="var(--diag-violet)" />
+      <text x="642" y="244" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="11">OpenRouter · Standby</text>
+    </svg>
 
-    <rect x="552" y="192" width="182" height="40" rx="6" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
-    <circle cx="570" cy="212" r="4" fill="var(--text-muted)" />
-    <text x="584" y="216" fill="var(--text-secondary)" font-family="var(--font-mono)" font-size="11">OpenRouter / OpenAI</text>
-  </svg>
-  <figcaption>شکل ۱: توپولوژی مسیریابی در 9router و AIDahl؛ کلیدهای دارای خطای ۴۲۹ وارد دوره استراحت می‌شوند و درخواست بدون قطعی روی سرویس‌دهنده سالم بعدی اجرا می‌گردد.</figcaption>
+    <div class="sim-controls">
+      <div class="sim-readout">
+        <span>وضعیت شبیه‌ساز روتینگ:</span>
+        <strong class="sim-badge ltr" data-gw-badge>سالم · Gemini 2.5 (14ms)</strong>
+      </div>
+      <button type="button" class="btn-secondary sim-action" data-gw-toggle>شبیه‌سازی خطای ۴۲۹ روی Gemini</button>
+    </div>
+  </div>
+  <figcaption>شکل ۱: شبیه‌ساز زنده مسیریابی در 9router و AIDahl؛ دکمه بالا را بزنید تا جابه‌جایی آنی ترافیک به DeepSeek پس از خطای ۴۲۹ را ببینید.</figcaption>
 </figure>
 <h2 id="sec-1">چرا اتصال مستقیم به یک سرویس‌دهنده زیر بار واقعی از کار می‌افتد؟</h2>
 <p>اغلب بات‌ها و ابزارهای ساده، ورودی کاربر را مستقیماً به یک کلید و یک نقطه اتصال می‌فرستند. این الگو در تست تکی عالی کار می‌کند، اما با ورود کاربران همزمان در سه نقطه متوقف می‌شود:</p>
@@ -257,7 +284,7 @@
             </div>
           </section>
 
-          <nav class="post-Matrix-nav" aria-label="مقاله قبلی و بعدی">
+          <nav class="post-matrix-nav" aria-label="مقاله قبلی و بعدی">
             <div></div>
             <a class="adj-link" href="/mohsen-tech-blog/fa/posts/fsrs-spaced-repetition-architecture/">
                     <span class="adj-dir">مقاله پیشین</span>
@@ -329,6 +356,17 @@
         <button type="button" class="tool-btn" data-close-search>بستن</button>
       </div>
       <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <div class="lightbox-bar">
+        <p id="lightbox-caption"></p>
+        <button type="button" class="tool-btn" data-close-lightbox>بستن (Esc)</button>
+      </div>
+      <img id="lightbox-img" alt="">
     </div>
   </div>
 

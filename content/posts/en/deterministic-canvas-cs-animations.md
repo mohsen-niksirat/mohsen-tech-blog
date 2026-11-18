@@ -20,7 +20,7 @@ When designing **[CodeVis](https://mohsen-niksirat.github.io/CodeVis/)** to teac
 
 ## Decoupling Execution from Rendering via Immutable Step Tapes
 
-The cleanest way to make any algorithm reversible is never to animate inside the algorithm itself. Instead, each algorithm runs synchronously to completion once on a small input ($N \le 32$), emitting an array of immutable **Step Snapshots**:
+The cleanest way to make any algorithm reversible is never to animate inside the algorithm itself. Instead, each algorithm runs synchronously to completion once on a small input (*N* ≤ 32), emitting an array of immutable **Step Snapshots**:
 
 ```javascript
 export function recordBinarySearch(sortedArray, target) {
@@ -61,7 +61,7 @@ export function recordBinarySearch(sortedArray, target) {
 Once `tape` exists in memory, the player UI becomes a pure function `render(tape[stepIndex], interpolationAlpha)`:
 
 * Clicking **Step Back** simply decrements `stepIndex` with zero state corruption.
-* Dragging the timeline scrubber jumps to any frame in $O(1)$ time.
+* Dragging the timeline scrubber jumps to any frame in `O(1)` time.
 * The code pane highlights `tape[stepIndex].line` and renders `tape[stepIndex].vars` in exact lockstep with the HTML5 Canvas drawing.
 
 ## Crisp High-DPI Canvas Rendering

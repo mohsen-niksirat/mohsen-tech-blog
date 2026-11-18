@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>اجرای ۶۰ فریم بازی بقای سه‌بعدی در مرورگر: چالش‌های خروجی WebAssembly در Godot 4 | یادداشت‌های مهندسی محسن نیک‌سیرت</title>
+  <title>اجرای ۶۰ فریم بازی بقای سه‌بعدی در مرورگر: چالش‌های خروجی WebAssembly در Godot 4 | نشریه مهندسی محسن نیک‌سیرت</title>
   <meta name="description" content="چگونه در Horde Survival 3D صدها دشمن سه‌بعدی، حلقه‌های پرتابه و باس چندفازی را درون بودجه ۱۶.۶ میلی‌ثانیه‌ای مرورگر نگه داشتم؛ به‌همراه مقایسه عملی با Unity و Kotlin.">
   <meta name="author" content="محسن نیک‌سیرت">
   <link rel="canonical" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/godot4-wasm-horde-survival/">
   <link rel="alternate" hreflang="fa" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/godot4-wasm-horde-survival/">
   <link rel="alternate" hreflang="en" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/posts/godot4-wasm-horde-survival/">
-  <link rel="alternate" type="application/rss+xml" title="یادداشت‌های مهندسی محسن نیک‌سیرت" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="نشریه مهندسی محسن نیک‌سیرت" href="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/feed.xml">
 
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="یادداشت‌های مهندسی محسن نیک‌سیرت">
+  <meta property="og:site_name" content="نشریه مهندسی محسن نیک‌سیرت">
   <meta property="og:title" content="اجرای ۶۰ فریم بازی بقای سه‌بعدی در مرورگر: چالش‌های خروجی WebAssembly در Godot 4">
   <meta property="og:description" content="چگونه در Horde Survival 3D صدها دشمن سه‌بعدی، حلقه‌های پرتابه و باس چندفازی را درون بودجه ۱۶.۶ میلی‌ثانیه‌ای مرورگر نگه داشتم؛ به‌همراه مقایسه عملی با Unity و Kotlin.">
   <meta property="og:url" content="https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/posts/godot4-wasm-horde-survival/">
@@ -30,7 +30,7 @@
   <link rel="manifest" href="/mohsen-tech-blog/manifest.webmanifest">
 
   <script>
-    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("data-theme","dark");}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
+    (function(){try{var t=localStorage.getItem("mtb-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}var s=localStorage.getItem("mtb-font-size");if(s&&s!=="md"){document.documentElement.setAttribute("data-font-size",s);}}catch(_){}})();
   </script>
   <link rel="stylesheet" href="/mohsen-tech-blog/assets/style.css">
   <script defer src="/mohsen-tech-blog/assets/app.js"></script>
@@ -46,12 +46,12 @@
         <span class="brand-mark" aria-hidden="true">MN</span>
         <span class="brand-text">
           <span class="brand-name">محسن نیک‌سیرت</span>
-          <span class="brand-sub">دفترچه مهندسی نرم‌افزار و هوش مصنوعی</span>
+          <span class="brand-sub">نشریه مهندسی نرم‌افزار و هوش مصنوعی</span>
         </span>
       </a>
 
       <nav class="primary-nav" aria-label="ناوبری اصلی">
-        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
+        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">گالری پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
       </nav>
 
       <div class="header-tools">
@@ -77,7 +77,7 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
       <nav aria-label="منوی موبایل">
-        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
+        <a class="nav-link" href="/mohsen-tech-blog/fa/" aria-current="page">مقالات</a><a class="nav-link" href="/mohsen-tech-blog/fa/notes/">یادداشت‌های فنی</a><a class="nav-link" href="/mohsen-tech-blog/fa/projects/">گالری پروژه‌ها</a><a class="nav-link" href="/mohsen-tech-blog/fa/archive/">آرشیو</a><a class="nav-link" href="/mohsen-tech-blog/fa/about/">درباره من</a>
       </nav>
     </div>
   </header>
@@ -99,50 +99,68 @@
         </div>
       </header>
 
+      <!-- Framed Real Project Cover Screenshot (R-40 hero <img> with fetchpriority="high") -->
+      <figure class="article-cover">
+        <div class="window-chrome">
+          <div class="chrome-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span class="chrome-url ltr">https://mohsen-niksirat.github.io/Horde_Survival_3D_Godot/</span>
+          <button type="button" class="chrome-zoom" data-lightbox-src="/mohsen-tech-blog/assets/shots/horde-survival-3d.webp" data-lightbox-alt="گیم‌پلی ۶۰ فریم بازی سه‌بعدی Horde Survival 3D اجراشده در مرورگر با WebGL 2." aria-label="بزرگنمایی تصویر"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg></button>
+        </div>
+        <img
+          src="/mohsen-tech-blog/assets/shots/horde-survival-3d.webp"
+          alt="گیم‌پلی ۶۰ فریم بازی سه‌بعدی Horde Survival 3D اجراشده در مرورگر با WebGL 2."
+          width="800"
+          height="403"
+          fetchpriority="high"
+        >
+        <figcaption>اجرای زنده بازی بقای سه‌بعدی Horde Survival 3D در مرورگر</figcaption>
+      </figure>
+
       <div class="article-layout">
         <div class="prose">
           <p>اجرای مستقیم روی سیستم‌عامل دسکتاپ بسیاری از سربارهای تخصیص حافظه را پنهان می‌کند؛ اما وقتی همان صحنه سه‌بعدی را به <strong>WebAssembly و WebGL 2</strong> کامپایل می‌کنید تا کاربر با یک کلیک روی GitHub Pages بازی کند، هر برخورد فیزیکی اضافه، ساخت نود جدید برای گلوله‌ها یا کامپایل دیرهنگام شیدر بلافاصله به شکل لگ و افت فریم دیده می‌شود.</p>
 <p>پروژه <strong><a href="https://mohsen-niksirat.github.io/Horde_Survival_3D_Godot/" target="_blank" rel="noopener noreferrer">Horde Survival 3D</a></strong> بخشی از یک سه‌گانه مهندسی شخصی است که در آن مکانیک‌های سبک بقای روگ‌لایت را موازی در سه پشته <strong>Godot 4 (تحت وب سه‌بعدی)</strong>، <strong>Unity (با C#)</strong> و <strong>اندروید نیتیو (Kotlin دوبعدی)</strong> پیاده‌سازی کردم. برای قفل شدن نرخ فریم نسخه وب روی ۶۰ فریم بر ثانیه، سه بخش اصلی موتور برخورد، چرخه عمر اشیاء و پیش‌گرمایش شیدرها را بازطراحی کردم.</p>
-<figure class="schematic" role="group" aria-label="شبکه مکانی برخورد و استخر اشیاء در خروجی WebAssembly موتور Godot 4">
-  <svg viewBox="0 0 760 240" width="760" height="240" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
-    <rect x="1" y="1" width="758" height="238" rx="10" fill="var(--bg-surface)" stroke="var(--border)" />
-    <!-- Spatial Grid -->
-    <g transform="translate(44, 30)">
-      <rect x="0" y="0" width="220" height="180" rx="6" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
-      <line x1="55" y1="0" x2="55" y2="180" stroke="var(--border)" />
-      <line x1="110" y1="0" x2="110" y2="180" stroke="var(--border)" />
-      <line x1="165" y1="0" x2="165" y2="180" stroke="var(--border)" />
-      <line x1="0" y1="45" x2="220" y2="45" stroke="var(--border)" />
-      <line x1="0" y1="90" x2="220" y2="90" stroke="var(--border)" />
-      <line x1="0" y1="135" x2="220" y2="135" stroke="var(--border)" />
-      <!-- Active 3x3 Query Neighborhood -->
-      <rect x="55" y="45" width="110" height="90" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5" />
-      <circle cx="110" cy="90" r="6" fill="var(--accent)" />
-      <circle cx="82" cy="68" r="3.5" fill="var(--text-primary)" />
-      <circle cx="142" cy="76" r="3.5" fill="var(--text-primary)" />
-      <circle cx="128" cy="116" r="3.5" fill="var(--text-primary)" />
-      <circle cx="24" cy="24" r="3.5" fill="var(--text-muted)" opacity="0.45" />
-      <circle cx="194" cy="156" r="3.5" fill="var(--text-muted)" opacity="0.45" />
-      <circle cx="188" cy="28" r="3.5" fill="var(--text-muted)" opacity="0.45" />
-    </g>
-    <!-- Right Panel: Frame Budget Breakdown -->
-    <rect x="308" y="30" width="410" height="180" rx="8" fill="var(--bg-canvas)" stroke="var(--border-strong)" />
-    <text x="330" y="58" fill="var(--text-primary)" font-family="var(--font-mono)" font-size="11.5" font-weight="700">16.6ms WASM FRAME BUDGET (60 FPS)</text>
-    <text x="330" y="88" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="11.5">Naive CharacterBody3D × 300 mobs (24.8ms · drops to 38 FPS)</text>
-    <rect x="330" y="96" width="356" height="14" rx="3" fill="var(--border)" />
-    <rect x="330" y="96" width="356" height="14" rx="3" fill="var(--text-muted)" opacity="0.55" />
+<figure class="schematic" role="group" aria-label="مقایسه بودجه فریم WebAssembly با شبکه مکانی در Godot 4">
+  <div class="schematic-stage">
+    <svg viewBox="0 0 820 250" width="820" height="250" fill="none" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+      <g transform="translate(36, 24)">
+        <rect x="0" y="0" width="240" height="202" rx="12" fill="var(--diag-node)" stroke="var(--border-strong)" />
+        <line x1="60" y1="0" x2="60" y2="202" stroke="var(--border)" />
+        <line x1="120" y1="0" x2="120" y2="202" stroke="var(--border)" />
+        <line x1="180" y1="0" x2="180" y2="202" stroke="var(--border)" />
+        <line x1="0" y1="50" x2="240" y2="50" stroke="var(--border)" />
+        <line x1="0" y1="101" x2="240" y2="101" stroke="var(--border)" />
+        <line x1="0" y1="152" x2="240" y2="152" stroke="var(--border)" />
+        <rect x="60" y="50" width="120" height="102" rx="4" fill="var(--diag-amber)" fill-opacity="0.16" stroke="var(--diag-amber)" stroke-width="1.8" />
+        <circle cx="120" cy="101" r="28" stroke="var(--diag-amber)" stroke-dasharray="4 3" />
+        <circle cx="120" cy="101" r="6.5" fill="var(--diag-amber)" />
+        <circle cx="96" cy="82" r="4" fill="var(--diag-cyan)" />
+        <circle cx="148" cy="92" r="4" fill="var(--diag-cyan)" />
+        <circle cx="136" cy="126" r="4" fill="var(--diag-cyan)" />
+        <circle cx="28" cy="28" r="3.5" fill="var(--text-muted)" opacity="0.45" />
+        <circle cx="208" cy="176" r="3.5" fill="var(--text-muted)" opacity="0.45" />
+        <circle cx="204" cy="34" r="3.5" fill="var(--text-muted)" opacity="0.45" />
+      </g>
 
-    <text x="330" y="138" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="11.5" font-weight="600">Spatial Hash + Squared-Distance Pool (6.1ms · locked 60 FPS)</text>
-    <rect x="330" y="146" width="356" height="14" rx="3" fill="var(--border)" />
-    <rect x="330" y="146" width="132" height="14" rx="3" fill="var(--accent)" />
+      <rect x="312" y="24" width="472" height="202" rx="14" fill="var(--diag-node)" stroke="var(--border-strong)" />
+      <text x="338" y="58" fill="var(--diag-amber)" font-family="var(--font-mono)" font-size="12" font-weight="700">16.6ms BROWSER WASM BUDGET (LOCKED 60 FPS)</text>
 
-    <text x="330" y="188" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="10.5">Zero GC allocations per wave · Pre-warmed WebGL shaders</text>
-  </svg>
-  <figcaption>شکل ۱: بررسی همسایگی ۳×۳ در شبکه مکانی به‌جای مقایسه دوبه‌دوی تمام دشمنان، زمان فیزیک هر فریم را به ۶.۱ میلی‌ثانیه کاهش می‌دهد.</figcaption>
+      <text x="338" y="94" fill="var(--text-secondary)" font-family="var(--font-sans)" font-size="12">Naive CharacterBody3D × 300 enemies · 24.8ms (Drops to 38 FPS)</text>
+      <rect x="338" y="104" width="416" height="16" rx="5" fill="var(--bg-surface)" />
+      <rect x="338" y="104" width="416" height="16" rx="5" fill="var(--diag-rose)" opacity="0.82" />
+
+      <text x="338" y="150" fill="var(--text-primary)" font-family="var(--font-sans)" font-size="12" font-weight="600">Spatial Grid 3×3 + Ring-Buffer Pool · 6.1ms (Locked 60 FPS)</text>
+      <rect x="338" y="160" width="416" height="16" rx="5" fill="var(--bg-surface)" />
+      <rect x="338" y="160" width="154" height="16" rx="5" fill="var(--diag-emerald)" />
+
+      <text x="338" y="204" fill="var(--text-muted)" font-family="var(--font-mono)" font-size="11">0 GC spikes · Pre-warmed WebGL 2 particle shaders</text>
+    </svg>
+  </div>
+  <figcaption>شکل ۱: جستجوی همسایگی ۳×۳ در شبکه مکانی به همراه استخر اشیاء، زمان شبیه‌سازی هر فریم را از ۲۴.۸ به ۶.۱ میلی‌ثانیه رساند.</figcaption>
 </figure>
 <h2 id="sec-1">جایگزینی فیزیک سنگین سه‌بعدی با شبکه هش مکانی (Spatial Grid)</h2>
 <p>در اوج موج‌های بازی، بیش از ۲۵۰ دشمن همزمان به سمت بازیکن حرکت می‌کنند و تیغه‌های چرخان و پرتابه‌های انفجاری از میان آن‌ها عبور می‌کنند. استفاده از <code>CharacterBody3D</code> و تابع <code>move_and_slide()</code> برای تک‌تک دشمنان باعث می‌شود موتور فیزیک در هر فریم هزاران برخورد کپسولی سه‌بعدی را حل کند.</p>
-<p>از آنجا که منطق گیم‌پلی روی صفحه افقی $XZ$ جریان دارد، جداسازی دشمنان و تشخیص اصابت پرتابه‌ها را به یک شبکه مکانی یکنواخت با بررسی مجذور فاصله منتقل کردم:</p>
+<p>از آنجا که منطق گیم‌پلی روی صفحه افقی <code>XZ</code> جریان دارد، جداسازی دشمنان و تشخیص اصابت پرتابه‌ها را به یک شبکه مکانی یکنواخت با بررسی مجذور فاصله منتقل کردم:</p>
 <div class="code-block">
         <div class="code-head"><span>GDSCRIPT</span><button type="button" class="copy-btn" data-copy-code>کپی کد</button></div>
         <pre><code>class_name SpatialGrid
@@ -183,7 +201,7 @@
       </div>
 <p>فشرده‌سازی مختصات سلول در یک عدد صحیح ۳۲ بیتی از ساخت رشته‌های موقت در هر فریم جلوگیری می‌کند و استفاده از <code>distance_squared_to</code> عملیات ریشه‌گیری (جذر) را کاملاً حذف می‌نماید.</p>
 <h2 id="sec-2">استخر اشیاء (Object Pooling) برای پرتابه‌ها و کریستال‌های امتیاز</h2>
-<p>ساخت و حذف مداوم نودها با <code>instantiate()</code> و <code>queue_free()</code> در موج‌های شلوغ باعث پرش زمان فریم می‌شود. با پیش‌تخصیص آرایه ثابتی از پرتابه‌ها، آیتم‌های XP و اعداد آسیب در ابتدای بارگذاری صحنه، شلیک هر گلوله به یک جابه‌جایی شاخص $O(1)$ تبدیل شد و مصرف حافظه از دقیقه اول تا مبارزه با باس سه‌فازی کاملاً خطی و ثابت باقی ماند.</p>
+<p>ساخت و حذف مداوم نودها با <code>instantiate()</code> و <code>queue_free()</code> در موج‌های شلوغ باعث پرش زمان فریم می‌شود. با پیش‌تخصیص آرایه ثابتی از پرتابه‌ها، آیتم‌های XP و اعداد آسیب در ابتدای بارگذاری صحنه، شلیک هر گلوله به یک جابه‌جایی شاخص <code>O(1)</code> تبدیل شد و مصرف حافظه از دقیقه اول تا مبارزه با باس سه‌فازی کاملاً خطی و ثابت باقی ماند.</p>
 <h2 id="sec-3">حذف مکث کامپایل شیدر در WebGL 2</h2>
 <p>در مرورگرها، شیدرهای WebGL 2 معمولاً اولین باری که یک متریال یا افکت ذره‌ای وارد کادر دوربین می‌شود کامپایل می‌گردند و مکثی حدود ۱۲۰ میلی‌ثانیه ایجاد می‌کنند. با قرار دادن یک نوار مخفی پیش‌گرمایش پشت منوی شروع (شامل نمونه‌های کوچک از متریال‌های انفجار و هاله سلاح‌ها)، کامپایل شیدرها پیش از شروع موج اول انجام می‌شود.</p>
 <h2 id="sec-4">مقایسه عملی Godot 4، Unity و Kotlin</h2>
@@ -201,7 +219,7 @@
             </div>
           </section>
 
-          <nav class="post-Matrix-nav" aria-label="مقاله قبلی و بعدی">
+          <nav class="post-matrix-nav" aria-label="مقاله قبلی و بعدی">
             <a class="adj-link" href="/mohsen-tech-blog/fa/posts/browser-only-developer-tools/">
                     <span class="adj-dir">مقاله جدیدتر</span>
                     <span class="adj-title">ابزارهای توسعه‌دهنده بدون سرور: تحلیل مخزن‌های گیت‌هاب و داده‌ها کاملاً درون مرورگر</span>
@@ -276,6 +294,17 @@
         <button type="button" class="tool-btn" data-close-search>بستن</button>
       </div>
       <ul class="dialog-results" id="search-modal-results"></ul>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <div class="lightbox-bar">
+        <p id="lightbox-caption"></p>
+        <button type="button" class="tool-btn" data-close-lightbox>بستن (Esc)</button>
+      </div>
+      <img id="lightbox-img" alt="">
     </div>
   </div>
 

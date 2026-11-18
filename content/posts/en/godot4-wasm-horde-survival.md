@@ -22,7 +22,7 @@ Desktop game engines forgive a surprising amount of allocation sloppiness. Compi
 
 In a horde roguelite, 250+ enemies converge continuously on the player while orbital blades, area pulses, and ricochet projectiles sweep through the crowd. Attaching a full `CharacterBody3D` with `move_and_slide()` to every enemy forces the 3D physics server to resolve thousands of convex capsule contacts per frame.
 
-Because combat takes place on a mostly planar arena ($XZ$ plane with visual height variation), enemy separation and projectile hit detection only need 2D uniform spatial hashing with squared-distance checks:
+Because combat takes place on a mostly planar arena (*XZ* plane with visual height variation), enemy separation and projectile hit detection only need 2D uniform spatial hashing with squared-distance checks:
 
 ```gdscript
 class_name SpatialGrid
@@ -68,7 +68,7 @@ Packing cell coordinates into a single 32-bit integer key avoids string allocati
 
 Spawning and freeing scene-tree nodes (`instantiate()` + `queue_free()`) during late-game waves creates frame-time spikes when hundreds of XP crystals and damage numbers appear simultaneously.
 
-Pre-allocating fixed pools at scene boot (for projectiles, XP pickups, and floating combat text) turns spawning into an $O(1)$ index increment. Inactive instances simply toggle `visible = false` and park outside the camera frustum, keeping memory flat from minute one through the three-phase boss encounter.
+Pre-allocating fixed pools at scene boot (for projectiles, XP pickups, and floating combat text) turns spawning into an `O(1)` index increment. Inactive instances simply toggle `visible = false` and park outside the camera frustum, keeping memory flat from minute one through the three-phase boss encounter.
 
 ## Eliminating First-Hit Shader Stutter in WebGL 2
 
