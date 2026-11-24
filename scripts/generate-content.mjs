@@ -418,7 +418,7 @@ function loadPosts(locale) {
       pullQuote: pullQuote || meta.subtitle || meta.description || "",
       headings,
       html,
-      plainText: body.replace(/```[\s\S]*?```/g, " ").replace(/[#>*`[\]()]/g, " ").replace(/\s+/g, " ").trim(),
+      plainText: body.replace(/```[\s\S]*?```/g, " ").replace(/\{\{[^}]+\}\}/g, " ").replace(/[#>*`[\]()]/g, " ").replace(/\s+/g, " ").trim(),
     };
   });
   return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
