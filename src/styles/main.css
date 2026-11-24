@@ -922,6 +922,304 @@ html[dir="rtl"] .pull-quote {
   align-items: center;
 }
 
+/* ─── Section B: Fixed Full-Viewport Ambient 3D Canvas ─────────────── */
+.ambient-canvas-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 600ms ease;
+}
+
+.ambient-canvas-layer canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.page-shell,
+.site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── C1: Branded Volt-Lime Loader (<= 1.2s, skippable) ────────────── */
+.brand-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: var(--accent);
+  color: #111112;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  transition: transform 420ms cubic-bezier(0.76, 0, 0.24, 1), opacity 320ms ease;
+}
+
+.brand-loader.is-done {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.brand-loader__mono {
+  font-size: clamp(3.5rem, 10vw, 7rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.brand-loader__counter {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.brand-loader__skip {
+  margin-top: 0.75rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(17, 17, 18, 0.35);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: #111112;
+}
+
+/* ─── C6: Route Transition Curtain (<= 420ms) ──────────────────────── */
+.route-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 950;
+  background: var(--accent);
+  color: #111112;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  transform: translateY(100%);
+  pointer-events: none;
+  transition: transform 210ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.route-curtain.is-in {
+  transform: translateY(0%);
+}
+
+.route-curtain.is-out {
+  transform: translateY(-100%);
+}
+
+/* ─── C2: Topic Ticker under Hero ──────────────────────────────────── */
+.topic-ticker {
+  overflow: hidden;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(17, 17, 18, 0.88);
+  padding-block: 0.95rem;
+}
+
+.topic-ticker__track {
+  display: flex;
+  gap: 2.5rem;
+  width: max-content;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  color: var(--ink-muted);
+  animation: ticker-scroll 26s linear infinite;
+}
+
+.topic-ticker:hover .topic-ticker__track {
+  animation-play-state: paused;
+}
+
+.topic-ticker__track span strong {
+  color: var(--accent);
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ─── C3: Custom Cursor (Desktop fine-pointer only) ────────────────── */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  pointer-events: none;
+  z-index: 900;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 200ms ease, width 180ms ease, height 180ms ease, border-color 180ms ease;
+}
+
+.cursor-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  margin: -3.5px 0 0 -3.5px;
+}
+
+.cursor-ring {
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid rgba(210, 255, 0, 0.55);
+  margin: -15px 0 0 -15px;
+}
+
+.cursor-ring.is-hover {
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  border-color: var(--accent);
+}
+
+/* ─── C4: Card Radial Spotlight + Image Desat -> Color Hover ───────── */
+.journal-card,
+.essay-card,
+.note-card,
+.centerpiece-step {
+  position: relative;
+  background: rgba(25, 26, 24, 0.92);
+}
+
+.journal-card::before,
+.essay-card::before,
+.note-card::before,
+.centerpiece-step::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(210, 255, 0, 0.35), transparent 70%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.journal-card:hover::before,
+.essay-card:hover::before,
+.note-card:hover::before,
+.centerpiece-step:hover::before {
+  opacity: 1;
+}
+
+.journal-card__media img {
+  filter: saturate(0.28) contrast(1.06);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), filter 380ms ease;
+}
+
+.journal-card:hover .journal-card__media img {
+  filter: saturate(1) contrast(1);
+  transform: scale(1.04);
+}
+
+/* ─── C5: Editorial Statement + Giant Outline Words ────────────────── */
+.statement-section {
+  position: relative;
+  padding-block: clamp(4.5rem, 11vh, 8rem);
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(17, 17, 18, 0.86);
+  overflow: hidden;
+}
+
+.statement-text {
+  max-width: 24ch;
+  font-size: clamp(1.9rem, 4.2vw, 3.6rem);
+  line-height: 1.18;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 1rem 0 2rem;
+}
+
+html[dir="rtl"] .statement-text {
+  letter-spacing: 0;
+  line-height: 1.38;
+}
+
+.statement-text span {
+  display: block;
+}
+
+.statement-text .accent-word {
+  color: var(--accent);
+}
+
+.outline-bg-word {
+  position: absolute;
+  inset-block-start: 0.5rem;
+  inset-inline-end: -2vw;
+  font-size: clamp(5rem, 16vw, 15rem);
+  font-weight: 900;
+  line-height: 0.85;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(210, 255, 0, 0.1);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* ─── C7: Filmic Grain & Soft Vignette (Homepage Only) ─────────────── */
+.filmic-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.032;
+  background-image: radial-gradient(rgba(244, 244, 237, 0.65) 0.6px, transparent 0.6px);
+  background-size: 4px 4px;
+}
+
+.filmic-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, transparent 62%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+/* ─── C8: Giant Footer Wordmark ────────────────────────────────────── */
+.site-footer {
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+.footer-wordmark {
+  margin-top: 2.5rem;
+  font-size: clamp(3.4rem, 11.5vw, 11rem);
+  font-weight: 900;
+  line-height: 0.78;
+  letter-spacing: -0.045em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(210, 255, 0, 0.42);
+  text-align: center;
+  user-select: none;
+  transform: translateY(14%);
+  transition: color 300ms ease, -webkit-text-stroke-color 300ms ease;
+}
+
+html[dir="rtl"] .footer-wordmark {
+  letter-spacing: 0;
+  line-height: 1.05;
+  transform: translateY(8%);
+}
+
+.footer-wordmark:hover {
+  color: var(--accent);
+  -webkit-text-stroke-color: var(--accent);
+}
+
 /* ─── Responsive & Reduced Motion ──────────────────────────────────── */
 @media (max-width: 1023px) {
   .site-nav {

@@ -2,7 +2,7 @@ import "./styles/main.css";
 import contentData from "./data/content.json";
 import { initPageMotion, type MotionHandle } from "./motion/choreography";
 import type { HeroRevealHandle } from "./webgl/HeroSliceReveal";
-import type { CenterpieceHandle } from "./webgl/ScrollCenterpiece";
+import type { AmbientSceneHandle } from "./webgl/AmbientScene";
 
 type Locale = "en" | "fa";
 
@@ -71,15 +71,113 @@ const routeUrl = (sub: string) => `${BASE}${sub.replace(/^\/+/, "")}`;
 
 const app = document.getElementById("app")!;
 let activeHero: HeroRevealHandle | null = null;
-let activeCenterpiece: CenterpieceHandle | null = null;
+let ambientScene: AmbientSceneHandle | null = null;
 let activeMotion: MotionHandle | null = null;
 let scrollCleanup: (() => void) | null = null;
+
+// Persistent layers (fixed ambient 3D background + route curtain + custom cursor)
+const ambientHost = document.createElement("div");
+ambientHost.className = "ambient-canvas-layer";
+ambientHost.setAttribute("aria-hidden", "true");
+document.body.prepend(ambientHost);
+
+const curtain = document.createElement("div");
+curtain.className = "route-curtain";
+curtain.setAttribute("aria-hidden", "true");
+curtain.textContent = "MN";
+document.body.appendChild(curtain);
+
+function initCustomCursor() {
+  const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!fine || reduced) return;
+  const dot = document.createElement("div");
+  dot.className = "cursor-dot";
+  const ring = document.createElement("div");
+  ring.className = "cursor-ring";
+  document.body.append(dot, ring);
+
+  let mx = 0;
+  let my = 0;
+  let rx = 0;
+  let ry = 0;
+  let shown = false;
+
+  window.addEventListener(
+    "pointermove",
+    (e) => {
+      mx = e.clientX;
+      my = e.clientY;
+      dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+      if (!shown) {
+        shown = true;
+        dot.style.opacity = "1";
+        ring.style.opacity = "1";
+      }
+      const hoverEl = (e.target as HTMLElement | null)?.closest("a, button, .journal-card, .essay-card");
+      ring.classList.toggle("is-hover", Boolean(hoverEl));
+    },
+    { passive: true }
+  );
+
+  const loop = () => {
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
+    ring.style.transform = `translate3d(${rx.toFixed(1)}px, ${ry.toFixed(1)}px, 0)`;
+    requestAnimationFrame(loop);
+  };
+  loop();
+}
+
+function runBrandedLoader() {
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduced || sessionStorage.getItem("mn_loaded") === "1") return;
+  sessionStorage.setItem("mn_loaded", "1");
+
+  const loader = document.createElement("div");
+  loader.className = "brand-loader";
+  loader.innerHTML = `
+    <div class="brand-loader__mono">MN</div>
+    <div class="brand-loader__counter" data-loader-num>00</div>
+    <button type="button" class="brand-loader__skip" data-loader-skip>SKIP</button>
+  `;
+  document.body.appendChild(loader);
+
+  const numEl = loader.querySelector<HTMLElement>("[data-loader-num]");
+  let finished = false;
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    loader.classList.add("is-done");
+    setTimeout(() => loader.remove(), 460);
+  };
+
+  loader.querySelector("[data-loader-skip]")?.addEventListener("click", finish);
+  loader.addEventListener("click", finish);
+  const start = performance.now();
+  const duration = 820;
+  const step = (now: number) => {
+    if (finished) return;
+    const p = Math.min(1, (now - start) / duration);
+    if (numEl) numEl.textContent = String(Math.round(p * 100)).padStart(2, "0");
+    if (p < 1) requestAnimationFrame(step);
+    else finish();
+  };
+  requestAnimationFrame(step);
+  setTimeout(finish, 1150);
+}
+
+void import("./webgl/AmbientScene").then(({ mountAmbientScene }) => {
+  ambientScene = mountAmbientScene(ambientHost);
+  const { route } = parseRoute(window.location.pathname);
+  ambientScene?.setRouteMode(route === "home" ? "home" : route === "essay" ? "essay" : "other");
+});
+initCustomCursor();
+runBrandedLoader();
 
 function cleanupActive() {
   activeHero?.destroy();
   activeHero = null;
-  activeCenterpiece?.destroy();
-  activeCenterpiece = null;
   activeMotion?.destroy();
   activeMotion = null;
   scrollCleanup?.();
@@ -188,6 +286,7 @@ function renderShell(locale: Locale, route: string, mainHtml: string, showProgre
         </div>
       </div>
     </div>
+    ${route === "home" ? `<div class="filmic-overlay" aria-hidden="true"></div><div class="filmic-vignette" aria-hidden="true"></div>` : ""}
     <footer class="site-footer">
       <div class="container site-footer__inner">
         <div>
@@ -199,6 +298,7 @@ function renderShell(locale: Locale, route: string, mainHtml: string, showProgre
           <a href="${asset(fa ? "assets/files/mohsen-niksirat-resume-fa.pdf" : "assets/files/mohsen-niksirat-resume.pdf")}" target="_blank" rel="noopener noreferrer" class="pill-btn">${fa ? "رزومه PDF" : "Resume PDF"}</a>
         </div>
       </div>
+      <div class="footer-wordmark" aria-hidden="true">${fa ? "محسن نیک‌سیرت" : "MOHSEN NIKSIRAT"}</div>
     </footer>
   `;
 }
@@ -252,42 +352,62 @@ function renderHome(locale: Locale): string {
       </div>
     </section>
 
-    <section class="centerpiece-section" data-centerpiece-section>
+    <section class="topic-ticker" aria-label="${fa ? "حوزه‌های تخصصی" : "Engineering topics"}">
+      <div class="topic-ticker__track">
+        <span><strong>FSRS</strong> · AI GATEWAYS · <strong>WEBASSEMBLY</strong> · LOCAL-FIRST · <strong>GODOT 4</strong> · MCP STUDIO · <strong>TYPESCRIPT</strong> · RUST TAURI ·</span>
+        <span><strong>FSRS</strong> · AI GATEWAYS · <strong>WEBASSEMBLY</strong> · LOCAL-FIRST · <strong>GODOT 4</strong> · MCP STUDIO · <strong>TYPESCRIPT</strong> · RUST TAURI ·</span>
+      </div>
+    </section>
+
+    <section class="statement-section" data-statement-section>
+      <div class="outline-bg-word" data-outline-drift aria-hidden="true">ESSAYS</div>
       <div class="container">
+        <span class="eyebrow">${fa ? "بیانیه مهندسی" : "ENGINEERING STATEMENT"}</span>
+        <p class="statement-text">
+          ${
+            fa
+              ? `<span data-statement-line>ساخت نرم‌افزارهایی که <span class="accent-word">سریع، آفلاین و قابل‌اعتماد</span> هستند —</span><span data-statement-line>از درگاه‌های هوش مصنوعی تا بازی‌های WebAssembly.</span>`
+              : `<span data-statement-line>Software that runs <span class="accent-word">fast, local-first, and deterministic</span> —</span><span data-statement-line>from multi-provider AI gateways to 60fps WebAssembly engines.</span>`
+          }
+        </p>
+        <a href="${p}/about" data-link class="pill-btn">${fa ? "بیشتر درباره من" : "ABOUT & RESUME →"}</a>
+      </div>
+    </section>
+
+    <section class="centerpiece-section" data-centerpiece-section>
+      <div class="container" style="position:relative">
+        <div class="outline-bg-word" data-outline-drift aria-hidden="true">SYSTEMS</div>
         <div class="section-head">
           <div>
-            <span class="eyebrow">${fa ? "فصل تعاملی سه‌بعدی (شبیه‌سازی‌شده)" : "SCROLL-SCRUBBED 3D ARCHITECTURE (SIMULATED)"}</span>
+            <span class="eyebrow">${fa ? "معماری زنده در پس‌زمینه (شبیه‌سازی‌شده)" : "AMBIENT 3D ARCHITECTURE (SIMULATED)"}</span>
             <h2>${fa ? "مقالات شاخص مهندسی" : "Featured Engineering Essays"}</h2>
           </div>
           <a href="${p}/essays" data-link class="pill-btn">${fa ? "همه ۶ مقاله" : "ALL 6 ESSAYS"}</a>
         </div>
-        <div class="centerpiece-grid">
-          <div class="centerpiece-stage" data-centerpiece-stage>
-            <div class="centerpiece-badge"
-                 data-centerpiece-badge
-                 data-label0="${fa ? "شبیه‌سازی‌شده · ۰۱ · توپولوژی درگاه AI" : "SIMULATED · 01 · AI GATEWAY TOPOLOGY"}"
-                 data-label1="${fa ? "شبیه‌سازی‌شده · ۰۲ · منحنی حافظه FSRS" : "SIMULATED · 02 · FSRS MEMORY CURVE"}"
-                 data-label2="${fa ? "شبیه‌سازی‌شده · ۰۳ · آرنا سه‌بعدی Godot 4" : "SIMULATED · 03 · GODOT 4 HORDE ARENA"}">
-              ${fa ? "شبیه‌سازی‌شده · ۰۱ · توپولوژی درگاه AI" : "SIMULATED · 01 · AI GATEWAY TOPOLOGY"}
-            </div>
+        <div class="centerpiece-steps">
+          <div class="centerpiece-badge"
+               style="position:static;display:inline-flex;align-self:flex-start;margin-bottom:0.5rem"
+               data-centerpiece-badge
+               data-label0="${fa ? "شبیه‌سازی‌شده · ۰۱ · توپولوژی درگاه AI" : "SIMULATED · 01 · AI GATEWAY TOPOLOGY"}"
+               data-label1="${fa ? "شبیه‌سازی‌شده · ۰۲ · منحنی حافظه FSRS" : "SIMULATED · 02 · FSRS MEMORY CURVE"}"
+               data-label2="${fa ? "شبیه‌سازی‌شده · ۰۳ · آرنا سه‌بعدی Godot 4" : "SIMULATED · 03 · GODOT 4 HORDE ARENA"}">
+            ${fa ? "شبیه‌سازی‌شده · ۰۱ · توپولوژی درگاه AI" : "SIMULATED · 01 · AI GATEWAY TOPOLOGY"}
           </div>
-          <div class="centerpiece-steps">
-            ${featured
-              .map(
-                (post, idx) => `
-              <article class="centerpiece-step ${idx === 0 ? "is-active" : ""}" data-centerpiece-step>
-                <div class="essay-card__meta">
-                  <span>0${idx + 1} · ${post.dateFormatted}</span>
-                  <span>${post.readingLabel}</span>
-                </div>
-                <h3>${post.title}</h3>
-                <p>${post.subtitle}</p>
-                <a href="${p}/essays/${post.slug}" data-link class="pill-btn">${fa ? "خواندن مقاله" : "READ ESSAY"}</a>
-              </article>
-            `
-              )
-              .join("")}
-          </div>
+          ${featured
+            .map(
+              (post, idx) => `
+            <article class="centerpiece-step ${idx === 0 ? "is-active" : ""}" data-centerpiece-step>
+              <div class="essay-card__meta">
+                <span>0${idx + 1} · ${post.dateFormatted}</span>
+                <span>${post.readingLabel}</span>
+              </div>
+              <h3>${post.title}</h3>
+              <p>${post.subtitle}</p>
+              <a href="${p}/essays/${post.slug}" data-link class="pill-btn">${fa ? "خواندن مقاله" : "READ ESSAY"}</a>
+            </article>
+          `
+            )
+            .join("")}
         </div>
       </div>
     </section>
@@ -635,23 +755,13 @@ async function mountInteractive(route: string, locale: Locale) {
     }
   }
 
-  // Lazy-load 3D Scroll Centerpiece
-  if (route === "home") {
-    const stage = document.querySelector<HTMLElement>("[data-centerpiece-stage]");
-    if (stage) {
-      try {
-        const { mountScrollCenterpiece } = await import("./webgl/ScrollCenterpiece");
-        activeCenterpiece = mountScrollCenterpiece(stage);
-      } catch (err) {
-        console.warn("[ScrollCenterpiece] WebGL unavailable:", err);
-      }
-    }
-  }
+  // Update persistent ambient 3D background mode
+  ambientScene?.setRouteMode(route === "home" ? "home" : route === "essay" ? "essay" : "other");
 
   if (prefersReduced) {
-    console.info("[Motion] prefers-reduced-motion active — Lenis & ScrollTrigger pin disabled");
+    console.info("[Motion] prefers-reduced-motion active — Lenis disabled, ambient 3D static frame");
   }
-  activeMotion = initPageMotion(activeCenterpiece);
+  activeMotion = initPageMotion(ambientScene);
 
   // Reading progress bar on article pages
   const fill = document.querySelector<HTMLElement>("[data-reading-fill]");
@@ -749,11 +859,25 @@ document.addEventListener("click", (e) => {
   if (!link) return;
   if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   e.preventDefault();
-  const href = link.getAttribute("href") || "/";
-  if (href !== window.location.pathname) {
+  const href = link.getAttribute("href") || BASE;
+  if (href === window.location.pathname) return;
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduced) {
     window.history.pushState({}, "", href);
+    renderCurrentRoute();
+    return;
   }
-  renderCurrentRoute();
+
+  curtain.classList.remove("is-out");
+  curtain.classList.add("is-in");
+  setTimeout(() => {
+    window.history.pushState({}, "", href);
+    renderCurrentRoute();
+    curtain.classList.remove("is-in");
+    curtain.classList.add("is-out");
+    setTimeout(() => curtain.classList.remove("is-out"), 210);
+  }, 190);
 });
 
 window.addEventListener("popstate", renderCurrentRoute);

@@ -1,7 +1,7 @@
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import type { CenterpieceHandle } from "../webgl/ScrollCenterpiece";
+import type { AmbientSceneHandle } from "../webgl/AmbientScene";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,16 +9,18 @@ export interface MotionHandle {
   destroy: () => void;
 }
 
-export function initPageMotion(centerpiece: CenterpieceHandle | null): MotionHandle {
+export function initPageMotion(ambient: AmbientSceneHandle | null): MotionHandle {
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   let lenis: Lenis | null = null;
   let tickerFn: ((time: number) => void) | null = null;
+  const cleanups: Array<() => void> = [];
 
   if (!prefersReduced) {
     lenis = new Lenis({
-      duration: 1.05,
+      duration: 0.95,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
@@ -30,45 +32,71 @@ export function initPageMotion(centerpiece: CenterpieceHandle | null): MotionHan
     gsap.ticker.lagSmoothing(0);
   }
 
-  const ctx = gsap.context(() => {
-    // Pinned scroll-scrubbed 3D centerpiece chapter on desktop
-    const section = document.querySelector<HTMLElement>("[data-centerpiece-section]");
-    const steps = Array.from(document.querySelectorAll<HTMLElement>("[data-centerpiece-step]"));
+  // Feed 1:1 scroll progress to Ambient 3D background (ZERO pinning!)
+  const onScroll = () => {
+    const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+    const p = Math.min(1, Math.max(0, window.scrollY / max));
+    ambient?.setScrollProgress(p);
+
+    const steps = document.querySelectorAll<HTMLElement>("[data-centerpiece-step]");
     const badge = document.querySelector<HTMLElement>("[data-centerpiece-badge]");
+    if (steps.length) {
+      const idx = p < 0.35 ? 0 : p < 0.65 ? 1 : 2;
+      steps.forEach((el, i) => el.classList.toggle("is-active", i === idx));
+      if (badge) {
+        const labels = [badge.dataset.label0, badge.dataset.label1, badge.dataset.label2];
+        if (labels[idx]) badge.textContent = labels[idx]!;
+      }
+    }
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  cleanups.push(() => window.removeEventListener("scroll", onScroll));
 
-    if (section && centerpiece && !prefersReduced) {
-      const labels = [
-        badge?.dataset.label0 || "01 · AI GATEWAY TOPOLOGY",
-        badge?.dataset.label1 || "02 · FSRS MEMORY CURVE",
-        badge?.dataset.label2 || "03 · GODOT 4 HORDE ARENA",
-      ];
+  const ctx = gsap.context(() => {
+    if (prefersReduced) return;
 
-      ScrollTrigger.create({
-        trigger: section,
-        start: isDesktop ? "top 88px" : "top 75%",
-        end: isDesktop ? "+=1100" : "bottom 35%",
-        pin: isDesktop,
-        scrub: 0.8,
-        onUpdate(self) {
-          centerpiece.setProgress(self.progress);
-          const idx = self.progress < 0.34 ? 0 : self.progress < 0.67 ? 1 : 2;
-          steps.forEach((el, i) => el.classList.toggle("is-active", i === idx));
-          if (badge) badge.textContent = labels[idx];
+    // Kinetic Hero masked line reveal
+    const heroLines = gsap.utils.toArray<HTMLElement>("[data-hero-reveal]");
+    if (heroLines.length) {
+      gsap.from(heroLines, {
+        yPercent: 28,
+        opacity: 0,
+        duration: 0.72,
+        stagger: 0.08,
+        ease: "power3.out",
+        clearProps: "transform,opacity",
+      });
+    }
+
+    // Statement line-by-line scroll reveal
+    const stmtLines = gsap.utils.toArray<HTMLElement>("[data-statement-line]");
+    if (stmtLines.length) {
+      gsap.from(stmtLines, {
+        y: 26,
+        opacity: 0.15,
+        stagger: 0.12,
+        duration: 0.65,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: "[data-statement-section]",
+          start: "top 78%",
+          once: true,
         },
       });
     }
 
-    // Subtle photo-journal parallax on desktop
-    if (isDesktop && !prefersReduced) {
-      gsap.utils.toArray<HTMLElement>(".journal-card").forEach((card, idx) => {
+    // Giant outline words parallax drift (no pin)
+    if (isDesktop) {
+      gsap.utils.toArray<HTMLElement>("[data-outline-drift]").forEach((el, idx) => {
         gsap.fromTo(
-          card,
-          { y: idx % 2 === 0 ? 18 : 34 },
+          el,
+          { xPercent: idx % 2 === 0 ? -4 : 4 },
           {
-            y: idx % 2 === 0 ? -12 : -22,
+            xPercent: idx % 2 === 0 ? 6 : -6,
             ease: "none",
             scrollTrigger: {
-              trigger: card,
+              trigger: el.parentElement || el,
               start: "top bottom",
               end: "bottom top",
               scrub: true,
@@ -77,10 +105,63 @@ export function initPageMotion(centerpiece: CenterpieceHandle | null): MotionHan
         );
       });
     }
+
+    // Image clip-path reveal on scroll into view
+    gsap.utils.toArray<HTMLElement>(".journal-card__media").forEach((media) => {
+      gsap.fromTo(
+        media,
+        { clipPath: "inset(10% 0% 0% 0% round 16px)", opacity: 0.6 },
+        {
+          clipPath: "inset(0% 0% 0% 0% round 16px)",
+          opacity: 1,
+          duration: 0.65,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: media,
+            start: "top 86%",
+            once: true,
+          },
+        }
+      );
+    });
   });
+
+  // Card radial spotlight + Custom cursor + Magnetic buttons (desktop fine pointer only)
+  if (finePointer && !prefersReduced) {
+    const cards = document.querySelectorAll<HTMLElement>(".journal-card, .essay-card, .note-card, .centerpiece-step");
+    cards.forEach((card) => {
+      const onCardMove = (e: PointerEvent) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        card.style.setProperty("--my", `${e.clientY - r.top}px`);
+      };
+      card.addEventListener("pointermove", onCardMove, { passive: true });
+      cleanups.push(() => card.removeEventListener("pointermove", onCardMove));
+    });
+
+    // Magnetic primary buttons
+    document.querySelectorAll<HTMLElement>(".pill-btn--accent").forEach((btn) => {
+      const onBtnMove = (e: PointerEvent) => {
+        const r = btn.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width / 2)) * 0.18;
+        const dy = (e.clientY - (r.top + r.height / 2)) * 0.22;
+        btn.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0)`;
+      };
+      const onBtnLeave = () => {
+        btn.style.transform = "";
+      };
+      btn.addEventListener("pointermove", onBtnMove, { passive: true });
+      btn.addEventListener("pointerleave", onBtnLeave);
+      cleanups.push(() => {
+        btn.removeEventListener("pointermove", onBtnMove);
+        btn.removeEventListener("pointerleave", onBtnLeave);
+      });
+    });
+  }
 
   return {
     destroy() {
+      cleanups.forEach((fn) => fn());
       ctx.revert();
       ScrollTrigger.getAll().forEach((st) => st.kill());
       if (tickerFn) gsap.ticker.remove(tickerFn);
