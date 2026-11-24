@@ -75,6 +75,17 @@
   --ink-muted: #b4b8a5;
   --ink-cream: #efefe5;
 
+  /* Schematic Diagram Semantic Tokens */
+  --diag-node: #1b1c1a;
+  --diag-cyan: #d2ff00;
+  --diag-emerald: #b2c73a;
+  --diag-amber: #dde1d2;
+  --diag-rose: #ff6b6b;
+  --border: #3b3c38;
+  --border-strong: #535450;
+  --text-primary: #f4f4ed;
+  --text-secondary: #b4b8a5;
+
   /* Typography */
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   --font-fa: "Vazirmatn", "Plus Jakarta Sans", system-ui, sans-serif;

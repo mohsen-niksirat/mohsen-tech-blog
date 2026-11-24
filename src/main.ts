@@ -616,28 +616,41 @@ function bindSearch(locale: Locale) {
   run();
 }
 
-async function mountInteractive(route: string) {
+async function mountInteractive(route: string, locale: Locale) {
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
 
-  // Lazy-load Hero WebGL slice reveal ONLY on desktop + non-reduced-motion
-  if (route === "home" && isDesktop && !prefersReduced) {
+  // Lazy-load Hero WebGL slice reveal on desktop (log any failure; keep static portrait fallback)
+  if (route === "home") {
     const heroHost = document.querySelector<HTMLElement>("[data-hero-canvas]");
-    if (heroHost) {
-      const { mountHeroSliceReveal } = await import("./webgl/HeroSliceReveal");
-      activeHero = mountHeroSliceReveal(heroHost, asset("assets/shots/avatar.webp"));
+    if (!isDesktop) {
+      console.info("[HeroSliceReveal] mobile viewport (<1024px) — using static portrait fallback");
+    } else if (heroHost) {
+      try {
+        const { mountHeroSliceReveal } = await import("./webgl/HeroSliceReveal");
+        activeHero = mountHeroSliceReveal(heroHost, asset("assets/shots/avatar.webp"));
+      } catch (err) {
+        console.warn("[HeroSliceReveal] WebGL unavailable — using static portrait fallback:", err);
+      }
     }
   }
 
   // Lazy-load 3D Scroll Centerpiece
-  if (route === "home" && !prefersReduced) {
+  if (route === "home") {
     const stage = document.querySelector<HTMLElement>("[data-centerpiece-stage]");
     if (stage) {
-      const { mountScrollCenterpiece } = await import("./webgl/ScrollCenterpiece");
-      activeCenterpiece = mountScrollCenterpiece(stage);
+      try {
+        const { mountScrollCenterpiece } = await import("./webgl/ScrollCenterpiece");
+        activeCenterpiece = mountScrollCenterpiece(stage);
+      } catch (err) {
+        console.warn("[ScrollCenterpiece] WebGL unavailable:", err);
+      }
     }
   }
 
+  if (prefersReduced) {
+    console.info("[Motion] prefers-reduced-motion active — Lenis & ScrollTrigger pin disabled");
+  }
   activeMotion = initPageMotion(activeCenterpiece);
 
   // Reading progress bar on article pages
@@ -652,16 +665,20 @@ async function mountInteractive(route: string) {
     scrollCleanup = () => window.removeEventListener("scroll", onScroll);
   }
 
-  // Copy code buttons
+  // Copy code buttons with visible "Copied" / "کپی شد" feedback
+  const copiedText = locale === "fa" ? "کپی شد" : "Copied";
   document.querySelectorAll<HTMLButtonElement>("[data-copy-code]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const code = btn.closest(".code-block")?.querySelector("code")?.textContent || "";
-      navigator.clipboard?.writeText(code);
-      const prev = btn.textContent;
-      btn.textContent = "✓";
+      navigator.clipboard?.writeText(code).catch(() => {});
+      const prev = btn.dataset.origLabel || btn.textContent || "Copy";
+      btn.dataset.origLabel = prev;
+      btn.textContent = copiedText;
+      btn.classList.add("is-copied");
       setTimeout(() => {
         btn.textContent = prev;
-      }, 1200);
+        btn.classList.remove("is-copied");
+      }, 1500);
     });
   });
 
@@ -724,7 +741,7 @@ function renderCurrentRoute() {
   window.scrollTo(0, 0);
 
   if (route === "search") bindSearch(locale);
-  void mountInteractive(route);
+  void mountInteractive(route, locale);
 }
 
 document.addEventListener("click", (e) => {

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { DIAGRAMS } from "./diagrams.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -285,7 +286,7 @@ function renderInline(text) {
   return s;
 }
 
-function renderMarkdown(md, locale = "en") {
+function renderMarkdown(md, locale = "en", diagramKey = "") {
   const codeBlocks = [];
   const withPlaceholders = md.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g, (_, lang, code) => {
     const idx = codeBlocks.length;
@@ -316,6 +317,14 @@ function renderMarkdown(md, locale = "en") {
     if (line.startsWith("@@CODEBLOCK_")) {
       const idx = Number(line.replace("@@CODEBLOCK_", "").replace("@@", ""));
       out.push(codeBlocks[idx]);
+      i++;
+      continue;
+    }
+    if (line === "{{DIAGRAM}}") {
+      const fn = diagramKey && DIAGRAMS[diagramKey];
+      if (typeof fn === "function") {
+        out.push(fn(locale));
+      }
       i++;
       continue;
     }
@@ -389,7 +398,7 @@ function loadPosts(locale) {
     const slug = file.replace(/\.md$/, "");
     const raw = fs.readFileSync(path.join(dir, file), "utf8");
     const { meta, body } = parseFrontmatter(raw);
-    const { html, headings, pullQuote } = renderMarkdown(body, locale);
+    const { html, headings, pullQuote } = renderMarkdown(body, locale, meta.diagram || "");
     const words = body.split(/\s+/).filter(Boolean).length;
     const minutes = Math.max(2, Math.ceil(words / (locale === "fa" ? 160 : 200)));
     const vis = POST_VISUALS[slug] || { src: "assets/shots/9router.webp", alt: meta.title, altFa: meta.title, year: "2026", sceneState: 0 };
@@ -433,5 +442,9 @@ const data = {
 
 const outDir = path.join(ROOT, "src", "data");
 fs.mkdirSync(outDir, { recursive: true });
-fs.writeFileSync(path.join(outDir, "content.json"), JSON.stringify(data, null, 2), "utf8");
+const serialized = JSON.stringify(data, null, 2);
+if (serialized.includes("{{")) {
+  throw new Error("Build failed: raw template token '{{' leaked into src/data/content.json");
+}
+fs.writeFileSync(path.join(outDir, "content.json"), serialized, "utf8");
 console.log(`Generated src/data/content.json (${data.posts.en.length} EN essays, ${data.posts.fa.length} FA essays, ${data.notes.length} notes, ${data.projects.length} projects)`);

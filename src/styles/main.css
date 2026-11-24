@@ -314,9 +314,16 @@ html[dir="rtl"] .eyebrow {
   font-weight: 800;
 }
 
+html[dir="rtl"] .hero {
+  min-height: auto;
+  padding-block: clamp(2rem, 4.5vh, 3.5rem);
+}
+
 html[dir="rtl"] .hero__title {
-  line-height: 1.15;
-  letter-spacing: -0.015em;
+  font-size: clamp(2.15rem, 4.4vw, 4.25rem);
+  line-height: 1.24;
+  letter-spacing: -0.01em;
+  margin: 0.75rem 0 1rem;
 }
 
 .hero__title .accent-word {
@@ -742,9 +749,37 @@ html[dir="rtl"] .pull-quote {
   font-size: 0.7rem;
 }
 
-.copy-btn:hover {
+.copy-btn:hover,
+.copy-btn.is-copied {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.schematic {
+  margin: 2rem 0;
+  padding: 1.25rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+}
+
+.schematic-stage {
+  overflow-x: auto;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.schematic-stage svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.schematic figcaption {
+  margin-top: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-muted);
 }
 
 .code-block pre {
