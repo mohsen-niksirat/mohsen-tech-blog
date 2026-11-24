@@ -8,6 +8,11 @@
     <link rel="icon" type="image/svg+xml" href="./assets/icons/favicon.svg" />
     <script>
       (function () {
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (regs) {
+            regs.forEach(function (r) { r.unregister(); });
+          }).catch(function () {});
+        }
         var params = new URLSearchParams(window.location.search);
         var p = params.get("p");
         if (p) {

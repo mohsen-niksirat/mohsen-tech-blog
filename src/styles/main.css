@@ -1125,6 +1125,16 @@ html[dir="rtl"] .pull-quote {
   transform: scale(1.04);
 }
 
+@media (hover: none) {
+  .journal-card__media img {
+    filter: none;
+  }
+  .pill-btn,
+  .mobile-menu-btn {
+    min-height: 44px;
+  }
+}
+
 /* ─── C5: Editorial Statement + Giant Outline Words ────────────────── */
 .statement-section {
   position: relative;
