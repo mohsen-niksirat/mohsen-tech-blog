@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting…</title>
+    <script>
+      (function () {
+        var base = "/mohsen-tech-blog/";
+        var path = window.location.pathname;
+        var rest = path.indexOf(base) === 0 ? path.slice(base.length) : path.replace(/^\/+/, "");
+        var query = window.location.search || "";
+        var hash = window.location.hash || "";
+        var target = base + "?p=" + encodeURIComponent(rest + query + hash);
+        window.location.replace(target);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

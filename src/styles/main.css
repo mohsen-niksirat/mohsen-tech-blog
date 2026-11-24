@@ -35,6 +35,18 @@ img {
   height: auto;
 }
 
+svg {
+  max-width: 100%;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
 button {
   font: inherit;
   color: inherit;
@@ -63,9 +75,9 @@ code {
   position: fixed;
   inset-block-start: 0;
   inset-inline: 0;
-  height: 3px;
+  height: 5px;
   z-index: 120;
-  background: transparent;
+  background: rgba(244, 244, 237, 0.1);
   pointer-events: none;
 }
 
@@ -73,7 +85,55 @@ code {
   height: 100%;
   width: 0%;
   background: var(--accent);
+  box-shadow: 0 0 12px rgba(210, 255, 0, 0.75);
   transition: width 60ms linear;
+}
+
+/* ─── Lightbox Modal ───────────────────────────────────────────────── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(11, 11, 12, 0.92);
+  backdrop-filter: blur(12px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--pad-container);
+}
+
+.lightbox.is-open {
+  display: flex;
+}
+
+.lightbox__dialog {
+  max-width: min(1100px, 94vw);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.lightbox__img {
+  max-height: 76vh;
+  width: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  object-fit: contain;
+}
+
+.lightbox__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-secondary);
+}
+
+.journal-card__media {
+  cursor: zoom-in;
 }
 
 /* ─── Header / Navigation ──────────────────────────────────────────── */

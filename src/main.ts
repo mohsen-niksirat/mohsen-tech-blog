@@ -65,6 +65,10 @@ const DATA = contentData as unknown as {
   projects: Project[];
 };
 
+const BASE = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const asset = (rel: string) => `${BASE}${rel.replace(/^\/+/, "")}`;
+const routeUrl = (sub: string) => `${BASE}${sub.replace(/^\/+/, "")}`;
+
 const app = document.getElementById("app")!;
 let activeHero: HeroRevealHandle | null = null;
 let activeCenterpiece: CenterpieceHandle | null = null;
@@ -82,8 +86,16 @@ function cleanupActive() {
   scrollCleanup = null;
 }
 
+function stripBase(pathname: string): string {
+  if (pathname.startsWith(BASE)) {
+    const rest = pathname.slice(BASE.length);
+    return `/${rest}`.replace(/\/+$/, "") || "/";
+  }
+  return pathname.replace(/\/+$/, "") || "/";
+}
+
 function parseRoute(pathname: string): { locale: Locale; route: string; slug?: string } {
-  const clean = pathname.replace(/\/+$/, "") || "/";
+  const clean = stripBase(pathname);
   const isFa = clean === "/fa" || clean.startsWith("/fa/");
   const locale: Locale = isFa ? "fa" : "en";
   const sub = isFa ? clean.replace(/^\/fa/, "") || "/" : clean;
@@ -100,13 +112,13 @@ function parseRoute(pathname: string): { locale: Locale; route: string; slug?: s
 }
 
 function prefixFor(locale: Locale): string {
-  return locale === "fa" ? "/fa" : "";
+  return locale === "fa" ? `${BASE}fa` : BASE.replace(/\/$/, "");
 }
 
 function switchLocalePath(pathname: string, target: Locale): string {
   const { route, slug } = parseRoute(pathname);
   const p = prefixFor(target);
-  if (route === "home") return p || "/";
+  if (route === "home") return target === "fa" ? `${BASE}fa/` : BASE;
   if (route === "essay" && slug) return `${p}/essays/${slug}`;
   return `${p}/${route}`;
 }
@@ -116,7 +128,7 @@ function navLinks(locale: Locale, activeRoute: string): string {
   const items =
     locale === "fa"
       ? [
-          { key: "home", label: "خانه", href: p || "/" },
+          { key: "home", label: "خانه", href: `${BASE}fa/` },
           { key: "essays", label: "مقالات", href: `${p}/essays` },
           { key: "projects", label: "پروژه‌ها", href: `${p}/projects` },
           { key: "notes", label: "یادداشت‌ها", href: `${p}/notes` },
@@ -124,12 +136,12 @@ function navLinks(locale: Locale, activeRoute: string): string {
           { key: "about", label: "درباره من", href: `${p}/about` },
         ]
       : [
-          { key: "home", label: "Home", href: "/" },
-          { key: "essays", label: "Essays", href: "/essays" },
-          { key: "projects", label: "Projects", href: "/projects" },
-          { key: "notes", label: "Field Notes", href: "/notes" },
-          { key: "archive", label: "Archive", href: "/archive" },
-          { key: "about", label: "About", href: "/about" },
+          { key: "home", label: "Home", href: BASE },
+          { key: "essays", label: "Essays", href: routeUrl("essays") },
+          { key: "projects", label: "Projects", href: routeUrl("projects") },
+          { key: "notes", label: "Field Notes", href: routeUrl("notes") },
+          { key: "archive", label: "Archive", href: routeUrl("archive") },
+          { key: "about", label: "About", href: routeUrl("about") },
         ];
 
   return items
@@ -149,7 +161,7 @@ function renderShell(locale: Locale, route: string, mainHtml: string, showProgre
   return `
     ${showProgress ? `<div class="reading-progress" aria-hidden="true"><div class="reading-progress__fill" data-reading-fill></div></div>` : ""}
     <header class="site-header">
-      <a href="${p || "/"}" data-link class="brand-mark">
+      <a href="${fa ? `${BASE}fa/` : BASE}" data-link class="brand-mark" style="white-space:nowrap;flex-shrink:0">
         <span class="brand-dot" aria-hidden="true"></span>
         <span>${fa ? "محسن نیک‌سیرت" : "MOHSEN NIKSIRAT"}</span>
       </a>
@@ -167,6 +179,15 @@ function renderShell(locale: Locale, route: string, mainHtml: string, showProgre
       <a href="${p}/search" data-link>${fa ? "جستجو" : "Search"}</a>
     </div>
     <main class="page-shell">${mainHtml}</main>
+    <div class="lightbox" data-lightbox role="dialog" aria-modal="true" aria-label="${fa ? "بزرگ‌نمایی تصویر پروژه" : "Project screenshot lightbox"}">
+      <div class="lightbox__dialog">
+        <img class="lightbox__img" data-lightbox-img src="" alt="" />
+        <div class="lightbox__bar">
+          <span data-lightbox-caption></span>
+          <button type="button" class="pill-btn pill-btn--accent" data-lightbox-close>${fa ? "بستن (ESC)" : "CLOSE (ESC)"}</button>
+        </div>
+      </div>
+    </div>
     <footer class="site-footer">
       <div class="container site-footer__inner">
         <div>
@@ -175,7 +196,7 @@ function renderShell(locale: Locale, route: string, mainHtml: string, showProgre
         </div>
         <div class="journal-card__links">
           <a href="https://github.com/mohsen-niksirat" target="_blank" rel="noopener noreferrer" class="pill-btn">GitHub</a>
-          <a href="${fa ? "/assets/files/mohsen-niksirat-resume-fa.pdf" : "/assets/files/mohsen-niksirat-resume.pdf"}" target="_blank" rel="noopener noreferrer" class="pill-btn">${fa ? "رزومه PDF" : "Resume PDF"}</a>
+          <a href="${asset(fa ? "assets/files/mohsen-niksirat-resume-fa.pdf" : "assets/files/mohsen-niksirat-resume.pdf")}" target="_blank" rel="noopener noreferrer" class="pill-btn">${fa ? "رزومه PDF" : "Resume PDF"}</a>
         </div>
       </div>
     </footer>
@@ -222,7 +243,7 @@ function renderHome(locale: Locale): string {
         </div>
       </div>
       <div class="hero__visual" data-hero-visual>
-        <img src="/assets/shots/avatar.webp" alt="${fa ? "محسن نیک‌سیرت" : "Mohsen Niksirat portrait"}" class="hero__fallback-img" width="520" height="650" />
+        <img src="${asset("assets/shots/avatar.webp")}" alt="${fa ? "محسن نیک‌سیرت" : "Mohsen Niksirat portrait"}" class="hero__fallback-img" width="520" height="650" />
         <div class="hero__canvas-host" data-hero-canvas aria-hidden="true"></div>
         <div class="hero__hud">
           <span>${fa ? "لایه WebGL تعاملی" : "WEBGL SLICE REVEAL"}</span>
@@ -235,7 +256,7 @@ function renderHome(locale: Locale): string {
       <div class="container">
         <div class="section-head">
           <div>
-            <span class="eyebrow">${fa ? "فصل تعاملی سه‌بعدی" : "SCROLL-SCRUBBED 3D ARCHITECTURE"}</span>
+            <span class="eyebrow">${fa ? "فصل تعاملی سه‌بعدی (شبیه‌سازی‌شده)" : "SCROLL-SCRUBBED 3D ARCHITECTURE (SIMULATED)"}</span>
             <h2>${fa ? "مقالات شاخص مهندسی" : "Featured Engineering Essays"}</h2>
           </div>
           <a href="${p}/essays" data-link class="pill-btn">${fa ? "همه ۶ مقاله" : "ALL 6 ESSAYS"}</a>
@@ -244,10 +265,10 @@ function renderHome(locale: Locale): string {
           <div class="centerpiece-stage" data-centerpiece-stage>
             <div class="centerpiece-badge"
                  data-centerpiece-badge
-                 data-label0="${fa ? "۰۱ · توپولوژی درگاه AI" : "01 · AI GATEWAY TOPOLOGY"}"
-                 data-label1="${fa ? "۰۲ · منحنی حافظه FSRS" : "02 · FSRS MEMORY CURVE"}"
-                 data-label2="${fa ? "۰۳ · آرنا سه‌بعدی Godot 4" : "03 · GODOT 4 HORDE ARENA"}">
-              ${fa ? "۰۱ · توپولوژی درگاه AI" : "01 · AI GATEWAY TOPOLOGY"}
+                 data-label0="${fa ? "شبیه‌سازی‌شده · ۰۱ · توپولوژی درگاه AI" : "SIMULATED · 01 · AI GATEWAY TOPOLOGY"}"
+                 data-label1="${fa ? "شبیه‌سازی‌شده · ۰۲ · منحنی حافظه FSRS" : "SIMULATED · 02 · FSRS MEMORY CURVE"}"
+                 data-label2="${fa ? "شبیه‌سازی‌شده · ۰۳ · آرنا سه‌بعدی Godot 4" : "SIMULATED · 03 · GODOT 4 HORDE ARENA"}">
+              ${fa ? "شبیه‌سازی‌شده · ۰۱ · توپولوژی درگاه AI" : "SIMULATED · 01 · AI GATEWAY TOPOLOGY"}
             </div>
           </div>
           <div class="centerpiece-steps">
@@ -285,8 +306,8 @@ function renderHome(locale: Locale): string {
             .map(
               (proj) => `
             <article class="journal-card">
-              <div class="journal-card__media">
-                <img src="${proj.shot}" alt="${proj.name}" loading="lazy" decoding="async" />
+              <div class="journal-card__media" data-lightbox-src="${asset(proj.shot)}" data-lightbox-title="${proj.name} · ${proj.stack} · ${proj.year}">
+                <img src="${asset(proj.shot)}" alt="${proj.name}" loading="lazy" decoding="async" />
               </div>
               <div class="journal-card__caption">
                 <strong>${proj.name}</strong>
@@ -353,7 +374,7 @@ function renderEssays(locale: Locale): string {
           .map(
             (post) => `
           <a href="${p}/essays/${post.slug}" data-link class="essay-card">
-            <img src="${post.cover}" alt="${post.coverAlt}" class="essay-card__cover" loading="lazy" />
+            <img src="${asset(post.cover)}" alt="${post.coverAlt}" class="essay-card__cover" loading="lazy" />
             <div class="essay-card__body">
               <div class="essay-card__meta">
                 <span>${post.dateFormatted}</span>
@@ -386,7 +407,7 @@ function renderEssayDetail(locale: Locale, slug: string): string {
             <span>${post.readingLabel}</span>
             <span>${post.tags.join(" · ")}</span>
           </div>
-          <img src="${post.cover}" alt="${post.coverAlt}" class="article-cover" />
+          <img src="${asset(post.cover)}" alt="${post.coverAlt}" class="article-cover" />
         </div>
         <div class="prose">${post.html}</div>
       </article>
@@ -416,8 +437,8 @@ function renderProjects(locale: Locale): string {
           .map(
             (proj) => `
           <article class="journal-card">
-            <div class="journal-card__media">
-              <img src="${proj.shot}" alt="${proj.name}" loading="lazy" />
+            <div class="journal-card__media" data-lightbox-src="${asset(proj.shot)}" data-lightbox-title="${proj.name} · ${proj.stack} · ${proj.year}">
+              <img src="${asset(proj.shot)}" alt="${proj.name}" loading="lazy" />
             </div>
             <div class="journal-card__caption">
               <strong>${proj.name}</strong>
@@ -476,7 +497,7 @@ function renderAbout(locale: Locale): string {
   return `
     <section class="container section-block" style="border-top:0">
       <div class="about-grid">
-        <img src="/assets/shots/avatar.webp" alt="${fa ? "محسن نیک‌سیرت" : "Mohsen Niksirat"}" class="about-portrait" />
+        <img src="${asset("assets/shots/avatar.webp")}" alt="${fa ? "محسن نیک‌سیرت" : "Mohsen Niksirat"}" class="about-portrait" />
         <div class="prose">
           <span class="eyebrow">${fa ? "درباره نویسنده" : "ABOUT THE AUTHOR"}</span>
           <h1 style="margin:0.5rem 0 1rem;font-size:var(--text-h1)">${fa ? "محسن نیک‌سیرت" : "Mohsen Niksirat"}</h1>
@@ -488,8 +509,8 @@ function renderAbout(locale: Locale): string {
             }
           </p>
           <div class="hero__cta-row" style="margin-top:1.75rem">
-            <a href="/assets/files/mohsen-niksirat-resume.pdf" target="_blank" rel="noopener noreferrer" class="pill-btn pill-btn--accent">${fa ? "دانلود رزومه انگلیسی (PDF)" : "Download Resume (EN PDF)"}</a>
-            <a href="/assets/files/mohsen-niksirat-resume-fa.pdf" target="_blank" rel="noopener noreferrer" class="pill-btn">${fa ? "دانلود رزومه فارسی (PDF)" : "Download Resume (FA PDF)"}</a>
+            <a href="${asset("assets/files/mohsen-niksirat-resume.pdf")}" target="_blank" rel="noopener noreferrer" class="pill-btn pill-btn--accent">${fa ? "دانلود رزومه انگلیسی (PDF)" : "Download Resume (EN PDF)"}</a>
+            <a href="${asset("assets/files/mohsen-niksirat-resume-fa.pdf")}" target="_blank" rel="noopener noreferrer" class="pill-btn">${fa ? "دانلود رزومه فارسی (PDF)" : "Download Resume (FA PDF)"}</a>
             <a href="https://github.com/mohsen-niksirat" target="_blank" rel="noopener noreferrer" class="pill-btn">GitHub</a>
           </div>
         </div>
@@ -604,7 +625,7 @@ async function mountInteractive(route: string) {
     const heroHost = document.querySelector<HTMLElement>("[data-hero-canvas]");
     if (heroHost) {
       const { mountHeroSliceReveal } = await import("./webgl/HeroSliceReveal");
-      activeHero = mountHeroSliceReveal(heroHost, "/assets/shots/avatar.webp");
+      activeHero = mountHeroSliceReveal(heroHost, asset("assets/shots/avatar.webp"));
     }
   }
 
@@ -651,6 +672,34 @@ async function mountInteractive(route: string) {
     const open = drawer?.classList.toggle("is-open") ?? false;
     menuBtn.setAttribute("aria-expanded", String(open));
   });
+
+  // Projects lightbox
+  const lb = document.querySelector<HTMLElement>("[data-lightbox]");
+  const lbImg = document.querySelector<HTMLImageElement>("[data-lightbox-img]");
+  const lbCap = document.querySelector<HTMLElement>("[data-lightbox-caption]");
+  const closeLb = () => lb?.classList.remove("is-open");
+  document.querySelectorAll<HTMLElement>("[data-lightbox-src]").forEach((el) => {
+    el.addEventListener("click", () => {
+      if (!lb || !lbImg || !lbCap) return;
+      lbImg.src = el.dataset.lightboxSrc || "";
+      lbImg.alt = el.dataset.lightboxTitle || "";
+      lbCap.textContent = el.dataset.lightboxTitle || "";
+      lb.classList.add("is-open");
+    });
+  });
+  document.querySelector("[data-lightbox-close]")?.addEventListener("click", closeLb);
+  lb?.addEventListener("click", (e) => {
+    if (e.target === lb) closeLb();
+  });
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === "Escape") closeLb();
+  };
+  window.addEventListener("keydown", onKey);
+  const prevCleanup = scrollCleanup;
+  scrollCleanup = () => {
+    prevCleanup?.();
+    window.removeEventListener("keydown", onKey);
+  };
 }
 
 function renderCurrentRoute() {

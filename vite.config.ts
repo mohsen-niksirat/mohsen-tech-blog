@@ -1,21 +1,24 @@
 import { defineConfig, type Plugin } from "vite";
 
+const BASE = "/mohsen-tech-blog/";
+
 function spaRouteRewrite(): Plugin {
   const spaPrefixes = ["/fa", "/essays", "/projects", "/notes", "/about", "/archive", "/search"];
   return {
     name: "spa-route-rewrite",
     configureServer(server) {
       server.middlewares.use((req, _res, next) => {
-        const url = (req.url || "").split("?")[0];
+        const rawUrl = (req.url || "").split("?")[0];
+        const sub = rawUrl.startsWith(BASE) ? `/${rawUrl.slice(BASE.length)}` : rawUrl;
         if (
-          url !== "/" &&
-          !url.startsWith("/src/") &&
-          !url.startsWith("/assets/") &&
-          !url.startsWith("/@") &&
-          !url.startsWith("/node_modules/") &&
-          spaPrefixes.some((p) => url === p || url.startsWith(`${p}/`))
+          sub !== "/" &&
+          !sub.startsWith("/src/") &&
+          !sub.startsWith("/assets/") &&
+          !sub.startsWith("/@") &&
+          !sub.startsWith("/node_modules/") &&
+          spaPrefixes.some((p) => sub === p || sub.startsWith(`${p}/`))
         ) {
-          req.url = "/index.html";
+          req.url = `${BASE}index.html`;
         }
         next();
       });
@@ -24,8 +27,9 @@ function spaRouteRewrite(): Plugin {
 }
 
 export default defineConfig({
+  base: BASE,
   root: ".",
-  publicDir: false,
+  publicDir: "public",
   plugins: [spaRouteRewrite()],
   server: {
     port: 5173,

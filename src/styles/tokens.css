@@ -1,7 +1,7 @@
 /* Self-hosted fonts — zero layout shift with font-display: swap */
 @font-face {
   font-family: "Plus Jakarta Sans";
-  src: url("/assets/fonts/plus-jakarta-sans-normal.woff2") format("woff2");
+  src: url("../../public/assets/fonts/plus-jakarta-sans-normal.woff2") format("woff2");
   font-weight: 200 800;
   font-style: normal;
   font-display: swap;
@@ -9,7 +9,7 @@
 
 @font-face {
   font-family: "Plus Jakarta Sans";
-  src: url("/assets/fonts/plus-jakarta-sans-latin-ext.woff2") format("woff2");
+  src: url("../../public/assets/fonts/plus-jakarta-sans-latin-ext.woff2") format("woff2");
   font-weight: 200 800;
   font-style: normal;
   font-display: swap;
@@ -18,7 +18,7 @@
 
 @font-face {
   font-family: "Newsreader";
-  src: url("/assets/fonts/newsreader-opsz-normal.woff2") format("woff2");
+  src: url("../../public/assets/fonts/newsreader-opsz-normal.woff2") format("woff2");
   font-weight: 300 700;
   font-style: normal;
   font-display: swap;
@@ -26,7 +26,7 @@
 
 @font-face {
   font-family: "Newsreader";
-  src: url("/assets/fonts/newsreader-opsz-italic.woff2") format("woff2");
+  src: url("../../public/assets/fonts/newsreader-opsz-italic.woff2") format("woff2");
   font-weight: 300 700;
   font-style: italic;
   font-display: swap;
@@ -34,7 +34,7 @@
 
 @font-face {
   font-family: "JetBrains Mono";
-  src: url("/assets/fonts/jetbrains-mono-normal.woff2") format("woff2");
+  src: url("../../public/assets/fonts/jetbrains-mono-normal.woff2") format("woff2");
   font-weight: 400 700;
   font-style: normal;
   font-display: swap;
@@ -42,7 +42,7 @@
 
 @font-face {
   font-family: "Vazirmatn";
-  src: url("/assets/fonts/vazirmatn-arabic.woff2") format("woff2");
+  src: url("../../public/assets/fonts/vazirmatn-arabic.woff2") format("woff2");
   font-weight: 200 900;
   font-style: normal;
   font-display: swap;
@@ -50,7 +50,7 @@
 
 @font-face {
   font-family: "Vazirmatn";
-  src: url("/assets/fonts/vazirmatn-latin.woff2") format("woff2");
+  src: url("../../public/assets/fonts/vazirmatn-latin.woff2") format("woff2");
   font-weight: 200 900;
   font-style: normal;
   font-display: swap;
