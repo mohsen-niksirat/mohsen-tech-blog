@@ -121,12 +121,19 @@ export function mountAmbientScene(container: HTMLElement): AmbientSceneHandle | 
     let wHorde = 0;
 
     if (routeMode === "home") {
-      if (scrollProgress < 0.22) wHero = 0.82;
-      else if (scrollProgress < 0.48) wGw = 0.28;
-      else if (scrollProgress < 0.74) wFsrs = 0.26;
-      else wHorde = 0.26;
+      if (scrollProgress < 0.16) wHero = 0.82;
+      else if (scrollProgress < 0.45) wGw = 0.18;
+      else if (scrollProgress < 0.72) wFsrs = 0.18;
+      else wHorde = 0.18;
     } else {
       wHero = 0.5;
+    }
+
+    // Smoothly ease container opacity from 1.0 in hero down to 0.15 by first content section
+    if (routeMode === "home") {
+      const fadeT = Math.min(1, Math.max(0, (scrollProgress - 0.03) / 0.13));
+      const smooth = fadeT * fadeT * (3 - 2 * fadeT);
+      container.style.opacity = (1 - smooth * 0.85).toFixed(3);
     }
 
     const lerpRate = Math.min(1, dt * 2.4);

@@ -84,7 +84,6 @@ document.body.prepend(ambientHost);
 const curtain = document.createElement("div");
 curtain.className = "route-curtain";
 curtain.setAttribute("aria-hidden", "true");
-curtain.textContent = "MN";
 document.body.appendChild(curtain);
 
 function initCustomCursor() {
@@ -129,10 +128,20 @@ function initCustomCursor() {
   loop();
 }
 
+let loaderAlreadyRan = false;
+
 function runBrandedLoader() {
+  if (loaderAlreadyRan) return;
+  loaderAlreadyRan = true;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduced || sessionStorage.getItem("mn_loaded") === "1") return;
-  sessionStorage.setItem("mn_loaded", "1");
+  let seen = false;
+  try {
+    seen = sessionStorage.getItem("mn_loaded") === "1";
+    if (!seen) sessionStorage.setItem("mn_loaded", "1");
+  } catch {
+    seen = false;
+  }
+  if (reduced || seen) return;
 
   const loader = document.createElement("div");
   loader.className = "brand-loader";
