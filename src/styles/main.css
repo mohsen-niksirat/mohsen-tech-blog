@@ -1238,6 +1238,9 @@ html[dir="rtl"] .footer-wordmark {
   .mobile-menu-btn {
     display: inline-flex;
   }
+  .hero__hud {
+    display: none;
+  }
   .hero {
     grid-template-columns: 1fr;
     min-height: auto;
@@ -1265,6 +1268,25 @@ html[dir="rtl"] .footer-wordmark {
   .archive-row {
     grid-template-columns: 1fr;
     gap: 0.35rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .header-actions > a:not([data-lang-switch]) {
+    display: none;
+  }
+  .brand-mark {
+    font-size: 0.92rem;
+    gap: 0.45rem;
+  }
+  .header-actions {
+    gap: 0.45rem;
+  }
+  .header-actions .pill-btn,
+  .mobile-menu-btn {
+    padding: 0.4rem 0.75rem;
+    min-height: 38px;
+    font-size: 0.72rem;
   }
 }
 
