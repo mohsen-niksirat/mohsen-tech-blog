@@ -1,0 +1,105 @@
+/* Self-hosted fonts — zero layout shift with font-display: swap */
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/assets/fonts/plus-jakarta-sans-normal.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/assets/fonts/plus-jakarta-sans-latin-ext.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Newsreader";
+  src: url("/assets/fonts/newsreader-opsz-normal.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Newsreader";
+  src: url("/assets/fonts/newsreader-opsz-italic.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/assets/fonts/jetbrains-mono-normal.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/assets/fonts/vazirmatn-arabic.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/assets/fonts/vazirmatn-latin.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Verified Color Tokens (Phase 1 REA Inspection) */
+  --bg-canvas: #111112;
+  --bg-surface: #191a18;
+  --bg-olive: #282c20;
+  --border-subtle: #3b3c38;
+  --border-muted: #535450;
+
+  /* Single Volt-Lime Accent */
+  --accent: #d2ff00;
+  --accent-muted: #b2c73a;
+  --accent-zero: rgba(210, 255, 0, 0);
+
+  /* Editorial Ink Scale */
+  --ink-primary: #f4f4ed;
+  --ink-secondary: #dde1d2;
+  --ink-muted: #b4b8a5;
+  --ink-cream: #efefe5;
+
+  /* Typography */
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-fa: "Vazirmatn", "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Type Scale */
+  --text-impact: clamp(3rem, 8.2vw, 7.9375rem);
+  --text-h1: clamp(2.25rem, 5.2vw, 4.5rem);
+  --text-h2: clamp(1.85rem, 4vw, 3.5rem);
+  --text-h3: clamp(1.35rem, 2.4vw, 2rem);
+  --text-lead: clamp(1.1rem, 1.5vw, 1.45rem);
+  --text-body: 1.0625rem;
+  --text-mono: 0.75rem;
+
+  /* Spacing & Grid */
+  --pad-container: clamp(1.25rem, 3vw, 2.5rem);
+  --gap: 1.25rem;
+  --nav-h: 5.375rem;
+  --radius-sm: 1rem;
+  --radius-md: 2rem;
+  --radius-pill: 6.25rem;
+  --max-w: 1440px;
+}
+
+html[dir="rtl"] {
+  --font-sans: var(--font-fa);
+}

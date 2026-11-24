@@ -1,17 +1,30 @@
-# Mohsen Niksirat · Engineering Monograph (`mohsen-tech-blog`)
+# Mohsen Niksirat — Personal Tech Blog & Systems Portfolio
 
-Bilingual (**English LTR** & **Persian RTL**) engineering publication and lab notebook hosted at **[mohsen-niksirat.github.io/mohsen-tech-blog](https://mohsen-niksirat.github.io/mohsen-tech-blog/)** (Persian edition: **[/mohsen-tech-blog/fa/](https://mohsen-niksirat.github.io/mohsen-tech-blog/fa/)**).
+Bilingual (**EN LTR / FA RTL**) engineering monograph, field notes, and shipped systems portfolio built with **Vite + Vanilla TypeScript + Three.js + GSAP ScrollTrigger + Lenis**.
 
-## Highlights
-- **Archival Monograph Typography:** 100% self-hosted variable `.woff2` fonts (`Newsreader` optical size, `Plus Jakarta Sans`, `JetBrains Mono`, and `Vazirmatn` for Persian with Jalali dates).
-- **Verified Light & Dark Themes:** Warm Archival Paper (`#FBF9F5`) and Obsidian Slate (`#131416`) with zero flash on load and WCAG 2.1 AA contrast across every token.
-- **Zero-Dependency Static Compiler (`scripts/build.mjs`):** Compiles Markdown essays, build-time syntax highlighting, authored geometric SVG system diagrams, sticky Table of Contents, RSS 2.0 feeds (`feed.xml` & `fa/feed.xml`), `sitemap.xml`, and a bilingual `⌘K` instant search index in `< 200ms`.
+> **Design Study Attribution:** Interaction design and editorial art direction inspired by `landonorris.com` / **OFF+BRAND** (Awwwards Site of the Year). Zero code, fonts, shaders, 3D models, or media were copied from the reference — every mechanic was re-implemented from scratch using Three.js, GSAP ScrollTrigger, and Lenis, and 100% of the content, essays, screenshots, and assets belong to Mohsen Niksirat.
 
-## Writing a New Post
-1. Add a Markdown file in `content/posts/en/<slug>.md` and `content/posts/fa/<slug>.md`.
-2. Run locally with `node scripts/build.mjs` (or push straight to `master` and `.github/workflows/build-blog.yml` rebuilds the static HTML automatically).
+## Stack
+- **Build & Language:** Vite + Vanilla TypeScript (strict mode)
+- **3D & Shaders:** Three.js (`ShaderMaterial` hero slice reveal + scroll-scrubbed 3D centerpiece)
+- **Motion & Scroll:** GSAP + ScrollTrigger + Lenis smooth scroll
+- **Typography (Self-hosted, `font-display: swap`):** Plus Jakarta Sans (EN), Vazirmatn (FA RTL), Newsreader (serif pull quotes), JetBrains Mono (mono captions)
+- **Dates:** Gregorian (EN) and Jalali (`fa-IR-u-ca-persian`) on the FA edition
 
-## Links
-- **Interactive macOS / iOS Portfolio:** [mohsen-niksirat.github.io/Profile](https://mohsen-niksirat.github.io/Profile/)
-- **GitHub:** [@mohsen-niksirat](https://github.com/mohsen-niksirat)
-- **Telegram:** [@mohsenniksirat](https://t.me/mohsenniksirat)
+## Re-implemented Mechanics
+1. **Cursor-Driven WebGL Slice Reveal (`src/webgl/HeroSliceReveal.ts`):** Custom GLSL fragment shader revealing a procedural `#d2ff00` wireframe/node lattice over the author's portrait in liquid horizontal slices. Lazy-loaded, paused off-screen via `IntersectionObserver`, and gracefully degraded to a static portrait on mobile (`< 1024px`) and `prefers-reduced-motion`.
+2. **Scroll-Scrubbed 3D Centerpiece (`src/webgl/ScrollCenterpiece.ts`):** Lazy-loaded Three.js canvas pinned on desktop that rotates and transitions across 3 architectural states tied to featured essays: **AI Gateway Topology → FSRS Memory Curve → Godot 4 Horde Arena**.
+3. **Photo-Journal Project Grid:** Asymmetric 12-column staggered gallery of 12 shipped projects with real screenshots and mono captions (`project · stack · year`).
+4. **Bilingual EN/FA Choreography:** Full LTR/RTL support using logical CSS properties with clean ScrollTrigger teardown/re-initialization on language switch.
+
+## Local Development
+```bash
+npm install
+npm run dev
+```
+
+## Build & Local Preview
+```bash
+npm run build
+npm run preview
+```

@@ -1,10 +1,24 @@
 {
   "name": "mohsen-tech-blog",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
-  "description": "Bilingual (EN/FA) Engineering Monograph & Field Notes by Mohsen Niksirat",
+  "description": "Bilingual (EN/FA) Engineering Blog & Systems Portfolio by Mohsen Niksirat — Vite + TypeScript + Three.js + GSAP + Lenis",
   "scripts": {
-    "build": "node scripts/build.mjs"
+    "content": "node scripts/generate-content.mjs",
+    "dev": "npm run content && vite",
+    "build": "npm run content && tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4173",
+    "legacy:build": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "gsap": "^3.12.7",
+    "lenis": "^1.1.20",
+    "three": "^0.174.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.174.0",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.0"
   }
 }
